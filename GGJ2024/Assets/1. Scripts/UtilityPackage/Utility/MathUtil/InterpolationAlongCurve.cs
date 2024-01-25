@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Attributes;
 using UnityEngine;
+using UtilityPackage.Attributes;
 
-namespace Utility.MathUtil
+namespace UtilityPackage.Utility.MathUtil
 {
 	/// <summary>
 	/// A class that interpolates between <see cref="ValueA"/> and <see cref="ValueB"/> using an <see cref="AnimationCurve"/>

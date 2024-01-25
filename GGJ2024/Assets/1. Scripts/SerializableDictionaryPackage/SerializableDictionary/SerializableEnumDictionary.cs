@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Structs.Utility.SerializableDictionary;
+using SerializableDictionaryPackage.Structs;
 using VDFramework.Utility;
 
-namespace Utility.SerializableDictionary
+namespace SerializableDictionaryPackage.SerializableDictionary
 {
 	[Serializable]
 	public class SerializableEnumDictionary<TKey, TValue> : SerializableDictionary<TKey, TValue>
