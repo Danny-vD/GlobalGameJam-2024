@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using VDFramework;
 
-namespace SingleInstanceEnforcement
+namespace UtilityPackage.Utility.SingleInstanceEnforcement
 {
 	public class EnforceSingleInstance : BetterMonoBehaviour
 	{
