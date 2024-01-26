@@ -21,7 +21,7 @@ namespace UtilityPackage.CursorManagement.CursorUtility.Singletons
 		{
 			if (inputModule == null)
 			{
-				inputModule = FindObjectOfType<InputSystemUIInputModule>(false);
+				inputModule = FindAnyObjectByType<InputSystemUIInputModule>(FindObjectsInactive.Exclude);
 
 				if (inputModule == null)
 				{
