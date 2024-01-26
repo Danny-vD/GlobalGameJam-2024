@@ -5,6 +5,6 @@
 	/// </summary>
 	public static class ApplicationData
 	{
-		public const long DISCORD_APPLICATION_ID = 0; // AKA Client ID
+		public const long DISCORD_APPLICATION_ID = 1200521521467240519; // AKA Client ID
 	}
 }
