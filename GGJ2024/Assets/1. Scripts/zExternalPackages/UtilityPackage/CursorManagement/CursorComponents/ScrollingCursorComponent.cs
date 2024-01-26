@@ -1,8 +1,8 @@
-﻿using UnityEngine;
-using UtilityPackage.CursorManagement.Singletons;
-using UtilityPackage.CursorManagement.Structs;
+﻿using CursorManagement.Singletons;
+using Structs.CursorStructs;
+using UnityEngine;
 
-namespace UtilityPackage.CursorManagement.CursorComponents
+namespace CursorManagement.CursorComponents
 {
 	public class ScrollingCursorComponent : AbstractCursorComponent
 	{

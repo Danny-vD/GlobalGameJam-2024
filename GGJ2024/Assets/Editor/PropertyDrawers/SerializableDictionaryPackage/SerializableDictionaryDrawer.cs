@@ -6,6 +6,7 @@ using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
 using Utility;
+using Utility.EditorPackage;
 
 namespace PropertyDrawers.SerializableDictionaryPackage
 {
@@ -66,14 +67,14 @@ namespace PropertyDrawers.SerializableDictionaryPackage
 				reorderableList.elementHeight = 0;
 			}
 
-			//if (isFoldOut && !isValid) //TODO: Drawing the warning message gives the header a wrong message (2023.2.7)
-			//{
-			//	DrawDuplicateKeyWarning(position, actualCount);
-			//
-			//	position.y   += warningHeight;
-			//	position.y   += spacingWarningToDictionary;
-			//	propertySize += spacingWarningToDictionary;
-			//}
+			if (isFoldOut && !isValid)
+			{
+				DrawDuplicateKeyWarning(position, actualCount);
+
+				position.y   += warningHeight;
+				position.y   += spacingWarningToDictionary;
+				propertySize += spacingWarningToDictionary;
+			}
 
 			reorderableList.DoList(position); // Draw the reorderable list
 

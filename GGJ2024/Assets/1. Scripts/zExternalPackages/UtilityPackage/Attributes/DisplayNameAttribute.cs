@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace UtilityPackage.Attributes
+namespace Attributes
 {
 	/// <summary>
 	///   <para>Use this attribute on serialized fields to change the display name shown in the Inspector.</para>

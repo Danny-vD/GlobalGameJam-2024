@@ -1,12 +1,12 @@
-﻿using UnityEditor;
+﻿using Attributes;
+using UnityEditor;
 using UnityEngine;
-using UtilityPackage.Attributes;
 using VDFramework.Extensions;
 
-namespace PropertyDrawers.EditorPackage.Attributes
+namespace PropertyDrawers.Attributes.EditorPackage
 {
 	[CustomPropertyDrawer(typeof(DisplayNameAttribute))]
-	public class DisplayNameAttributeEditor : PropertyDrawer
+	public class DisplayNameEditor : PropertyDrawer
 	{
 		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
 		{

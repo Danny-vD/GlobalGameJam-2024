@@ -1,11 +1,11 @@
 ﻿using SerializableDictionaryPackage.SerializableDictionary;
+using Structs.CursorStructs;
 using UnityEngine;
 using UnityEngine.UI;
 using UtilityPackage.CursorManagement.CursorUtility;
 using UtilityPackage.CursorManagement.CursorUtility.Singletons;
-using UtilityPackage.CursorManagement.Structs;
 
-namespace UtilityPackage.CursorManagement.CursorComponents
+namespace CursorManagement.CursorComponents
 {
 	public class HoverCursorComponent : AbstractCursorComponent
 	{

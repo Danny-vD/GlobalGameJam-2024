@@ -4,7 +4,7 @@ using VDFramework.Singleton;
 using VDFramework.Utility.TimerUtil;
 using VDFramework.Utility.TimerUtil.TimerHandles;
 
-namespace UtilityPackage.CursorManagement.Singletons
+namespace CursorManagement.Singletons
 {
 	public class MouseScrollChecker : Singleton<MouseScrollChecker>
 	{

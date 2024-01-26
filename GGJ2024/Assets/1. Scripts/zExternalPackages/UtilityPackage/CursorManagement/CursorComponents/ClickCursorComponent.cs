@@ -1,9 +1,9 @@
 ﻿using SerializableDictionaryPackage.SerializableDictionary;
+using Structs.CursorStructs;
 using UnityEngine;
 using UtilityPackage.CursorManagement.CursorUtility;
-using UtilityPackage.CursorManagement.Structs;
 
-namespace UtilityPackage.CursorManagement.CursorComponents
+namespace CursorManagement.CursorComponents
 {
 	public class ClickCursorComponent : AbstractCursorComponent
 	{

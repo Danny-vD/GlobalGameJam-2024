@@ -4,7 +4,7 @@ using System.Text;
 using UnityEngine;
 using VDFramework.Interfaces;
 
-namespace SerializableDictionaryPackage.Structs
+namespace Structs.Utility.SerializableDictionary
 {
 	[Serializable]
 	public struct SerializableKeyValuePair<TKey, TValue> : IKeyValuePair<TKey, TValue>, IEquatable<SerializableKeyValuePair<TKey, TValue>>

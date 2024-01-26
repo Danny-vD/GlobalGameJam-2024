@@ -3,7 +3,7 @@ using UnityEngine;
 using UtilityPackage.CursorManagement.CursorUtility;
 using VDFramework.Singleton;
 
-namespace UtilityPackage.CursorManagement.Singletons
+namespace CursorManagement.Singletons
 {
 	public class CursorMovementChecker : Singleton<CursorMovementChecker>
 	{

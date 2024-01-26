@@ -1,9 +1,9 @@
 ﻿using System.Globalization;
+using Attributes;
 using UnityEditor;
 using UnityEngine;
-using UtilityPackage.Attributes;
 
-namespace PropertyDrawers.EditorPackage.Attributes
+namespace PropertyDrawers.Attributes.EditorPackage
 {
 	[CustomPropertyDrawer(typeof(ReadOnlyAttribute))]
 	public class ReadOnlyAttributeEditor : PropertyDrawer

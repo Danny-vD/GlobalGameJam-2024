@@ -1,7 +1,7 @@
-﻿using UtilityPackage.CursorManagement.Structs;
+﻿using Structs.CursorStructs;
 using VDFramework;
 
-namespace UtilityPackage.CursorManagement
+namespace CursorManagement
 {
 	/// <summary>
 	/// An abstract representation of a component used by the <seealso cref="CursorComponentManager"/> to change cursor textures and add cursor effects
