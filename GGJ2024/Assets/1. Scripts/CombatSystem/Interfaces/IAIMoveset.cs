@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace CombatSystem.Interfaces
+﻿namespace CombatSystem.Interfaces
 {
 	public interface IAIMoveset : IMoveset
 	{

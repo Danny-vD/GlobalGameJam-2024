@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using CombatSystem.CharacterScripts.CharacterStates;
 using CombatSystem.Enums;
 using SerializableDictionaryPackage.SerializableDictionary;
@@ -9,6 +10,8 @@ namespace CombatSystem.CharacterScripts
 {
 	public class CharacterStateManager : BetterMonoBehaviour
 	{
+		public event Action OnStateChanged = delegate { };
+
 		[SerializeField]
 		private SerializableEnumDictionary<CharacterStateType, AbstractCharacterState> statesPerType;
 
@@ -43,10 +46,11 @@ namespace CombatSystem.CharacterScripts
 			CurrentStateType = stateType;
 
 			currentState = statesPerType[CurrentStateType];
+			OnStateChanged.Invoke();
+			
+			currentState.OnStateEnded += SetState;
 			
 			currentState.Enter();
-
-			currentState.OnStateEnded += SetState;
 		}
 	}
 }
