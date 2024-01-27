@@ -45,6 +45,8 @@ public class PlayerMovementController : Singleton<PlayerMovementController>
         isMoving = true;
 
         var vector = obj.ReadValue<Vector2>();
+
+        Debug.Log($"{vector} [{vector.magnitude}]");
         deltaMovement = new Vector3(vector.x * Time.deltaTime * speed, 0, vector.y * Time.deltaTime * speed);
     }
 
@@ -76,7 +78,7 @@ public class PlayerMovementController : Singleton<PlayerMovementController>
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if (isMoving)
         {
