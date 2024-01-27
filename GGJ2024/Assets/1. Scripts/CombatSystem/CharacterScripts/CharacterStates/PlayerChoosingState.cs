@@ -1,4 +1,5 @@
-﻿using CombatSystem.Enums;
+﻿using System;
+using CombatSystem.Enums;
 using UnityEngine;
 
 namespace CombatSystem.CharacterScripts.CharacterStates
@@ -6,6 +7,9 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 	[RequireComponent(typeof(CombatMoveManager))]
 	public class PlayerChoosingState : AbstractCharacterState
 	{
+		public static event Action<GameObject> StartedChoosingState = delegate { };
+		public static event Action<GameObject> EndedChoosingState = delegate { };
+
 		public override CharacterStateType NextState => CharacterStateType.Casting;
 		
 		private CombatMoveManager combatMoveManager;
@@ -18,7 +22,7 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 		
 		public override void Enter()
 		{
-			//TODO show UI
+			StartedChoosingState.Invoke(gameObject);
 		}
 
 		public override void Step()
@@ -29,7 +33,12 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 		{
 			base.Exit();
 			
-			//TODO hide UI
+			EndedChoosingState.Invoke(gameObject);
+		}
+
+		private void OnDestroy()
+		{
+			combatMoveManager.OnMoveSelected -= Exit;
 		}
 	}
 }

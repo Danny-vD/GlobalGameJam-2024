@@ -52,5 +52,13 @@ namespace CombatSystem.CharacterScripts
 			
 			currentState.Enter();
 		}
+
+		private void OnDestroy()
+		{
+			if (currentState != null)
+			{
+				currentState.OnStateEnded -= SetState;
+			}
+		}
 	}
 }
