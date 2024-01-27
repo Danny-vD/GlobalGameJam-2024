@@ -2,7 +2,7 @@
 using UnityEngine;
 using VDFramework;
 
-namespace CombatSystem
+namespace CharacterScripts
 {
 	public class Character : BetterMonoBehaviour
 	{
