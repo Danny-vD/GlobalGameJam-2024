@@ -10,7 +10,7 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 		[SerializeField, Tooltip("The time in seconds that the character has to wait")]
 		private float maximumIdleTime = 10;
 		
-		public override CharacterStateType NextState => CharacterStateType.Choosing;
+		public override CharacterCombatStateType NextState => CharacterCombatStateType.Choosing;
 		public float NormalizedTimer => timer / maximumIdleTime;
 
 		private Character character;

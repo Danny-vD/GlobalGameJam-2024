@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using CombatSystem.Interfaces;
+using CombatSystem.ScriptableAssets.CombatMoves;
 using SerializableDictionaryPackage.SerializableDictionary;
 using UnityEngine;
 using VDFramework;

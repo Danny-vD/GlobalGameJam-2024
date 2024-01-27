@@ -2,6 +2,7 @@
 using CombatSystem.CharacterScripts;
 using CombatSystem.CharacterScripts.CharacterStates;
 using CombatSystem.Interfaces;
+using CombatSystem.ScriptableAssets.CombatMoves;
 using UnityEngine;
 using VDFramework;
 using VDFramework.UnityExtensions;

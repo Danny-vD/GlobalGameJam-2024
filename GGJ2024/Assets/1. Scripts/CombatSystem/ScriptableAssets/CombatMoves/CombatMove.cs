@@ -1,7 +1,7 @@
 ﻿using CombatSystem.Enums;
 using UnityEngine;
 
-namespace CombatSystem
+namespace CombatSystem.ScriptableAssets.CombatMoves
 {
 	[CreateAssetMenu(fileName = "Combatmove", menuName = "Combat/Move")]
 	public class CombatMove : ScriptableObject
