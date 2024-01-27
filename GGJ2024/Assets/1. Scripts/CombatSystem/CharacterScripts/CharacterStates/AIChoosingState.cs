@@ -1,5 +1,6 @@
 ﻿using CombatSystem.Enums;
 using CombatSystem.Interfaces;
+using CombatSystem.ScriptableAssets.CombatMoves;
 
 namespace CombatSystem.CharacterScripts.CharacterStates
 {
@@ -8,7 +9,7 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 		private CombatMoveManager combatMoveManager;
 		private IAIMoveset aiMoveset;
 		
-		public override CharacterStateType NextState => CharacterStateType.Casting;
+		public override CharacterCombatStateType NextState => CharacterCombatStateType.Casting;
 
 		private void Awake()
 		{

@@ -11,7 +11,7 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 		public static event Action<IMoveset, CombatMoveManager> StartedChoosingState = delegate { };
 		public static event Action EndedChoosingState = delegate { };
 
-		public override CharacterStateType NextState => CharacterStateType.Casting;
+		public override CharacterCombatStateType NextState => CharacterCombatStateType.Casting;
 		
 		private CombatMoveManager combatMoveManager;
 		private IMoveset moveset;

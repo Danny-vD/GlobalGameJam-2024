@@ -1,4 +1,5 @@
 ﻿using CombatSystem.CharacterScripts;
+using CombatSystem.ScriptableAssets.CombatMoves;
 using LocalisationPackage.Core;
 using TMPro;
 using UnityEngine;

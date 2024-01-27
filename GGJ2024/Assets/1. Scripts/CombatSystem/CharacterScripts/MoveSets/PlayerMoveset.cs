@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using CombatSystem.Interfaces;
+using CombatSystem.ScriptableAssets.CombatMoves;
 using UnityEngine;
 using VDFramework;
 
