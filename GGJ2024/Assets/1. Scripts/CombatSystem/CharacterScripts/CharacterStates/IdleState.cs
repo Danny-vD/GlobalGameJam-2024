@@ -1,4 +1,5 @@
-﻿using CombatSystem.Enums;
+﻿using CharacterScripts;
+using CombatSystem.Enums;
 using UnityEngine;
 
 namespace CombatSystem.CharacterScripts.CharacterStates
@@ -10,6 +11,7 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 		private float maximumIdleTime = 10;
 		
 		public override CharacterStateType NextState => CharacterStateType.Choosing;
+		public float NormalizedTimer => timer / maximumIdleTime;
 
 		private Character character;
 
