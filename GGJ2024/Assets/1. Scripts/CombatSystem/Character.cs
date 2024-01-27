@@ -6,7 +6,7 @@ namespace CombatSystem
 {
 	public class Character : BetterMonoBehaviour
 	{
-		[SerializeField]
-		private CharacterStatistics statistics;
+		[field: SerializeField]
+		public CharacterStatistics Statistics { get; private set; }
 	}
 }

@@ -67,14 +67,15 @@ namespace PropertyDrawers.SerializableDictionaryPackage
 				reorderableList.elementHeight = 0;
 			}
 
-			if (isFoldOut && !isValid)
-			{
-				DrawDuplicateKeyWarning(position, actualCount);
-
-				position.y   += warningHeight;
-				position.y   += spacingWarningToDictionary;
-				propertySize += spacingWarningToDictionary;
-			}
+			// Drawing the warning messes up the header (2023.2.7)
+			//if (isFoldOut && !isValid)
+			//{
+			//	DrawDuplicateKeyWarning(position, actualCount);
+			//
+			//	position.y   += warningHeight;
+			//	position.y   += spacingWarningToDictionary;
+			//	propertySize += spacingWarningToDictionary;
+			//}
 
 			reorderableList.DoList(position); // Draw the reorderable list
 
