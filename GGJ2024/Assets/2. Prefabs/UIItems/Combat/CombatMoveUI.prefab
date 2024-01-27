@@ -12,8 +12,9 @@ GameObject:
   - component: {fileID: 7335499540592378976}
   - component: {fileID: 7683284776025963198}
   - component: {fileID: 7508285108618592516}
+  - component: {fileID: 2757744230577304786}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: CombatMoveUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -93,7 +94,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24.5
+  m_fontSize: 36.75
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -181,3 +182,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2757744230577304786
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5152311482693130161}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b0a24de73a444a7853e4bfe5dc89caa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selectMoveButton: {fileID: 7508285108618592516}
+  nameLabel: {fileID: 7683284776025963198}
+  descriptionLabel: {fileID: 0}
+  costLabel: {fileID: 0}
