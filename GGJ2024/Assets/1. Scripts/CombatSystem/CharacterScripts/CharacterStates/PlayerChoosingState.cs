@@ -12,18 +12,18 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 		public static event Action EndedChoosingState = delegate { };
 
 		public override CharacterCombatStateType NextState => CharacterCombatStateType.Casting;
-		
+
 		private CombatMoveManager combatMoveManager;
 		private IMoveset moveset;
 
 		private void Awake()
 		{
-			combatMoveManager                =  GetComponent<CombatMoveManager>();
-			moveset                          =  GetComponent<IMoveset>();
-			
+			combatMoveManager = GetComponent<CombatMoveManager>();
+			moveset           = GetComponent<IMoveset>();
+
 			combatMoveManager.OnMoveSelected += Exit;
 		}
-		
+
 		public override void Enter()
 		{
 			StartedChoosingState.Invoke(moveset, combatMoveManager);
@@ -36,7 +36,7 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 		protected override void Exit()
 		{
 			base.Exit();
-			
+
 			EndedChoosingState.Invoke();
 		}
 

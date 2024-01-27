@@ -587,6 +587,7 @@ GameObject:
   - component: {fileID: 5715167608326618601}
   - component: {fileID: 7127487562931007067}
   - component: {fileID: 2615725902248936076}
+  - component: {fileID: 8416605109282267032}
   m_Layer: 5
   m_Name: Cat Name
   m_TagString: Untagged
@@ -676,7 +677,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 20.55
+  m_fontSize: 41.1
   m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -720,6 +721,23 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &8416605109282267032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4795997663828928722}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7ccd3bb5f474c8f9baf40751921a954, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nameLabel: {fileID: 2615725902248936076}
+  timerSlider: {fileID: 9173494443773286413}
+  specialAttackSlider: {fileID: 3536737041546896881}
+  healthLabel: {fileID: 6111620831378962832}
+  mpLabel: {fileID: 3641768230562433171}
 --- !u!1 &5708118168163554335
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,19 +1,32 @@
 ﻿using CombatSystem.Events;
 using VDFramework;
-using VDFramework.EventSystem;
 
 namespace CombatSystem.Managers
 {
 	public class CombatManager : BetterMonoBehaviour
 	{
+		// Is a player currently picking a move?
+		// Keep track of all the moves and apply them one by one
+		
+
+		private void Awake()
+		{
+			CombatStartedEvent.ParameterlessListeners += StartCombat;
+			CombatEndedEvent.ParameterlessListeners   += EndCombat;
+		}
+
 		public void StartCombat()
 		{
-			EventManager.RaiseEvent(new CombatStartedEvent());
 		}
 
 		public void EndCombat()
 		{
-			EventManager.RaiseEvent(new CombatEndedEvent());
+		}
+
+		private void OnDestroy()
+		{
+			CombatStartedEvent.ParameterlessListeners -= StartCombat;
+			CombatEndedEvent.ParameterlessListeners   -= EndCombat;
 		}
 	}
 }

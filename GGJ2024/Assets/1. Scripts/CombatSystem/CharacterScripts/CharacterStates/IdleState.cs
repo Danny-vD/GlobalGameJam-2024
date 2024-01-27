@@ -13,9 +13,9 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 		public override CharacterCombatStateType NextState => CharacterCombatStateType.Choosing;
 		public float NormalizedTimer => timer / maximumIdleTime;
 
-		private Character character;
-
 		private float timer;
+
+		private Character character;
 
 		private void Awake()
 		{

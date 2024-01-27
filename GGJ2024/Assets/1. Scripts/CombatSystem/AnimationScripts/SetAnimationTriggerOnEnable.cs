@@ -28,11 +28,6 @@ namespace CombatSystem.AnimationScripts
 			parameterID = Animator.StringToHash(parameterName);
 		}
 
-		private IEnumerable Update()
-		{
-			yield return new WaitForSeconds(.5f);
-		}
-
 		private void OnEnable()
 		{
 			animator.SetBool(parameterID, value);
