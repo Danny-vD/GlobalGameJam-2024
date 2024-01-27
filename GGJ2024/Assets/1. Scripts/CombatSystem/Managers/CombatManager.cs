@@ -17,10 +17,7 @@ namespace CombatSystem.Managers
 
 		public void StartCombat()
 		{
-<<<<<<< Updated upstream
-=======
-			// EventManager.RaiseEvent(new CombatStartedEvent());
->>>>>>> Stashed changes
+			 
 		}
 
 		public void EndCombat()
