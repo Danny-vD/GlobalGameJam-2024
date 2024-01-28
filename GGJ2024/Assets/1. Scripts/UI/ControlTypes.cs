@@ -4,6 +4,7 @@
     {
         Overworld,
         Menus,
-        Combat
+        Combat,
+        Dialogue
     }
 }
