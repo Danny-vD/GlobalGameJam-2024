@@ -31,9 +31,9 @@ namespace CombatSystem.UIScripts.CombatMoves
 
 			selectMoveButton.onClick.AddListener(SelectMove);
 
-			nameLabel.text = combatMove.name; //LocalisationUtil.GetLocalisedString(combatMove.Name);
+			nameLabel.text = combatMove.name;
 
-			//descriptionLabel.text = LocalisationUtil.GetLocalisedString(combatMove.Description);
+			//descriptionLabel.text = combatMove.Description;
 			//costLabel.text        = combatMove.Cost.ToString();
 		}
 
