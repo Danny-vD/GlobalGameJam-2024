@@ -132,5 +132,10 @@ namespace FMODUtilityPackage.Enums
 		/// event:/SFX/Cutscenes/Scene8
 		/// </FMODEventPath>
 		SFX_Cutscenes_Scene8,
+
+		/// <FMODEventPath>
+		/// event:/SFX/Battle/Death
+		/// </FMODEventPath>
+		SFX_Battle_Death,
 	}
 }
