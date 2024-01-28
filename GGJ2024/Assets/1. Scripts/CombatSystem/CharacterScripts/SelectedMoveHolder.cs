@@ -1,5 +1,5 @@
 ﻿using System;
-using CombatSystem.ScriptableAssets.CombatMoves;
+using CombatMoves.BaseClasses;
 using VDFramework;
 
 namespace CombatSystem.CharacterScripts
@@ -8,11 +8,11 @@ namespace CombatSystem.CharacterScripts
 	{
 		public event Action OnMoveSelected = delegate { };
 		
-		public CombatMove SelectedMove { get; private set; }
+		public AbstractCombatMove SelectedMove { get; private set; }
 
-		public void SelectMove(CombatMove move)
+		public void SelectMove(AbstractCombatMove moveData)
 		{
-			SelectedMove = move;
+			SelectedMove = moveData;
 			
 			OnMoveSelected.Invoke();
 		}

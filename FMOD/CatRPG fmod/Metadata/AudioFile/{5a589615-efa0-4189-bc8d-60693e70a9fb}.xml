@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{5a589615-efa0-4189-bc8d-60693e70a9fb}">
+		<property name="assetPath">
+			<value>CatMeow_1.ogg</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>1.8144897959183675</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{e5fd9c8d-414d-4c50-a1b7-ed9cf45b207e}</destination>
+		</relationship>
+	</object>
+</objects>

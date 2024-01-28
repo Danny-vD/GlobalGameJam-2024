@@ -1,9 +1,8 @@
 ﻿using System;
+using CombatMoves.BaseClasses;
 using CombatSystem.CharacterScripts;
-using CombatSystem.CharacterScripts.CharacterStates;
 using CombatSystem.Interfaces;
 using CombatSystem.Managers;
-using CombatSystem.ScriptableAssets.CombatMoves;
 using UnityEngine;
 using VDFramework;
 using VDFramework.UnityExtensions;
@@ -23,7 +22,6 @@ namespace CombatSystem.UIScripts.CombatMoves
 
 		private void Awake()
 		{
-			//TODO: ignore if someone is already choosing a move
 			PlayerTurnManager.NewCharacterChoosingMove += ShowMoves;
 			PlayerTurnManager.OnChoosingQueueEmpty += HideMoves;
 		}
@@ -47,7 +45,7 @@ namespace CombatSystem.UIScripts.CombatMoves
 		{
 			combatMovesParent.DestroyChildren();
 			
-			foreach (CombatMove combatMove in moveset.GetMoves())
+			foreach (AbstractCombatMove combatMove in moveset.GetMoves())
 			{
 				GameObject instance = Instantiate(combatMovePrefab, combatMovesParent);
 

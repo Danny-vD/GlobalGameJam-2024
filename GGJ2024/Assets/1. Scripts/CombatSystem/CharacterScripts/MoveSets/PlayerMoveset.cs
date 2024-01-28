@@ -1,19 +1,20 @@
 ﻿using System.Collections.Generic;
-using CombatSystem.Interfaces;
-using CombatSystem.ScriptableAssets.CombatMoves;
+using CombatMoves.BaseClasses;
 using UnityEngine;
-using VDFramework;
 
 namespace CombatSystem.CharacterScripts.MoveSets
 {
-	public class PlayerMoveset : BetterMonoBehaviour, IMoveset
+	public class PlayerMoveset : AbstractMoveset
 	{
 		[SerializeField]
-		private List<CombatMove> moves;
-
-		public List<CombatMove> GetMoves()
+		protected List<AbstractCombatMove> starterMoves;
+		
+		private void Start()
 		{
-			return new List<CombatMove>(moves);
+			foreach (AbstractCombatMove combatMove in starterMoves)
+			{
+				base.AddMove(combatMove);
+			}
 		}
 	}
 }

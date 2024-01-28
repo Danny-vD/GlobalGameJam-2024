@@ -1,9 +1,9 @@
-﻿using CombatSystem.ScriptableAssets.CombatMoves;
+﻿using CombatMoves.BaseClasses;
 
 namespace CombatSystem.Interfaces
 {
 	public interface IAIMoveset : IMoveset
 	{
-		public CombatMove ChooseAIMove();
+		public AbstractCombatMove ChooseAIMove();
 	}
 }

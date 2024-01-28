@@ -1,6 +1,6 @@
-﻿using CombatSystem.Enums;
+﻿using CombatMoves.BaseClasses;
+using CombatSystem.Enums;
 using CombatSystem.Interfaces;
-using CombatSystem.ScriptableAssets.CombatMoves;
 
 namespace CombatSystem.CharacterScripts.CharacterStates
 {
@@ -19,8 +19,8 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 
 		public override void Enter()
 		{
-			CombatMove combatMove = aiMoveset.ChooseAIMove();
-			selectedMoveHolder.SelectMove(combatMove);
+			AbstractCombatMove combatMoveData = aiMoveset.ChooseAIMove();
+			selectedMoveHolder.SelectMove(combatMoveData);
 			Exit();
 		}
 
