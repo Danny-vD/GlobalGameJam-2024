@@ -1,5 +1,5 @@
-﻿using CombatSystem.CharacterScripts;
-using CombatSystem.ScriptableAssets.CombatMoves;
+﻿using CombatMoves.ScriptableAssets;
+using CombatSystem.CharacterScripts;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

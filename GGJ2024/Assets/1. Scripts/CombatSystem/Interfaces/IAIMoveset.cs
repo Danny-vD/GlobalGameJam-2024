@@ -1,4 +1,4 @@
-﻿using CombatSystem.ScriptableAssets.CombatMoves;
+﻿using CombatMoves.ScriptableAssets;
 
 namespace CombatSystem.Interfaces
 {

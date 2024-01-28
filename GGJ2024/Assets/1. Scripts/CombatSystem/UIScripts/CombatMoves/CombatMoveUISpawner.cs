@@ -1,9 +1,9 @@
 ﻿using System;
+using CombatMoves.ScriptableAssets;
 using CombatSystem.CharacterScripts;
 using CombatSystem.CharacterScripts.CharacterStates;
 using CombatSystem.Interfaces;
 using CombatSystem.Managers;
-using CombatSystem.ScriptableAssets.CombatMoves;
 using UnityEngine;
 using VDFramework;
 using VDFramework.UnityExtensions;
@@ -23,7 +23,6 @@ namespace CombatSystem.UIScripts.CombatMoves
 
 		private void Awake()
 		{
-			//TODO: ignore if someone is already choosing a move
 			PlayerTurnManager.NewCharacterChoosingMove += ShowMoves;
 			PlayerTurnManager.OnChoosingQueueEmpty += HideMoves;
 		}

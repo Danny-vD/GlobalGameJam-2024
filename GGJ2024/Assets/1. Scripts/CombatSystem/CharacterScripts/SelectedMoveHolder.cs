@@ -1,5 +1,5 @@
 ﻿using System;
-using CombatSystem.ScriptableAssets.CombatMoves;
+using CombatMoves.ScriptableAssets;
 using VDFramework;
 
 namespace CombatSystem.CharacterScripts

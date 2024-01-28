@@ -1,6 +1,6 @@
-﻿using CombatSystem.Enums;
+﻿using CombatMoves.ScriptableAssets;
+using CombatSystem.Enums;
 using CombatSystem.Interfaces;
-using CombatSystem.ScriptableAssets.CombatMoves;
 
 namespace CombatSystem.CharacterScripts.CharacterStates
 {

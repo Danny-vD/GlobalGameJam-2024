@@ -1,7 +1,8 @@
-﻿using CombatSystem.Enums;
+﻿using CombatMoves.TargetingLogic.Interfaces;
+using CombatSystem.Enums;
 using UnityEngine;
 
-namespace CombatSystem.ScriptableAssets.CombatMoves
+namespace CombatMoves.ScriptableAssets
 {
 	[CreateAssetMenu(fileName = "Combatmove", menuName = "Combat/Move")]
 	public class CombatMove : ScriptableObject
@@ -10,10 +11,11 @@ namespace CombatSystem.ScriptableAssets.CombatMoves
 		public string Description;
 		
 		public int Cost = 0;
-		public float CastingTime = 1;
 
 		public DamageType DamageType = DamageType.Normal;
 
 		public float Potency = 10;
+
+		public ITargetingValidator TargetingValidator;
 	}
 }
