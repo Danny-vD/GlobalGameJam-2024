@@ -8,8 +8,6 @@ namespace CombatSystem.AnimationScripts
 {
 	public class AttackAnimations : BetterMonoBehaviour
 	{
-		private static readonly int castingStarted = Animator.StringToHash("CastingStarted");
-
 		private static readonly Dictionary<string, int> parameterIDs = new Dictionary<string, int>();
 		
 		private Animator animator;
@@ -28,7 +26,7 @@ namespace CombatSystem.AnimationScripts
 		private void OnStartedCasting()
 		{
 			// Using the move name as the trigger allows us to dynamically set the respective animation
-			animator.SetTrigger(GetParameterID(selectedMoveHolder.SelectedMove.Name));
+			animator.SetTrigger(GetParameterID(selectedMoveHolder.SelectedMove.AnimationTriggerName));
 		}
 
 		private void OnDestroy()
@@ -36,7 +34,7 @@ namespace CombatSystem.AnimationScripts
 			castingState.OnCastingStarted += OnStartedCasting;
 		}
 
-		private int GetParameterID(string combatMoveName)
+		private static int GetParameterID(string combatMoveName)
 		{
 			if (parameterIDs.TryGetValue(combatMoveName, out int id))
 			{

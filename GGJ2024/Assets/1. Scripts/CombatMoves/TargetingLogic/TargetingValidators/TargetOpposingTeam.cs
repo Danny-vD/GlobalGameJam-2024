@@ -2,11 +2,10 @@
 using CombatMoves.TargetingLogic.Interfaces;
 using PlayerPartyScripts;
 using UnityEngine;
-using VDFramework;
 
 namespace CombatMoves.TargetingLogic.TargetingValidators
 {
-	public class TargetOpposingTeam : BetterMonoBehaviour, ITargetingValidator
+	public class TargetOpposingTeam : ITargetingValidator
 	{
 		public bool IsValidTarget(GameObject target, GameObject caster)
 		{

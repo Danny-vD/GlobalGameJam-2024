@@ -1,34 +1,52 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using CombatMoves.ScriptableAssets;
+using CombatMoves.BaseClasses;
 using CombatSystem.Interfaces;
 using SerializableDictionaryPackage.SerializableDictionary;
 using UnityEngine;
-using VDFramework;
+using VDFramework.LootTables.LootTableItems;
 using VDFramework.LootTables.Variations;
 
 namespace CombatSystem.CharacterScripts.MoveSets
 {
-	public class AIMoveSet : BetterMonoBehaviour, IAIMoveset
+	public class AIMoveSet : AbstractMoveset, IAIMoveset
 	{
+		[SerializeField, Tooltip("If no percentage is provided when adding a new move, this percentage will be used instead")]
+		private float defaultPercentageForNewMove = 5;
+		
 		[SerializeField]
-		private SerializableDictionary<CombatMove, float> moves;
+		private SerializableDictionary<AbstractCombatMove, float> moveChances;
 
-		private PercentageLootTable<CombatMove> percentagedMoves;
+		private PercentageLootTable<AbstractCombatMove> percentagedMoves;
 
 		private void Awake()
 		{
-			percentagedMoves = new PercentageLootTable<CombatMove>(moves);
+			percentagedMoves = new PercentageLootTable<AbstractCombatMove>(moveChances);
 		}
 
-		public List<CombatMove> GetMoves()
+		public override List<AbstractCombatMove> GetMoves()
 		{
-			return moves.Keys.ToList();
+			return moveChances.Keys.ToList();
 		}
 
-		public CombatMove ChooseAIMove()
+		public AbstractCombatMove ChooseAIMove()
 		{
 			return percentagedMoves.GetLoot();
+		}
+
+		public override T AddMove<T>()
+		{
+			return AddMove<T>(defaultPercentageForNewMove);
+		}
+
+		public T AddMove<T>(float percentage) where T : AbstractCombatMove
+		{
+			T combatMove = base.AddMove<T>();
+
+
+			percentagedMoves.Add(new LootTableItem<T>(combatMove), percentage);
+
+			return combatMove;
 		}
 	}
 }

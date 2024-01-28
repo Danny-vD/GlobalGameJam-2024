@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
-using CombatMoves.ScriptableAssets;
+using CombatMoves.BaseClasses;
 
 namespace CombatSystem.Interfaces
 {
 	public interface IMoveset
 	{
-		public List<CombatMove> GetMoves();
+		public List<AbstractCombatMove> GetMoves();
 	}
 }

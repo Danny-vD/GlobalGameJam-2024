@@ -1,10 +1,9 @@
 ﻿using CombatMoves.TargetingLogic.Interfaces;
 using UnityEngine;
-using VDFramework;
 
 namespace CombatMoves.TargetingLogic.TargetingValidators
 {
-	public class TargetSelf : BetterMonoBehaviour, ITargetingValidator
+	public class TargetSelf : ITargetingValidator
 	{
 		public bool IsValidTarget(GameObject target, GameObject caster)
 		{

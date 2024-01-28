@@ -1,4 +1,4 @@
-﻿using CombatMoves.ScriptableAssets;
+﻿using CombatMoves.BaseClasses;
 using CombatSystem.CharacterScripts;
 using TMPro;
 using UnityEngine;
@@ -21,17 +21,17 @@ namespace CombatSystem.UIScripts.CombatMoves
 		[SerializeField]
 		private TMP_Text costLabel;
 
-		private CombatMove combatMove;
+		private AbstractCombatMove combatMove;
 		private SelectedMoveHolder selectedMoveHolder;
 
-		public void Initialize(CombatMove move, SelectedMoveHolder moveHolder)
+		public void Initialize(AbstractCombatMove move, SelectedMoveHolder moveHolder)
 		{
-			combatMove        = move;
+			combatMove         = move;
 			selectedMoveHolder = moveHolder;
 
 			selectMoveButton.onClick.AddListener(SelectMove);
 
-			nameLabel.text = combatMove.name;
+			nameLabel.text = combatMove.AbilityName;
 
 			//descriptionLabel.text = combatMove.Description;
 			//costLabel.text        = combatMove.Cost.ToString();

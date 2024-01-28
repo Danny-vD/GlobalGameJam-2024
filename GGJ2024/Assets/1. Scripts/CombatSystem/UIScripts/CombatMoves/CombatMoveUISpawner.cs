@@ -1,7 +1,6 @@
 ﻿using System;
-using CombatMoves.ScriptableAssets;
+using CombatMoves.BaseClasses;
 using CombatSystem.CharacterScripts;
-using CombatSystem.CharacterScripts.CharacterStates;
 using CombatSystem.Interfaces;
 using CombatSystem.Managers;
 using UnityEngine;
@@ -46,7 +45,7 @@ namespace CombatSystem.UIScripts.CombatMoves
 		{
 			combatMovesParent.DestroyChildren();
 			
-			foreach (CombatMove combatMove in moveset.GetMoves())
+			foreach (AbstractCombatMove combatMove in moveset.GetMoves())
 			{
 				GameObject instance = Instantiate(combatMovePrefab, combatMovesParent);
 
