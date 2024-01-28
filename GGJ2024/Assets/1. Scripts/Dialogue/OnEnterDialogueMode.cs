@@ -9,7 +9,7 @@ namespace Dialogue
     {
         public TextAsset inkFile;
         
-        private OnEnterDialogueMode(TextAsset inkJson)
+        public OnEnterDialogueMode(TextAsset inkJson)
         {
             inkFile = inkJson;
         }

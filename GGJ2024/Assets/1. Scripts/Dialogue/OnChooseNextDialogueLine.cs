@@ -11,5 +11,10 @@ namespace Dialogue
             choiceIndex = choice;
             
         }
+
+        public OnChooseNextDialogueLine()
+        {
+            
+        }
     }
 }

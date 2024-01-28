@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using Ink.Runtime;
 using TMPro;
+using UI;
 using UnityEngine;
+using UnityEngine.UI;
 using VDFramework.EventSystem;
 using VDFramework.Singleton;
+using VDFramework.UnityExtensions;
 
 namespace Dialogue
 {
@@ -16,31 +19,37 @@ namespace Dialogue
         private Queue<string> _lines;
         private const float WaitTimer = 0.05f;
         private const float SentenceWaitTimer = 0.5f;
-        private const float EndWaitTimer = 1;
 
         private Story currentStory;
-        public Animator animator;
 
-        [Header("Regular UI")] [SerializeField]
-        public TextMeshProUGUI remark;
-
-        [Header("Dialogue UI")] [SerializeField]
-        public GameObject TextPanel;
+        [SerializeField] public GameObject dialogueCanvas;
 
         [SerializeField] public TextMeshProUGUI nameText;
         [SerializeField] public TextMeshProUGUI dialogueText;
         [SerializeField] public GameObject ChoicesPanel;
 
-        private TextMeshProUGUI[] choicesTextBoxes;
+        private TMP_Text[] choicesTextBoxes;
 
-        // Start is called before the first frame update
         private void Start()
         {
-            dialogueText.enabled = false;
+            
+            
+            dialogueText.Disable();
             printing = false;
             Conversing = false;
-            remark.text = "";
-            choicesTextBoxes = ChoicesPanel.GetComponentsInChildren<TextMeshProUGUI>();
+            choicesTextBoxes = ChoicesPanel.GetComponentsInChildren<TMP_Text>();
+
+            InputControlManager.Instance.playerControls.DialogueInteraction.Start.performed += _ =>
+            {
+                InputControlManager.Instance.ChangeControls(ControlTypes.Menus);
+            };
+
+            InputControlManager.Instance.playerControls.DialogueInteraction.Option1.performed +=
+                _ => { ContinueDialogue(0); };
+            InputControlManager.Instance.playerControls.DialogueInteraction.Option2.performed +=
+                _ => { ContinueDialogue(1); };
+            InputControlManager.Instance.playerControls.DialogueInteraction.Option3.performed +=
+                _ => { ContinueDialogue(2); };
         }
 
         private void OnEnable()
@@ -57,80 +66,106 @@ namespace Dialogue
 
         private void EnterDialogueMode(OnEnterDialogueMode onEnterDialogueMode)
         {
+            Debug.Log("DIALOGUE SHOULD SHOW");
+            
+            dialogueCanvas.SetActive(true);
             currentStory = new Story(onEnterDialogueMode.inkFile.text);
             Conversing = true;
-            dialogueText.enabled = true;
-            TextPanel.SetActive(true);
+            dialogueText.Enable();
 
             DisplayFirstLine();
         }
 
-        private void ContinueDialogue(OnChooseNextDialogueLine nextLine)
+        private void ContinueDialogue(int index)
         {
-            var chosenIndex = nextLine.choiceIndex;
-            
-            if (currentStory.currentChoices.Count != 0)
+            if (Conversing)
             {
-                if (chosenIndex > currentStory.currentChoices.Count)
+                if (currentStory.currentChoices.Count != 0)
                 {
-                    chosenIndex %= currentStory.currentChoices.Count;
+                    if (index > currentStory.currentChoices.Count)
+                    {
+                        Debug.LogError("OUT OF BOUNDS");
+                    }
+
+                    currentStory.ChooseChoiceIndex(index);
                 }
 
-                currentStory.ChooseChoiceIndex(chosenIndex);
+                if (currentStory.canContinue)
+                {
+                    if (printing) return;
+
+                    StopAllCoroutines();
+                    StartCoroutine(HandleNextLine(currentStory.Continue()));
+                }
+                else
+                {
+                    ExitDialogueMode();
+                }
             }
             else
             {
-                currentStory.Continue();
+                Debug.LogError("NOT CURRENTLY CONVERSING");
+            }
+        }
+
+        private void ContinueDialogue(OnChooseNextDialogueLine nextLine)
+        {
+            if (Conversing)
+            {
+                if (currentStory.currentChoices.Count != 0)
+                {
+                    if (nextLine.choiceIndex > currentStory.currentChoices.Count)
+                    {
+                        Debug.LogError("OUT OF BOUNDS");
+                    }
+
+                    currentStory.ChooseChoiceIndex(nextLine.choiceIndex);
+                }
+
+                if (currentStory.canContinue)
+                {
+                    if (printing) return;
+
+                    StopAllCoroutines();
+                    StartCoroutine(HandleNextLine(currentStory.Continue()));
+                }
+                else
+                {
+                    ExitDialogueMode();
+                }
+            }
+            else
+            {
+                Debug.LogError("NOT CURRENTLY CONVERSING");
             }
         }
 
         private void DisplayFirstLine()
         {
+            
+            
+            
             if (currentStory.canContinue)
             {
-                //Debug.Log(currentStory.Continue());
                 StopAllCoroutines();
                 StartCoroutine(HandleNextLine(currentStory.Continue()));
-                DisplayChoices();
-                HandleAuthor();
             }
             else
             {
-                Debug.Log("THE TEXT SHOULD BE FINISHED");
                 ExitDialogueMode();
             }
         }
 
         private void DisplayChoices()
         {
-            // if (currentStory.currentChoices.Count == 0) return;
+            
             var choices = currentStory.currentChoices;
             var index = 0;
             foreach (var choice in choices)
             {
+                
                 choicesTextBoxes[index].text = index + ". " + choice.text;
                 index++;
-            }
-
-            for (var a = index; a < choicesTextBoxes.Length; a++)
-            {
-                choicesTextBoxes[a].text = "";
-            }
-        }
-
-        private void DisplayNextLine(object sender, int choiceIndex)
-        {
-            if (currentStory.canContinue)
-            {
-                //Debug.Log(currentStory.Continue());
-                StopAllCoroutines();
-                StartCoroutine(HandleNextLine(currentStory.Continue()));
-                DisplayChoices();
-                HandleAuthor();
-            }
-            else
-            {
-                ExitDialogueMode();
             }
         }
 
@@ -146,13 +181,17 @@ namespace Dialogue
 
         private void ExitDialogueMode()
         {
+            dialogueCanvas.SetActive(false);
             Conversing = false;
-            TextPanel.SetActive(false);
-            dialogueText.text = "";
+            dialogueText.Disable();
         }
 
         private IEnumerator HandleNextLine(string line)
         {
+            printing = true;
+            HandleAuthor();
+            dialogueText.text = "";
+
             foreach (var letter in line.ToCharArray())
             {
                 Debug.Log(dialogueText.text);
@@ -162,56 +201,14 @@ namespace Dialogue
 
             yield return new WaitForSeconds(SentenceWaitTimer);
 
+            FinishLine();
             Debug.Log(line);
         }
-        // Start is called before the first frame update
 
-        private void DisplayNextSentence(string dialogueLine)
+        private void FinishLine()
         {
-            Debug.Log(" TYPING LINE: ");
-            StopAllCoroutines();
-            StartCoroutine(TypeLine(dialogueLine));
-        }
-
-        private IEnumerator TypeText(string[] lines)
-        {
-            foreach (var line in lines)
-            {
-                Debug.Log("SHOULD BE PRINTING");
-                remark.text = "";
-                foreach (var letter in line.ToCharArray())
-                {
-                    remark.text += letter;
-                    yield return new WaitForSeconds(WaitTimer);
-                }
-
-                yield return new WaitForSeconds(SentenceWaitTimer);
-            }
-
-            EndDialogue();
-        }
-
-        private IEnumerator TypeLine(string line)
-        {
-            dialogueText.text = "";
-
-            foreach (char letter in line)
-            {
-                dialogueText.text += letter;
-                yield return new WaitForSeconds(WaitTimer); // How long it will take for it to the new step
-            }
-            
-            yield return new WaitForSeconds(EndWaitTimer);
-            EndDialogue();
-        }
-
-        private void EndDialogue()
-        {
-            // animator.SetBool("IsOpen", false);
-            Debug.Log("End of Conversation");
-            remark.text = "";
-            dialogueText.enabled = false;
             printing = false;
+            DisplayChoices();
         }
     }
 }
