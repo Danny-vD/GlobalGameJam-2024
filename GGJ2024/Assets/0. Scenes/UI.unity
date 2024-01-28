@@ -908,7 +908,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &799280840
 RectTransform:
   m_ObjectHideFlags: 0
@@ -948,7 +948,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 0.85741144, b: 0.41823888, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1536,6 +1536,8 @@ GameObject:
   - component: {fileID: 1149137113}
   - component: {fileID: 1149137112}
   - component: {fileID: 1149137111}
+  - component: {fileID: 1149137114}
+  - component: {fileID: 1149137115}
   m_Layer: 5
   m_Name: HomeButton
   m_TagString: Untagged
@@ -1668,6 +1670,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1149137109}
   m_CullTransparentMesh: 1
+--- !u!114 &1149137114
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1149137109}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33f8ccc313d404d46bd93b72bebeebfa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clickRestartsSound: 1
+  eventToPlayOnClick: 16
+  parameters:
+    parameters:
+      serializedDictionary: []
+--- !u!114 &1149137115
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1149137109}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0d1acc6eff948b8bb53e6f2081d7214, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allowFadeoutOnStop: 1
+  stopInstancesOnDisable: 0
+  stopGlobalInstancesOnDisable: 0
+  allowFadeoutOnDisable: 0
+  allowFadeoutOnDestroy: 0
+  stopGlobalInstancesOnDestroy: 1
+  audioDataPerTriggerType:
+    serializedDictionary:
+    - key: 0
+      value:
+      - IsGlobalInstance: 0
+        AudioEvent: 19
+        PlayState: 0
+        Parameters:
+          parameters:
+            serializedDictionary: []
 --- !u!1 &1320667806
 GameObject:
   m_ObjectHideFlags: 0
@@ -1810,6 +1857,7 @@ GameObject:
   - component: {fileID: 1401145811}
   - component: {fileID: 1401145814}
   - component: {fileID: 1401145815}
+  - component: {fileID: 1401145816}
   m_Layer: 5
   m_Name: VolumeSlider
   m_TagString: Untagged
@@ -1938,6 +1986,42 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
   m_EffectDistance: {x: 5, y: -5}
   m_UseGraphicAlpha: 1
+--- !u!114 &1401145816
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1401145809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0d1acc6eff948b8bb53e6f2081d7214, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allowFadeoutOnStop: 1
+  stopInstancesOnDisable: 0
+  stopGlobalInstancesOnDisable: 0
+  allowFadeoutOnDisable: 0
+  allowFadeoutOnDestroy: 0
+  stopGlobalInstancesOnDestroy: 1
+  audioDataPerTriggerType:
+    serializedDictionary:
+    - key: 0
+      value:
+      - IsGlobalInstance: 0
+        AudioEvent: 1
+        PlayState: 0
+        Parameters:
+          parameters:
+            serializedDictionary: []
+    - key: 1
+      value:
+      - IsGlobalInstance: 0
+        AudioEvent: 1
+        PlayState: 5
+        Parameters:
+          parameters:
+            serializedDictionary: []
 --- !u!1 &1484311621
 GameObject:
   m_ObjectHideFlags: 0
@@ -2167,7 +2251,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -2939,8 +3023,9 @@ GameObject:
   - component: {fileID: 2007863816}
   - component: {fileID: 2007863815}
   - component: {fileID: 2007863819}
-  - component: {fileID: 2007863818}
   - component: {fileID: 2007863820}
+  - component: {fileID: 2007863821}
+  - component: {fileID: 2007863822}
   m_Layer: 5
   m_Name: Settings
   m_TagString: Untagged
@@ -2964,9 +3049,9 @@ RectTransform:
   - {fileID: 207017695}
   m_Father: {fileID: 1052517164}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 1738.0925, y: -156.68135}
   m_SizeDelta: {x: 511.13, y: 100}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &2007863815
@@ -3027,23 +3112,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2007863813}
   m_CullTransparentMesh: 1
---- !u!114 &2007863818
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2007863813}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 33f8ccc313d404d46bd93b72bebeebfa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  clickRestartsSound: 1
-  eventToPlayOnClick: 0
-  parameters:
-    parameters:
-      serializedDictionary: []
 --- !u!114 &2007863819
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3127,6 +3195,51 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
   m_EffectDistance: {x: 5, y: -5}
   m_UseGraphicAlpha: 1
+--- !u!114 &2007863821
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2007863813}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33f8ccc313d404d46bd93b72bebeebfa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clickRestartsSound: 1
+  eventToPlayOnClick: 16
+  parameters:
+    parameters:
+      serializedDictionary: []
+--- !u!114 &2007863822
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2007863813}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0d1acc6eff948b8bb53e6f2081d7214, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allowFadeoutOnStop: 1
+  stopInstancesOnDisable: 0
+  stopGlobalInstancesOnDisable: 0
+  allowFadeoutOnDisable: 0
+  allowFadeoutOnDestroy: 0
+  stopGlobalInstancesOnDestroy: 1
+  audioDataPerTriggerType:
+    serializedDictionary:
+    - key: 0
+      value:
+      - IsGlobalInstance: 0
+        AudioEvent: 19
+        PlayState: 0
+        Parameters:
+          parameters:
+            serializedDictionary: []
 --- !u!1 &2084894792
 GameObject:
   m_ObjectHideFlags: 0
@@ -3140,8 +3253,9 @@ GameObject:
   - component: {fileID: 2084894795}
   - component: {fileID: 2084894794}
   - component: {fileID: 2084894798}
-  - component: {fileID: 2084894797}
   - component: {fileID: 2084894799}
+  - component: {fileID: 2084894800}
+  - component: {fileID: 2084894801}
   m_Layer: 5
   m_Name: Play
   m_TagString: Untagged
@@ -3165,9 +3279,9 @@ RectTransform:
   - {fileID: 447372917}
   m_Father: {fileID: 1052517164}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 437.4725, y: -156.68135}
   m_SizeDelta: {x: 511.13, y: 101}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2084894794
@@ -3228,23 +3342,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2084894792}
   m_CullTransparentMesh: 1
---- !u!114 &2084894797
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2084894792}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 33f8ccc313d404d46bd93b72bebeebfa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  clickRestartsSound: 1
-  eventToPlayOnClick: 0
-  parameters:
-    parameters:
-      serializedDictionary: []
 --- !u!114 &2084894798
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3302,8 +3399,53 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
-  m_EffectDistance: {x: 5, y: -5}
+  m_EffectDistance: {x: 3, y: -3}
   m_UseGraphicAlpha: 1
+--- !u!114 &2084894800
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2084894792}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33f8ccc313d404d46bd93b72bebeebfa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clickRestartsSound: 1
+  eventToPlayOnClick: 16
+  parameters:
+    parameters:
+      serializedDictionary: []
+--- !u!114 &2084894801
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2084894792}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0d1acc6eff948b8bb53e6f2081d7214, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allowFadeoutOnStop: 1
+  stopInstancesOnDisable: 0
+  stopGlobalInstancesOnDisable: 0
+  allowFadeoutOnDisable: 0
+  allowFadeoutOnDestroy: 0
+  stopGlobalInstancesOnDestroy: 1
+  audioDataPerTriggerType:
+    serializedDictionary:
+    - key: 0
+      value:
+      - IsGlobalInstance: 0
+        AudioEvent: 19
+        PlayState: 0
+        Parameters:
+          parameters:
+            serializedDictionary: []
 --- !u!1 &2092463797
 GameObject:
   m_ObjectHideFlags: 0

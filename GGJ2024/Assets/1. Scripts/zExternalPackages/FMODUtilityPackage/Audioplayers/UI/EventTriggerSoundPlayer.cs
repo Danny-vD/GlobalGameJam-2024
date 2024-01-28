@@ -62,7 +62,8 @@ namespace FMODUtilityPackage.Audioplayers.UI
 
 		private void Awake()
 		{
-			eventTrigger = this.EnsureComponent<EventTrigger>();
+            Debug.Log($"Awake {gameObject.name}");
+            eventTrigger = this.EnsureComponent<EventTrigger>();
 
 			foreach (KeyValuePair<EventTriggerType, AudioEventData[]> eventDataPerTrigger in audioDataPerTriggerType)
 			{
@@ -182,7 +183,8 @@ namespace FMODUtilityPackage.Audioplayers.UI
 
 		private UnityAction<BaseEventData> GetCallback(AudioEventData audioEventData)
 		{
-			EventInstance instance = audioEventData.IsGlobalInstance ? staticInstancePerEventType[audioEventData.AudioEvent] : instancePerEventType[audioEventData.AudioEvent];
+            Debug.Log($"GetCallback {gameObject.name}");
+            EventInstance instance = audioEventData.IsGlobalInstance ? staticInstancePerEventType[audioEventData.AudioEvent] : instancePerEventType[audioEventData.AudioEvent];
 
 			return audioEventData.PlayState switch
 			{
