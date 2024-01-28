@@ -29,6 +29,7 @@ namespace CombatSystem.UIScripts.CombatMoves
 			combatMove         = move;
 			selectedMoveHolder = moveHolder;
 
+			//TODO: logic in between with events for Successful selection and failed selection
 			selectMoveButton.onClick.AddListener(SelectMove);
 
 			nameLabel.text = combatMove.AbilityName;
@@ -39,7 +40,9 @@ namespace CombatSystem.UIScripts.CombatMoves
 
 		private void SelectMove()
 		{
-			selectedMoveHolder.SelectMove(combatMove);
+			//TODO: validate target
+			//TODO: select target
+			selectedMoveHolder.SelectMove(combatMove, null);
 		}
 	}
 }

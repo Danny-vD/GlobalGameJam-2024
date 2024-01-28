@@ -15,10 +15,16 @@ namespace CombatSystem.Managers
 
 		private readonly Queue<GameObject> characterPickingMoveQueue = new Queue<GameObject>();
 
-		private void Awake()
+		private void OnEnable()
 		{
 			PlayerChoosingState.StartedChoosingState += AddToQueue;
 			PlayerChoosingState.EndedChoosingState   += RemoveFromQueue;
+		}
+
+		private void OnDisable()
+		{
+			PlayerChoosingState.StartedChoosingState -= AddToQueue;
+			PlayerChoosingState.EndedChoosingState   -= RemoveFromQueue;
 		}
 
 		[ContextMenu("Start combat")] //TODO: remove
@@ -29,8 +35,6 @@ namespace CombatSystem.Managers
 
 		private void AddToQueue(GameObject obj)
 		{
-			Debug.Log($"Count: {characterPickingMoveQueue.Count}\n{obj.name}");
-			
 			if (characterPickingMoveQueue.Contains(obj))
 			{
 				Debug.LogError("The queue already contains this character!\n" + obj.name);
@@ -73,12 +77,6 @@ namespace CombatSystem.Managers
 			}
 
 			Debug.LogError("Trying to dequeue with an empty queue!");
-		}
-
-		private void OnDestroy()
-		{
-			PlayerChoosingState.StartedChoosingState -= AddToQueue;
-			PlayerChoosingState.EndedChoosingState   -= RemoveFromQueue;
 		}
 	}
 }
