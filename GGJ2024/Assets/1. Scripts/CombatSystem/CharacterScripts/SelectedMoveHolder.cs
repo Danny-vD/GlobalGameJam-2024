@@ -4,7 +4,7 @@ using VDFramework;
 
 namespace CombatSystem.CharacterScripts
 {
-	public class CombatMoveManager : BetterMonoBehaviour
+	public class SelectedMoveHolder : BetterMonoBehaviour
 	{
 		public event Action OnMoveSelected = delegate { };
 		

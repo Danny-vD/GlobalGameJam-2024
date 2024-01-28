@@ -2,6 +2,7 @@
 using CombatSystem.CharacterScripts;
 using CombatSystem.CharacterScripts.CharacterStates;
 using CombatSystem.Interfaces;
+using CombatSystem.Managers;
 using CombatSystem.ScriptableAssets.CombatMoves;
 using UnityEngine;
 using VDFramework;
@@ -23,13 +24,16 @@ namespace CombatSystem.UIScripts.CombatMoves
 		private void Awake()
 		{
 			//TODO: ignore if someone is already choosing a move
-			PlayerChoosingState.StartedChoosingState += ShowMoves;
-			PlayerChoosingState.EndedChoosingState += HideMoves;
+			PlayerTurnManager.NewCharacterChoosingMove += ShowMoves;
+			PlayerTurnManager.OnChoosingQueueEmpty += HideMoves;
 		}
 
-		private void ShowMoves(IMoveset moveset, CombatMoveManager combatMoveManager)
+		private void ShowMoves(GameObject character)
 		{
-			InstantiateCombatMoves(moveset, combatMoveManager);
+			IMoveset moveset = character.GetComponent<IMoveset>();
+			SelectedMoveHolder selectedMoveHolder = character.GetComponent<SelectedMoveHolder>();
+			
+			InstantiateCombatMoves(moveset, selectedMoveHolder);
 			
 			OnShowMoves.Invoke();
 		}
@@ -39,7 +43,7 @@ namespace CombatSystem.UIScripts.CombatMoves
 			OnHideMoves.Invoke();
 		}
 
-		private void InstantiateCombatMoves(IMoveset moveset, CombatMoveManager combatMoveManager)
+		private void InstantiateCombatMoves(IMoveset moveset, SelectedMoveHolder selectedMoveHolder)
 		{
 			combatMovesParent.DestroyChildren();
 			
@@ -47,7 +51,7 @@ namespace CombatSystem.UIScripts.CombatMoves
 			{
 				GameObject instance = Instantiate(combatMovePrefab, combatMovesParent);
 
-				instance.GetComponent<CombatMoveUIManager>().Initialize(combatMove, combatMoveManager);
+				instance.GetComponent<CombatMoveUIManager>().Initialize(combatMove, selectedMoveHolder);
 			}
 		}
 	}

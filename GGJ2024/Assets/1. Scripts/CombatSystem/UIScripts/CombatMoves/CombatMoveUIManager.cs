@@ -1,6 +1,5 @@
 ﻿using CombatSystem.CharacterScripts;
 using CombatSystem.ScriptableAssets.CombatMoves;
-using LocalisationPackage.Core;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -23,12 +22,12 @@ namespace CombatSystem.UIScripts.CombatMoves
 		private TMP_Text costLabel;
 
 		private CombatMove combatMove;
-		private CombatMoveManager combatMoveManager;
+		private SelectedMoveHolder selectedMoveHolder;
 
-		public void Initialize(CombatMove move, CombatMoveManager moveManager)
+		public void Initialize(CombatMove move, SelectedMoveHolder moveHolder)
 		{
 			combatMove        = move;
-			combatMoveManager = moveManager;
+			selectedMoveHolder = moveHolder;
 
 			selectMoveButton.onClick.AddListener(SelectMove);
 
@@ -40,7 +39,7 @@ namespace CombatSystem.UIScripts.CombatMoves
 
 		private void SelectMove()
 		{
-			combatMoveManager.SelectMove(combatMove);
+			selectedMoveHolder.SelectMove(combatMove);
 		}
 	}
 }
