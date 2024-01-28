@@ -29,12 +29,13 @@ public class InputControlManager : Singleton<InputControlManager>
         {
             { ControlTypes.Overworld, playerControls.Overworld.Get() },
             { ControlTypes.Menus, playerControls.UIMenus.Get() },
-            { ControlTypes.Combat, playerControls.Combat.Get() }
+            { ControlTypes.Combat, playerControls.Combat.Get() },
+            { ControlTypes.Dialogue, playerControls.DialogueInteraction.Get() }
         };
 
         beforeMenu = ControlTypes.Overworld;
         currentType = ControlTypes.Overworld;
-        
+
         playerControls.UIMenus.Disable();
         playerControls.Overworld.Enable();
 
@@ -44,32 +45,24 @@ public class InputControlManager : Singleton<InputControlManager>
 
     public void ChangeControls(ControlTypes type)
     {
-
-
         if (type == ControlTypes.Menus)
         {
             beforeMenu = currentType;
             OpenSettings();
         }
-        
+
         actionMapsByType[currentType].Disable();
         actionMapsByType[type].Enable();
         currentType = type;
-        
-        
-
     }
 
     public void ChangeControls()
     {
-        
-        Debug.Log("GET RUN");
         actionMapsByType[currentType].Disable();
         actionMapsByType[beforeMenu].Enable();
 
         currentType = beforeMenu;
         CloseSettings();
-
     }
 
     private void OpenSettings()

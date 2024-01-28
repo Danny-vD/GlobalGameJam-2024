@@ -68,6 +68,8 @@ namespace Dialogue
         {
             Debug.Log("DIALOGUE SHOULD SHOW");
             
+            InputControlManager.Instance.ChangeControls(ControlTypes.Dialogue);
+            
             dialogueCanvas.SetActive(true);
             currentStory = new Story(onEnterDialogueMode.inkFile.text);
             Conversing = true;
@@ -161,9 +163,9 @@ namespace Dialogue
             
             var choices = currentStory.currentChoices;
             var index = 0;
+            Debug.Log(choices.Count);
             foreach (var choice in choices)
             {
-                
                 choicesTextBoxes[index].text = index + ". " + choice.text;
                 index++;
             }
@@ -181,6 +183,7 @@ namespace Dialogue
 
         private void ExitDialogueMode()
         {
+            InputControlManager.Instance.ChangeControls(ControlTypes.Overworld);
             dialogueCanvas.SetActive(false);
             Conversing = false;
             dialogueText.Disable();
@@ -194,7 +197,6 @@ namespace Dialogue
 
             foreach (var letter in line.ToCharArray())
             {
-                Debug.Log(dialogueText.text);
                 dialogueText.text += letter;
                 yield return new WaitForSeconds(WaitTimer);
             }
