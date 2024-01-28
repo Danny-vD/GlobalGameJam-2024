@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using CombatMoves.BaseClasses;
 using UnityEngine;
 
@@ -14,10 +13,8 @@ namespace CombatSystem.CharacterScripts.MoveSets
 		{
 			foreach (AbstractCombatMove combatMove in starterMoves)
 			{
-				gameObject.AddComponent(combatMove.GetType());
+				base.AddMove(combatMove);
 			}
-
-			currentMoves = GetComponents<AbstractCombatMove>().ToList();
 		}
 	}
 }

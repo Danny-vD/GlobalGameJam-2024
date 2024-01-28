@@ -7,8 +7,16 @@ namespace CombatSystem.CharacterScripts.MoveSets
 {
 	public abstract class AbstractMoveset : BetterMonoBehaviour, IMoveset
 	{
-		protected List<AbstractCombatMove> currentMoves;
+		protected List<AbstractCombatMove> currentMoves = new List<AbstractCombatMove>();
 
+		public virtual T AddMove<T>(T newMove) where T : AbstractCombatMove
+		{
+			T component = gameObject.AddComponent(newMove.GetType()) as T;
+			currentMoves.Add(component);
+
+			return component;
+		}
+		
 		public virtual T AddMove<T>() where T : AbstractCombatMove
 		{
 			T combatMove = gameObject.AddComponent<T>();
