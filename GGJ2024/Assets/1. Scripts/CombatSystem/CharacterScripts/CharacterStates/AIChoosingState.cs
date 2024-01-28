@@ -1,25 +1,26 @@
 ﻿using CombatSystem.Enums;
 using CombatSystem.Interfaces;
+using CombatSystem.ScriptableAssets.CombatMoves;
 
 namespace CombatSystem.CharacterScripts.CharacterStates
 {
 	public class AIChoosingState : AbstractCharacterState
 	{
-		private CombatMoveManager combatMoveManager;
+		private SelectedMoveHolder selectedMoveHolder;
 		private IAIMoveset aiMoveset;
 		
-		public override CharacterStateType NextState => CharacterStateType.Casting;
+		public override CharacterCombatStateType NextState => CharacterCombatStateType.Casting;
 
 		private void Awake()
 		{
-			combatMoveManager = GetComponent<CombatMoveManager>();
+			selectedMoveHolder = GetComponent<SelectedMoveHolder>();
 			aiMoveset         = GetComponent<IAIMoveset>();
 		}
 
 		public override void Enter()
 		{
 			CombatMove combatMove = aiMoveset.ChooseAIMove();
-			combatMoveManager.SelectMove(combatMove);
+			selectedMoveHolder.SelectMove(combatMove);
 			Exit();
 		}
 

@@ -6,9 +6,9 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 {
 	public abstract class AbstractCharacterState : BetterMonoBehaviour
 	{
-		public event Action<CharacterStateType> OnStateEnded = delegate { };
+		public event Action<CharacterCombatStateType> OnStateEnded = delegate { };
 
-		public abstract CharacterStateType NextState { get; }
+		public abstract CharacterCombatStateType NextState { get; }
 		
 		public abstract void Enter();
 

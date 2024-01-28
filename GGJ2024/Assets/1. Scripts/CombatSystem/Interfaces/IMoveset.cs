@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using CombatSystem.ScriptableAssets.CombatMoves;
 
 namespace CombatSystem.Interfaces
 {

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="SandboxScene" id="{3927a60c-cbb9-404b-bdff-6bba0942056c}">
+		<property name="name">
+			<value>New Scene</value>
+		</property>
+		<relationship name="folder">
+			<destination>{87394873-ff21-4583-9126-8776838d3080}</destination>
+		</relationship>
+		<relationship name="markerTracks">
+			<destination>{1a8c3d3c-cb47-4d84-bb47-d92e93ddb678}</destination>
+		</relationship>
+		<relationship name="timeline">
+			<destination>{e780f6c9-466b-43e9-90ca-66938c0f96e4}</destination>
+		</relationship>
+		<relationship name="listeners">
+			<destination>{7d65b343-55ac-4605-b0f1-eaee9bb9e257}</destination>
+		</relationship>
+	</object>
+	<object class="MarkerTrack" id="{1a8c3d3c-cb47-4d84-bb47-d92e93ddb678}" />
+	<object class="Timeline" id="{e780f6c9-466b-43e9-90ca-66938c0f96e4}" />
+	<object class="SandboxListener" id="{7d65b343-55ac-4605-b0f1-eaee9bb9e257}">
+		<property name="positionX">
+			<value>0.125</value>
+		</property>
+		<property name="positionZ">
+			<value>0.200000003</value>
+		</property>
+	</object>
+</objects>

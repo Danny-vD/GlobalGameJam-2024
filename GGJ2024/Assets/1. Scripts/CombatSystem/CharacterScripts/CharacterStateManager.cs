@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using CombatSystem.CharacterScripts.CharacterStates;
 using CombatSystem.Enums;
+using CombatSystem.Events;
 using SerializableDictionaryPackage.SerializableDictionary;
 using UnityEngine;
 using VDFramework;
+using VDFramework.UnityExtensions;
 
 namespace CombatSystem.CharacterScripts
 {
@@ -13,22 +15,30 @@ namespace CombatSystem.CharacterScripts
 		public event Action OnStateChanged = delegate { };
 
 		[SerializeField]
-		private SerializableEnumDictionary<CharacterStateType, AbstractCharacterState> statesPerType;
+		private SerializableEnumDictionary<CharacterCombatStateType, AbstractCharacterState> statesPerType;
 
-		public CharacterStateType CurrentStateType { get; private set; }
-		
+		public CharacterCombatStateType CurrentStateType { get; private set; }
+
 		private List<AbstractCharacterState> states;
 
 		private AbstractCharacterState currentState;
 
 		private void Awake()
 		{
-			if (!statesPerType.ContainsKey(CharacterStateType.Idle))
+			if (!statesPerType.ContainsKey(CharacterCombatStateType.Idle))
 			{
 				Debug.LogError("No idle state present!");
 			}
 
-			SetState(CharacterStateType.Idle);
+			CombatStartedEvent.ParameterlessListeners += this.Enable;
+			CombatEndedEvent.ParameterlessListeners   += this.Disable;
+
+			this.Disable();
+		}
+
+		private void Start()
+		{
+			SetState(CharacterCombatStateType.Idle);
 		}
 
 		private void Update()
@@ -36,7 +46,7 @@ namespace CombatSystem.CharacterScripts
 			currentState.Step();
 		}
 
-		private void SetState(CharacterStateType stateType)
+		private void SetState(CharacterCombatStateType stateType)
 		{
 			if (currentState != null)
 			{
@@ -47,9 +57,9 @@ namespace CombatSystem.CharacterScripts
 
 			currentState = statesPerType[CurrentStateType];
 			OnStateChanged.Invoke();
-			
+
 			currentState.OnStateEnded += SetState;
-			
+
 			currentState.Enter();
 		}
 
@@ -59,6 +69,9 @@ namespace CombatSystem.CharacterScripts
 			{
 				currentState.OnStateEnded -= SetState;
 			}
+
+			CombatStartedEvent.ParameterlessListeners -= this.Enable;
+			CombatEndedEvent.ParameterlessListeners   -= this.Disable;
 		}
 	}
 }

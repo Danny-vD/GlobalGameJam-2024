@@ -5,7 +5,8 @@ namespace CombatSystem.Structs
 	[Serializable]
 	public struct CharacterStatistics
 	{
-		public int Health;
+		public string Name;
+		
 		public float Speed;
 
 		public float AttackPower;

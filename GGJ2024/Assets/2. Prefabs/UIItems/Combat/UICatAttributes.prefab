@@ -173,7 +173,7 @@ RectTransform:
   m_Father: {fileID: 3340008003519524964}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -248,7 +248,7 @@ RectTransform:
   m_Father: {fileID: 5368695234382973803}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -537,6 +537,7 @@ GameObject:
   - component: {fileID: 5787807979611539877}
   - component: {fileID: 6580117216742829794}
   - component: {fileID: 2852926165035443085}
+  - component: {fileID: 4003585046300237285}
   m_Layer: 5
   m_Name: UICatAttributes
   m_TagString: Untagged
@@ -670,6 +671,23 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &4003585046300237285
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6171725141192828171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7ccd3bb5f474c8f9baf40751921a954, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nameLabel: {fileID: 2852926165035443085}
+  timerSlider: {fileID: 5084364097013890409}
+  specialAttackSlider: {fileID: 3614190981056852903}
+  healthLabel: {fileID: 0}
+  mpLabel: {fileID: 0}
 --- !u!1 &6905587905113844362
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="EventFolder" id="{c2416103-2a8f-4303-99b8-b116ff45214a}">
+		<property name="name">
+			<value>MageSpells</value>
+		</property>
+		<relationship name="folder">
+			<destination>{c179b475-8c40-4e02-9191-c7740af1a167}</destination>
+		</relationship>
+	</object>
+</objects>

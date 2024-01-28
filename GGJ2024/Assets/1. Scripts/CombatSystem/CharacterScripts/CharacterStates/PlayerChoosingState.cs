@@ -1,32 +1,29 @@
 ﻿using System;
 using CombatSystem.Enums;
-using CombatSystem.Interfaces;
 using UnityEngine;
 
 namespace CombatSystem.CharacterScripts.CharacterStates
 {
-	[RequireComponent(typeof(CombatMoveManager))]
+	[RequireComponent(typeof(SelectedMoveHolder))]
 	public class PlayerChoosingState : AbstractCharacterState
 	{
-		public static event Action<IMoveset, CombatMoveManager> StartedChoosingState = delegate { };
-		public static event Action EndedChoosingState = delegate { };
+		public static event Action<GameObject> StartedChoosingState = delegate { };
+		public static event Action<GameObject> EndedChoosingState = delegate { };
 
-		public override CharacterStateType NextState => CharacterStateType.Casting;
-		
-		private CombatMoveManager combatMoveManager;
-		private IMoveset moveset;
+		public override CharacterCombatStateType NextState => CharacterCombatStateType.Casting;
+
+		private SelectedMoveHolder selectedMoveHolder;
 
 		private void Awake()
 		{
-			combatMoveManager                =  GetComponent<CombatMoveManager>();
-			moveset                          =  GetComponent<IMoveset>();
-			
-			combatMoveManager.OnMoveSelected += Exit;
+			selectedMoveHolder = GetComponent<SelectedMoveHolder>();
+
+			selectedMoveHolder.OnMoveSelected += Exit;
 		}
-		
+
 		public override void Enter()
 		{
-			StartedChoosingState.Invoke(moveset, combatMoveManager);
+			StartedChoosingState.Invoke(gameObject);
 		}
 
 		public override void Step()
@@ -36,13 +33,13 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 		protected override void Exit()
 		{
 			base.Exit();
-			
-			EndedChoosingState.Invoke();
+
+			EndedChoosingState.Invoke(gameObject);
 		}
 
 		private void OnDestroy()
 		{
-			combatMoveManager.OnMoveSelected -= Exit;
+			selectedMoveHolder.OnMoveSelected -= Exit;
 		}
 	}
 }

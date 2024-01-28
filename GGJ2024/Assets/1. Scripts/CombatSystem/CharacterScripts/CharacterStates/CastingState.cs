@@ -8,7 +8,7 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 		public event Action OnCastingStarted = delegate { };
 		public event Action OnCastingEnded = delegate { };
 		
-		public override CharacterStateType NextState => CharacterStateType.Idle;
+		public override CharacterCombatStateType NextState => CharacterCombatStateType.Idle;
 
 		public override void Enter()
 		{

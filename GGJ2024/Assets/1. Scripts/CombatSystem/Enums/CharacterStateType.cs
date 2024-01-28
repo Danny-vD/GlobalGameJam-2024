@@ -1,6 +1,6 @@
 ﻿namespace CombatSystem.Enums
 {
-	public enum CharacterStateType
+	public enum CharacterCombatStateType
 	{
 		Idle,
 		Choosing,
