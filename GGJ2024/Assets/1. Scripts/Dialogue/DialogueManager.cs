@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using FMODUtilityPackage.Core;
 using Ink.Runtime;
+using SerializableDictionaryPackage.SerializableDictionary;
 using TMPro;
 using UI;
 using UnityEngine;
@@ -8,6 +10,7 @@ using UnityEngine.UI;
 using VDFramework.EventSystem;
 using VDFramework.Singleton;
 using VDFramework.UnityExtensions;
+using EventType = FMODUtilityPackage.Enums.EventType;
 
 namespace Dialogue
 {
@@ -24,6 +27,9 @@ namespace Dialogue
 
         [SerializeField] public GameObject dialogueCanvas;
 
+        [SerializeField] private GameObject sprite;
+        [SerializeField] private SerializableDictionary<string, Sprite> imagesByNames;
+
         [SerializeField] public TextMeshProUGUI nameText;
         [SerializeField] public TextMeshProUGUI dialogueText;
         [SerializeField] public GameObject ChoicesPanel;
@@ -32,8 +38,6 @@ namespace Dialogue
 
         private void Start()
         {
-            
-            
             dialogueText.Disable();
             printing = false;
             Conversing = false;
@@ -67,9 +71,9 @@ namespace Dialogue
         private void EnterDialogueMode(OnEnterDialogueMode onEnterDialogueMode)
         {
             Debug.Log("DIALOGUE SHOULD SHOW");
-            
+
             InputControlManager.Instance.ChangeControls(ControlTypes.Dialogue);
-            
+
             dialogueCanvas.SetActive(true);
             currentStory = new Story(onEnterDialogueMode.inkFile.text);
             Conversing = true;
@@ -144,9 +148,6 @@ namespace Dialogue
 
         private void DisplayFirstLine()
         {
-            
-            
-            
             if (currentStory.canContinue)
             {
                 StopAllCoroutines();
@@ -160,7 +161,6 @@ namespace Dialogue
 
         private void DisplayChoices()
         {
-            
             var choices = currentStory.currentChoices;
             var index = 0;
             Debug.Log(choices.Count);
@@ -181,6 +181,22 @@ namespace Dialogue
             }
         }
 
+        private void HandlePortrait()
+        {
+            var tags = currentStory.currentTags;
+            if (tags.Count <= 0) return;
+            
+            var s = tags[0];
+            var s1 = s.Split(':', 2)[1].Trim();
+            
+            Debug.Log(s1);
+            if (imagesByNames.TryGetValue(s1, out var byName))
+            {
+               
+                sprite.GetComponent<Image>().sprite = byName;
+            }
+        }
+
         private void ExitDialogueMode()
         {
             InputControlManager.Instance.ChangeControls(ControlTypes.Overworld);
@@ -193,10 +209,12 @@ namespace Dialogue
         {
             printing = true;
             HandleAuthor();
+            HandlePortrait();
             dialogueText.text = "";
 
             foreach (var letter in line.ToCharArray())
             {
+                AudioPlayer.PlayOneShot2D(EventType.SFX_UI_Talking);
                 dialogueText.text += letter;
                 yield return new WaitForSeconds(WaitTimer);
             }

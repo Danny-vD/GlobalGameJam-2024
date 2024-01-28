@@ -112,5 +112,30 @@ namespace FMODUtilityPackage.Enums
 		/// event:/SFX/Ambience/HellAmbience
 		/// </FMODEventPath>
 		SFX_Ambience_HellAmbience,
+
+		/// <FMODEventPath>
+		/// event:/SFX/UI/Talking
+		/// </FMODEventPath>
+		SFX_UI_Talking,
+
+		/// <FMODEventPath>
+		/// event:/SFX/Cutscenes/Scene6
+		/// </FMODEventPath>
+		SFX_Cutscenes_Scene6,
+
+		/// <FMODEventPath>
+		/// event:/SFX/Cutscenes/Scene1
+		/// </FMODEventPath>
+		SFX_Cutscenes_Scene1,
+
+		/// <FMODEventPath>
+		/// event:/SFX/Cutscenes/Scene8
+		/// </FMODEventPath>
+		SFX_Cutscenes_Scene8,
+
+		/// <FMODEventPath>
+		/// event:/SFX/Battle/Death
+		/// </FMODEventPath>
+		SFX_Battle_Death,
 	}
 }
