@@ -8,7 +8,7 @@ using VDFramework.EventSystem;
 
 namespace CombatSystem.Managers
 {
-	public class PlayerTurnManager : BetterMonoBehaviour //TODO: Keep track of all the moves and apply them one by one
+	public class PlayerTurnManager : BetterMonoBehaviour
 	{
 		public static event Action<GameObject> NewCharacterChoosingMove = delegate { };
 		public static event Action OnChoosingQueueEmpty = delegate { };
@@ -19,12 +19,23 @@ namespace CombatSystem.Managers
 		{
 			PlayerChoosingState.StartedChoosingState += AddToQueue;
 			PlayerChoosingState.EndedChoosingState   += RemoveFromQueue;
+			
+			CombatStartedEvent.ParameterlessListeners += ResetState;
+			CombatEndedEvent.ParameterlessListeners   += ResetState;
 		}
 
 		private void OnDisable()
 		{
 			PlayerChoosingState.StartedChoosingState -= AddToQueue;
 			PlayerChoosingState.EndedChoosingState   -= RemoveFromQueue;
+			
+			CombatStartedEvent.ParameterlessListeners -= ResetState;
+			CombatEndedEvent.ParameterlessListeners   -= ResetState;
+		}
+		
+		private void ResetState()
+		{
+			characterPickingMoveQueue.Clear();
 		}
 
 		[ContextMenu("Start combat")] //TODO: remove

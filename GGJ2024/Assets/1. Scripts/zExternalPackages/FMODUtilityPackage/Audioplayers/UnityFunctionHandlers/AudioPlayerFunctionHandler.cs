@@ -1,20 +1,18 @@
 ﻿using FMOD.Studio;
 using FMODUtilityPackage.Audioplayers.UnityFunctionHandlers.BaseClasses;
 using FMODUtilityPackage.Core;
-using FMODUtilityPackage.Enums;
 using UnityEngine;
 using UtilityPackage.Utility.UnityFunctionHandlers.Enums;
-using EventType = FMODUtilityPackage.Enums.EventType;
 
 namespace FMODUtilityPackage.Audioplayers.UnityFunctionHandlers
 {
 	/// <summary>
-	/// play an <see cref="EventType"/> on a specific <see cref="Enums.UnityFunction"/>
+	/// play an <see cref="EventType"/> on a specific <see cref="UnityFunction"/>
 	/// </summary>
 	public class AudioPlayerFunctionHandler : AbstractAudioFunctionHandler
 	{
 		[SerializeField]
-		private EventType eventType;
+		private Enums.EventType eventType;
 		
 		[Header("On Destroy"), SerializeField, Tooltip("Stop all instances when this object is destroyed")]
 		private bool stopInstancesOnDestroy;

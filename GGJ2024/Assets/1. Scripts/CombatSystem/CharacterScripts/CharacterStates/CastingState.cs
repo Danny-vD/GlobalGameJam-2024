@@ -6,11 +6,13 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 {
 	public class CastingState : AbstractCharacterState
 	{
-		public static Action<Action> OnNewCharacterReadyToCast = delegate { };
+		public static Action<CastingState> OnNewCharacterReadyToCast = delegate { };
 		public static Action OnCharacterFinishedCasting = delegate { };
 		
 		public event Action OnCastingStarted = delegate { };
 		public event Action OnCastingEnded = delegate { };
+		
+		public bool IsCasting { get; private set; }
 		
 		public override CharacterCombatStateType NextState => CharacterCombatStateType.Idle;
 
@@ -23,16 +25,7 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 
 		public override void Enter()
 		{
-			OnNewCharacterReadyToCast.Invoke(StartCasting);
-		}
-
-		private void StartCasting()
-		{
-			AbstractCombatMove selectedMove = selectedMoveHolder.SelectedMove;
-			selectedMove.OnCombatMoveEnded += Exit;
-			selectedMove.StartCombatMove(selectedMoveHolder.SelectedTarget);
-			
-			OnCastingStarted.Invoke();
+			OnNewCharacterReadyToCast.Invoke(this);
 		}
 
 		public override void Step()
@@ -41,17 +34,28 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 
 		protected override void Exit()
 		{
+			StopCasting();
+		}
+		
+		public void StartCasting()
+		{
+			AbstractCombatMove selectedMove = selectedMoveHolder.SelectedMove;
+			selectedMove.OnCombatMoveEnded += Exit;
+			selectedMove.StartCombatMove(selectedMoveHolder.SelectedTarget);
+			
+			IsCasting = true;
+			OnCastingStarted.Invoke();
+		}
+
+		public void StopCasting()
+		{
 			selectedMoveHolder.SelectedMove.OnCombatMoveEnded -= Exit;
 			
 			OnCastingEnded.Invoke();
 			base.Exit();
 			
+			IsCasting = false;
 			OnCharacterFinishedCasting.Invoke();
-		}
-
-		public void EndCast()
-		{
-			Exit();
 		}
 	}
 }

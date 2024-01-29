@@ -1,55 +1,74 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using CombatSystem.CharacterScripts.CharacterStates;
+using CombatSystem.Events;
 using UnityEngine;
 using VDFramework;
 
 namespace CombatSystem.Managers
 {
-	public class CombatMoveManager : BetterMonoBehaviour //TODO: Keep track of all the moves and apply them one by one
+	public class CombatMoveManager : BetterMonoBehaviour
 	{
-		private readonly Queue<Action> combatMoveReadyQueue = new Queue<Action>();
+		private readonly Queue<CastingState> combatMoveReadyQueue = new Queue<CastingState>();
+
+		private bool isSomeoneCasting = false;
 
 		private void OnEnable()
 		{
-			CastingState.OnNewCharacterReadyToCast  += OnNewCharacterReadyToCast;
-			CastingState.OnCharacterFinishedCasting += RemoveFromQueue;
+			CastingState.OnNewCharacterReadyToCast    += OnNewCharacterReadyToCast;
+			CastingState.OnCharacterFinishedCasting   += StartNextInQueue;
+			
+			CombatStartedEvent.ParameterlessListeners += ResetState;
+			CombatEndedEvent.ParameterlessListeners += ResetState;
 		}
 
 		private void OnDisable()
 		{
 			CastingState.OnNewCharacterReadyToCast  -= OnNewCharacterReadyToCast;
-			CastingState.OnCharacterFinishedCasting -= RemoveFromQueue;
-		}
-
-		private void OnNewCharacterReadyToCast(Action functionToCall)
-		{
-			if (combatMoveReadyQueue.Count == 0)
-			{
-				functionToCall.Invoke();
-			}
+			CastingState.OnCharacterFinishedCasting -= StartNextInQueue;
 			
-			AddToQueue(functionToCall);
+			CombatStartedEvent.ParameterlessListeners -= ResetState;
+			CombatEndedEvent.ParameterlessListeners   -= ResetState;
 		}
 
-		private void AddToQueue(Action functionToCall)
+		private void ResetState()
 		{
-			if (combatMoveReadyQueue.Contains(functionToCall))
+			combatMoveReadyQueue.Clear();
+			isSomeoneCasting = false;
+		}
+
+		private void OnNewCharacterReadyToCast(CastingState castingState)
+		{
+			if (!isSomeoneCasting)
 			{
-				Debug.LogError("The queue already contains this character!");
+				isSomeoneCasting = true;
+				castingState.StartCasting();
+			}
+			else
+			{
+				AddToQueue(castingState);
+			}
+		}
+
+		private void AddToQueue(CastingState castingState)
+		{
+			if (combatMoveReadyQueue.Contains(castingState))
+			{
+				Debug.LogError("The queue already contains this character!\n" + castingState.gameObject.name);
 				return;
 			}
 
-			combatMoveReadyQueue.Enqueue(functionToCall);
+			combatMoveReadyQueue.Enqueue(castingState);
 		}
 
-		private void RemoveFromQueue()
+		private void StartNextInQueue() // Called when a character starts casting
 		{
-			combatMoveReadyQueue.Dequeue();
-			
-			if (combatMoveReadyQueue.TryPeek(out Action functionToCall))
+			if (combatMoveReadyQueue.TryDequeue(out CastingState castingState)) // Dequeue will succeed so long as at least 1 object is in the queue
 			{
-				functionToCall.Invoke();
+				castingState.StartCasting();
+			}
+			else
+			{
+				isSomeoneCasting = false;
 			}
 		}
 	}
