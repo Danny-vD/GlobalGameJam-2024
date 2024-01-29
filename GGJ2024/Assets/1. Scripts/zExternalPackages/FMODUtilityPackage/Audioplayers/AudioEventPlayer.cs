@@ -2,7 +2,6 @@
 using FMODUtilityPackage.Core;
 using FMODUtilityPackage.Interfaces;
 using UnityEngine;
-using UtilityPackage.Interfaces;
 using VDFramework;
 using EventType = FMODUtilityPackage.Enums.EventType;
 

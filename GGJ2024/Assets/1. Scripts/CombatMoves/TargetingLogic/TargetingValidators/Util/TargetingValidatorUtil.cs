@@ -6,15 +6,37 @@ namespace CombatMoves.TargetingLogic.TargetingValidators.Util
 {
 	public static class TargetingValidatorUtil
 	{
-		public static List<ITargetingValidator> GetValidators(ValidTargets validTargets)
+		public static ITargetingValidator GetValidators(ValidTargets validTargets)
 		{
-			List<ITargetingValidator> validators = new List<ITargetingValidator>();
+			ITargetingValidator validator = validTargets switch
+			{
+				ValidTargets.Any => new TargetAny(),
+				ValidTargets.Self => new TargetSelf(),
+				ValidTargets.Other => new TargetOther(),
+				ValidTargets.Teammates => new TargetCombined(new TargetOther(), new TargetOwnTeam()),
+				ValidTargets.OwnTeam => new TargetOwnTeam(),
+				ValidTargets.OpposingTeam => new TargetOpposingTeam(),
+				_ => null,
+			};
+
+			if (validator != null)
+			{
+				return validator;
+			}
+
+			return GetCombinedValidator(validTargets);
+		}
+
+		private static ITargetingValidator GetCombinedValidator(ValidTargets validTargets)
+		{
+			List<ITargetingValidator> targetingValidators = new List<ITargetingValidator>();
 			
-			// TODO: Implement this function
-			//TEMP
-			validators.Add(new TargetAny());
-			
-			return validators;
+			if ((validTargets & ValidTargets.Self) != 0)
+			{
+				targetingValidators.Add(new TargetSelf());
+			}
+
+			return new TargetCombined(targetingValidators.ToArray());
 		}
 	}
 }

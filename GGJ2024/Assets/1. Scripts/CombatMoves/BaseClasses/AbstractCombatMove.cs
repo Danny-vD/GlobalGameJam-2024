@@ -37,7 +37,7 @@ namespace CombatMoves.BaseClasses
 
 		public bool IsValidTarget(GameObject target)
 		{
-			return TargetingValidatorUtil.GetValidators(ValidTargets).TrueForAll(validator => validator.IsValidTarget(target, gameObject));
+			return TargetingValidatorUtil.GetValidators(ValidTargets).IsValidTarget(target, gameObject);
 		}
 
 		public abstract void StartCombatMove(GameObject target);

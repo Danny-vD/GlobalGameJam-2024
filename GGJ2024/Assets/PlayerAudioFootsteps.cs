@@ -1,13 +1,26 @@
-using System.Collections;
-using System.Collections.Generic;
+using FMOD.Studio;
 using FMODUtilityPackage.Core;
 using UnityEngine;
 using EventType = FMODUtilityPackage.Enums.EventType;
 
 public class PlayerAudioFootsteps : MonoBehaviour
 {
-    private void playFootsteps()
+    // NOTE: use an array/list to use multiple
+    private EventInstance footstepInstance;
+
+    private void Awake()
+    {
+        footstepInstance = AudioPlayer.GetEventInstance(EventType.SFX_Player_Footsteps);
+    }
+
+    private void PlayFootsteps()
     {
         AudioPlayer.PlayOneShot2D(EventType.SFX_Player_Footsteps);
+    }
+    
+    private void OnDestroy()
+    {
+        footstepInstance.release();
+        footstepInstance.stop(STOP_MODE.IMMEDIATE);
     }
 }
