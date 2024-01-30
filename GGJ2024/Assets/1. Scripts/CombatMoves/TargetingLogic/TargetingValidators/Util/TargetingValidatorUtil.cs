@@ -19,32 +19,20 @@ namespace CombatMoves.TargetingLogic.TargetingValidators.Util
 				_ => null,
 			};
 
-			if (validator != null)
-			{
-				return validator;
-			}
-
-			return GetCombinedValidator(validTargets);
+			return validator ?? GetCombinedValidator(validTargets);
 		}
 
 		private static ITargetingValidator GetCombinedValidator(ValidTargets validTargets)
 		{
 			List<ITargetingValidator> targetingValidators = new List<ITargetingValidator>();
 
+			// Self and Opposing team is the only combination that is not covered by any other value
+			
 			if ((validTargets & ValidTargets.Self) != 0)
 			{
 				targetingValidators.Add(new TargetSelf());
 			}
-			else if ((validTargets & ValidTargets.Other) != 0) // Else because 'Self' and 'Other' are mutually exclusive, if you have both flags then you can target 'Any'
-			{
-				targetingValidators.Add(new TargetOther());
-			}
-
-			if ((validTargets & ValidTargets.TeamMates) != 0)
-			{
-				targetingValidators.Add(new TargetCombined(new TargetOther(), new TargetOwnTeam()));
-			}
-
+			
 			if ((validTargets & ValidTargets.OpposingTeam) != 0)
 			{
 				targetingValidators.Add(new TargetOpposingTeam());

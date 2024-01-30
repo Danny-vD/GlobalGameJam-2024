@@ -181,7 +181,6 @@ namespace FMODUtilityPackage.Audioplayers.UI
 
 		private UnityAction<BaseEventData> GetCallback(AudioEventData audioEventData)
 		{
-            Debug.Log($"GetCallback {gameObject.name}");
             EventInstance instance = audioEventData.IsGlobalInstance ? staticInstancePerEventType[audioEventData.audioAudioEvent] : instancePerEventType[audioEventData.audioAudioEvent];
 
 			return audioEventData.PlayState switch
