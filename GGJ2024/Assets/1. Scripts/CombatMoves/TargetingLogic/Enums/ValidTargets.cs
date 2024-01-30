@@ -6,10 +6,12 @@ namespace CombatMoves.TargetingLogic.Enums
 	public enum ValidTargets : uint
 	{
 		Self = 1 << 0,
-		Other = ~Self,
-		Teammates = 1 << 1,
-		OwnTeam = Self | Teammates,
-		OpposingTeam = 1 << 2,
+		TeamMates = 1 << 1,
 		Any = ~0U, // Same as enabling all others
+		
+		// Combinations
+		OwnTeam = Self | TeamMates,
+		Other = ~Self,
+		OpposingTeam = ~OwnTeam,
 	}
 }

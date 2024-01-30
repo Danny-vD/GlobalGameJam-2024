@@ -13,7 +13,7 @@ namespace CombatMoves.TargetingLogic.TargetingValidators.Util
 				ValidTargets.Any => new TargetAny(),
 				ValidTargets.Self => new TargetSelf(),
 				ValidTargets.Other => new TargetOther(),
-				ValidTargets.Teammates => new TargetCombined(new TargetOther(), new TargetOwnTeam()),
+				ValidTargets.TeamMates => new TargetCombined(new TargetOther(), new TargetOwnTeam()),
 				ValidTargets.OwnTeam => new TargetOwnTeam(),
 				ValidTargets.OpposingTeam => new TargetOpposingTeam(),
 				_ => null,
@@ -30,10 +30,24 @@ namespace CombatMoves.TargetingLogic.TargetingValidators.Util
 		private static ITargetingValidator GetCombinedValidator(ValidTargets validTargets)
 		{
 			List<ITargetingValidator> targetingValidators = new List<ITargetingValidator>();
-			
+
 			if ((validTargets & ValidTargets.Self) != 0)
 			{
 				targetingValidators.Add(new TargetSelf());
+			}
+			else if ((validTargets & ValidTargets.Other) != 0) // Else because 'Self' and 'Other' are mutually exclusive, if you have both flags then you can target 'Any'
+			{
+				targetingValidators.Add(new TargetOther());
+			}
+
+			if ((validTargets & ValidTargets.TeamMates) != 0)
+			{
+				targetingValidators.Add(new TargetCombined(new TargetOther(), new TargetOwnTeam()));
+			}
+
+			if ((validTargets & ValidTargets.OpposingTeam) != 0)
+			{
+				targetingValidators.Add(new TargetOpposingTeam());
 			}
 
 			return new TargetCombined(targetingValidators.ToArray());

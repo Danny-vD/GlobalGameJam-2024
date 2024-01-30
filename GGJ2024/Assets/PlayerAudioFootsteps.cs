@@ -1,3 +1,4 @@
+using CombatMoves.TargetingLogic.Enums;
 using FMOD.Studio;
 using FMODUtilityPackage.Core;
 using UnityEngine;
@@ -7,6 +8,9 @@ public class PlayerAudioFootsteps : MonoBehaviour
 {
     // NOTE: use an array/list to use multiple
     private EventInstance footstepInstance;
+
+    [SerializeField]
+    private ValidTargets test;
 
     private void Awake()
     {
