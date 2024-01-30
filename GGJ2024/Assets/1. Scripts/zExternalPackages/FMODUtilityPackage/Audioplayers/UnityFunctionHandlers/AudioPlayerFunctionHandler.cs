@@ -12,7 +12,7 @@ namespace FMODUtilityPackage.Audioplayers.UnityFunctionHandlers
 	public class AudioPlayerFunctionHandler : AbstractAudioFunctionHandler
 	{
 		[SerializeField]
-		private Enums.EventType eventType;
+		private Enums.AudioEventType audioEventType;
 		
 		[Header("On Destroy"), SerializeField, Tooltip("Stop all instances when this object is destroyed")]
 		private bool stopInstancesOnDestroy;
@@ -26,7 +26,7 @@ namespace FMODUtilityPackage.Audioplayers.UnityFunctionHandlers
 
 		private void Awake()
 		{
-			eventInstance = AudioPlayer.GetEventInstance(eventType);
+			eventInstance = AudioPlayer.GetEventInstance(audioEventType);
 		}
 
 		protected override void ReactToEvent(UnityFunction unityFunction)
