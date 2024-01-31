@@ -41,7 +41,7 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 		{
 			AbstractCombatMove selectedMove = selectedMoveHolder.SelectedMove;
 			selectedMove.OnCombatMoveEnded += Exit;
-			selectedMove.StartCombatMove(selectedMoveHolder.SelectedTarget);
+			selectedMove.StartCombatMove(selectedMoveHolder.SelectedTarget, CachedGameObject);
 			
 			IsCasting = true;
 			OnCastingStarted.Invoke();

@@ -118,6 +118,8 @@ namespace CustomInspector.FMODUtilityPackage
 			{
 				DrawFoldoutKeyValueArray<AudioEventType>(events, "key", "value", eventPathsFoldout, eventIcon, new GUIContent("Path"));
 			}
+
+			EditorGUILayout.Space(5);
 		}
 
 		private void DrawBusPaths()

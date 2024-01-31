@@ -26,7 +26,7 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 			AbstractCombatMove combatMove = aiMoveset.ChooseAIMove();
 			
 			//HACK: taking a random party member does not work if the opposing team is not a valid target (opposing team from enemy is the party)
-			selectedMoveHolder.SelectMove(combatMove, PlayerPartySingleton.Instance.Party.Where(obj => !obj.GetComponent<CharacterHealth>().IsDead).GetRandomElement()); //TODO: maybe not random party member?
+			selectedMoveHolder.SelectMove(combatMove, PlayerPartySingleton.Instance.Party.Where(obj => !obj.GetComponent<CharacterHealth>().IsDead).GetRandomElement()); //TODO: make better
 			Exit();
 		}
 

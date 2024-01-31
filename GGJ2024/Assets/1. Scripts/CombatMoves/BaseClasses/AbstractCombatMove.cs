@@ -3,11 +3,10 @@ using CombatMoves.TargetingLogic.Enums;
 using CombatMoves.TargetingLogic.TargetingValidators.Util;
 using CombatSystem.Enums;
 using UnityEngine;
-using VDFramework;
 
 namespace CombatMoves.BaseClasses
 {
-	public abstract class AbstractCombatMove : BetterMonoBehaviour
+	public abstract class AbstractCombatMove : ScriptableObject
 	{
 		public event Action OnCombatMoveEnded = delegate { };
 
@@ -33,13 +32,18 @@ namespace CombatMoves.BaseClasses
 
 		[Header("Animation")]
 		[field: SerializeField]
-		public string AnimationTriggerName { get; private set; }
+		public string AnimationTriggerName { get; protected set; }
 
-		public bool IsValidTarget(GameObject target)
+		public bool IsValidTarget(GameObject target, GameObject caster)
 		{
-			return TargetingValidatorUtil.GetValidators(ValidTargets).IsValidTarget(target, gameObject);
+			return TargetingValidatorUtil.GetValidators(ValidTargets).IsValidTarget(target, caster);
 		}
 
-		public abstract void StartCombatMove(GameObject target);
+		public abstract void StartCombatMove(GameObject target, GameObject caster);
+
+		protected void InvokeCombatMoveEnded()
+		{
+			OnCombatMoveEnded.Invoke();
+		}
 	}
 }
