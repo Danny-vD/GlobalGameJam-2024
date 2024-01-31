@@ -167,7 +167,10 @@ namespace FMODUtilityPackage.Core
 		{
 			UpdateDictionaries();
 
-			SetEventPaths();
+#if UNITY_EDITOR
+			if (FMODUnity.EventManager.IsInitialized) //EventManager is an editor script
+#endif
+				SetEventPaths();
 		}
 
 		public void OnAfterDeserialize()

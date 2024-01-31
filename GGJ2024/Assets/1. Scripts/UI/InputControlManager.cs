@@ -21,8 +21,8 @@ public class InputControlManager : Singleton<InputControlManager>
     protected override void Awake()
     {
         playerControls = new PlayerControls();
+        
         // playerControls.UIMenus.Enable();
-
 
         actionMapsByType = new Dictionary<ControlTypes, InputActionMap>
         {
@@ -37,7 +37,6 @@ public class InputControlManager : Singleton<InputControlManager>
 
         playerControls.UIMenus.Disable();
         playerControls.Overworld.Enable();
-
 
         base.Awake();
     }

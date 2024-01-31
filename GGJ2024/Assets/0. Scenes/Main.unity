@@ -13478,6 +13478,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Magus
       objectReference: {fileID: 0}
+    - target: {fileID: 6520227370780432564, guid: 991c08216419102498fdd01980bf48de, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7018115281825185533, guid: 991c08216419102498fdd01980bf48de, type: 3}
       propertyPath: <Statistics>k__BackingField.Name
       value: Magus
@@ -13689,6 +13693,18 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6692243601480118974, guid: 7b266cda8710fdd4291020713a359e10, type: 3}
+      propertyPath: m_UiScaleMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6692243601480118974, guid: 7b266cda8710fdd4291020713a359e10, type: 3}
+      propertyPath: m_ReferenceResolution.x
+      value: 1920
+      objectReference: {fileID: 0}
+    - target: {fileID: 6692243601480118974, guid: 7b266cda8710fdd4291020713a359e10, type: 3}
+      propertyPath: m_ReferenceResolution.y
+      value: 1080
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -13705,6 +13721,14 @@ PrefabInstance:
     - target: {fileID: 1195346798982504421, guid: 9b487d0cab57e0646ba991440bc5ea9e, type: 3}
       propertyPath: m_Name
       value: CombatCanvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 1844185226430999828, guid: 9b487d0cab57e0646ba991440bc5ea9e, type: 3}
+      propertyPath: m_ReferenceResolution.x
+      value: 1920
+      objectReference: {fileID: 0}
+    - target: {fileID: 1844185226430999828, guid: 9b487d0cab57e0646ba991440bc5ea9e, type: 3}
+      propertyPath: m_ReferenceResolution.y
+      value: 1080
       objectReference: {fileID: 0}
     - target: {fileID: 5482302547187375251, guid: 9b487d0cab57e0646ba991440bc5ea9e, type: 3}
       propertyPath: m_Pivot.x
@@ -13799,6 +13823,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1269608004690032628, guid: e02a68bb4e47e4448970578aa6f6ea2d, type: 3}
+      propertyPath: m_UiScaleMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1269608004690032628, guid: e02a68bb4e47e4448970578aa6f6ea2d, type: 3}
+      propertyPath: m_ReferenceResolution.x
+      value: 1920
+      objectReference: {fileID: 0}
+    - target: {fileID: 1269608004690032628, guid: e02a68bb4e47e4448970578aa6f6ea2d, type: 3}
+      propertyPath: m_ReferenceResolution.y
+      value: 1080
+      objectReference: {fileID: 0}
     - target: {fileID: 2230278188972117010, guid: e02a68bb4e47e4448970578aa6f6ea2d, type: 3}
       propertyPath: m_fontAsset
       value: 
@@ -13900,6 +13936,7 @@ PrefabInstance:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 941551280}
   - {fileID: 963194228}
   - {fileID: 705507995}
   - {fileID: 1982194666}
@@ -13930,4 +13967,3 @@ SceneRoots:
   - {fileID: 1663555969}
   - {fileID: 921883963}
   - {fileID: 62912248}
-  - {fileID: 941551280}
