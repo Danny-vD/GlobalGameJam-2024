@@ -1,5 +1,8 @@
 ﻿using CombatMoves.BaseClasses;
+using FMODUtilityPackage.Core;
+using FMODUtilityPackage.Enums;
 using UnityEngine;
+using VDFramework.Utility.TimerUtil;
 
 namespace CombatMoves.Moves
 {
@@ -8,7 +11,9 @@ namespace CombatMoves.Moves
     {
         public override void StartCombatMove(GameObject target, GameObject caster)
         {
-            throw new System.NotImplementedException();
+            AudioPlayer.PlayOneShot2D(AudioEventType.SFX_Battle_HitEnemy);
+
+            TimerManager.StartNewTimer(1, InvokeCombatMoveEnded);
         }
     }
 }
