@@ -1,5 +1,6 @@
 ﻿using System;
 using CombatMoves.BaseClasses;
+using UnityEngine;
 using VDFramework;
 
 namespace CombatSystem.CharacterScripts
@@ -9,10 +10,12 @@ namespace CombatSystem.CharacterScripts
 		public event Action OnMoveSelected = delegate { };
 		
 		public AbstractCombatMove SelectedMove { get; private set; }
+		public GameObject SelectedTarget { get; private set; }
 
-		public void SelectMove(AbstractCombatMove moveData)
+		public void SelectMove(AbstractCombatMove combatMove, GameObject target)
 		{
-			SelectedMove = moveData;
+			SelectedMove   = combatMove;
+			SelectedTarget = target;
 			
 			OnMoveSelected.Invoke();
 		}

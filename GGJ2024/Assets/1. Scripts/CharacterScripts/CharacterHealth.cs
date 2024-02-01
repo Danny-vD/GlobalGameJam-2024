@@ -16,6 +16,8 @@ namespace CharacterScripts
 		public int MaximumHealth { get; private set; } = 100;
 
 		public int Health { get; private set; }
+		
+		public bool IsDead { get; private set; }
 
 		private void Awake()
 		{
@@ -29,6 +31,7 @@ namespace CharacterScripts
 			
 			if (Health <= 0)
 			{
+				IsDead = true;
 				OnDead.Invoke();
 			}
 		}

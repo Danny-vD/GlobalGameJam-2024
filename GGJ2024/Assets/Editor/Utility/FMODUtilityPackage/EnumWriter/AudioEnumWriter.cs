@@ -4,10 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using FMODUnity;
+using FMODUtilityPackage.Enums;
 using UnityEditor.Compilation;
 using UnityEngine;
 using Utility.EditorPackage;
-using EventType = FMODUtilityPackage.Enums.EventType;
 
 namespace Utility.FMODUtilityPackage.EnumWriter
 {
@@ -31,7 +31,7 @@ namespace Utility.FMODUtilityPackage.EnumWriter
 
 			WriteToResourcesUtil.WriteToResources(pathNames, "EventPaths.txt", "FMODUtilityPackage/");
 
-			WriteToFile(typePath, nameof(EventType), eventNames, pathNames, '/'); // everything starts with 'event:/'
+			WriteToFile(typePath, nameof(AudioEventType), eventNames, pathNames, '/'); // everything starts with 'event:/'
 		}
 
 		public static void WriteToFile(string path, string typeName, string[] values, string[] documentation, char startValueCharacter)
