@@ -46,6 +46,8 @@ namespace CombatSystem.CharacterScripts
 			currentState.Step();
 		}
 
+		//TODO: Characters should be able to get stunned (create stun state maybe? Necessary to check if stunned later (e.g. Bard's 3AM Concierto))
+		//TODO: Seperate disabled state? (Still unsure about what disabled even is to be honest)
 		private void SetState(CharacterCombatStateType stateType)
 		{
 			if (currentState != null)

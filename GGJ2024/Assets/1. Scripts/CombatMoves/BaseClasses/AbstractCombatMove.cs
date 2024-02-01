@@ -36,11 +36,13 @@ namespace CombatMoves.BaseClasses
 
 		public bool IsValidTarget(GameObject target, GameObject caster)
 		{
+			//TODO: Cache the ITargetingValidator
 			return TargetingValidatorUtil.GetValidators(ValidTargets).IsValidTarget(target, caster);
 		}
-
+		
 		public abstract void StartCombatMove(GameObject target, GameObject caster);
 
+		// TODO: Change so that we can say that someone else can start without explicitely ending our own casting yet (e.g. for charging/longer resting)
 		protected void InvokeCombatMoveEnded()
 		{
 			OnCombatMoveEnded.Invoke();

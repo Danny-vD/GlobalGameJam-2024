@@ -36,5 +36,10 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 				Exit();
 			}
 		}
+
+		public void SkipTimer()
+		{
+			timer = 0;
+		}
 	}
 }

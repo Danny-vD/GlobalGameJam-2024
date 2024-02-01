@@ -41,7 +41,7 @@ namespace CombatSystem.UIScripts.CombatMoves
 		private void SelectMove()
 		{
 			//TODO: validate target
-			//TODO: select target
+			//TODO: select target (support multiple targets as well)
 			selectedMoveHolder.SelectMove(combatMove, null);
 		}
 	}
