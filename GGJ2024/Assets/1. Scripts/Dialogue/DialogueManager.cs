@@ -1,6 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using FMOD.Studio;
+using FMODUtilityPackage.Core;
+using FMODUtilityPackage.Enums;
 using Ink.Runtime;
+using SerializableDictionaryPackage.SerializableDictionary;
 using TMPro;
 using UI;
 using UnityEngine;
@@ -11,206 +15,235 @@ using VDFramework.UnityExtensions;
 
 namespace Dialogue
 {
-    public class DialogueManager : Singleton<DialogueManager>
-    {
-        private bool printing;
-        public bool Conversing { get; private set; }
+	public class DialogueManager : Singleton<DialogueManager>
+	{
+		private bool printing;
+		public bool Conversing { get; private set; }
 
-        private Queue<string> _lines;
-        private const float WaitTimer = 0.05f;
-        private const float SentenceWaitTimer = 0.5f;
+		private Queue<string> _lines;
+		private const float WaitTimer = 0.05f;
+		private const float SentenceWaitTimer = 0.5f;
 
-        private Story currentStory;
+		private Story currentStory;
 
-        [SerializeField] public GameObject dialogueCanvas;
+		[SerializeField]
+		public GameObject dialogueCanvas;
 
-        [SerializeField] public TextMeshProUGUI nameText;
-        [SerializeField] public TextMeshProUGUI dialogueText;
-        [SerializeField] public GameObject ChoicesPanel;
+		[SerializeField]
+		private GameObject sprite;
 
-        private TMP_Text[] choicesTextBoxes;
+		[SerializeField]
+		private SerializableDictionary<string, Sprite> imagesByNames;
 
-        private void Start()
-        {
-            
-            
-            dialogueText.Disable();
-            printing = false;
-            Conversing = false;
-            choicesTextBoxes = ChoicesPanel.GetComponentsInChildren<TMP_Text>();
+		[SerializeField]
+		public TextMeshProUGUI nameText;
 
-            InputControlManager.Instance.playerControls.DialogueInteraction.Start.performed += _ =>
-            {
-                InputControlManager.Instance.ChangeControls(ControlTypes.Menus);
-            };
+		[SerializeField]
+		public TextMeshProUGUI dialogueText;
 
-            InputControlManager.Instance.playerControls.DialogueInteraction.Option1.performed +=
-                _ => { ContinueDialogue(0); };
-            InputControlManager.Instance.playerControls.DialogueInteraction.Option2.performed +=
-                _ => { ContinueDialogue(1); };
-            InputControlManager.Instance.playerControls.DialogueInteraction.Option3.performed +=
-                _ => { ContinueDialogue(2); };
-        }
+		[SerializeField]
+		public GameObject ChoicesPanel;
 
-        private void OnEnable()
-        {
-            OnEnterDialogueMode.Listeners += EnterDialogueMode;
-            OnChooseNextDialogueLine.Listeners += ContinueDialogue;
-        }
+		private TMP_Text[] choicesTextBoxes;
 
-        private void OnDisable()
-        {
-            OnEnterDialogueMode.Listeners -= EnterDialogueMode;
-            OnChooseNextDialogueLine.Listeners -= ContinueDialogue;
-        }
+		private EventInstance eventInstance;
 
-        private void EnterDialogueMode(OnEnterDialogueMode onEnterDialogueMode)
-        {
-            Debug.Log("DIALOGUE SHOULD SHOW");
-            
-            InputControlManager.Instance.ChangeControls(ControlTypes.Dialogue);
-            
-            dialogueCanvas.SetActive(true);
-            currentStory = new Story(onEnterDialogueMode.inkFile.text);
-            Conversing = true;
-            dialogueText.Enable();
+		private void Start()
+		{
+			dialogueText.Disable();
+			printing         = false;
+			Conversing       = false;
+			choicesTextBoxes = ChoicesPanel.GetComponentsInChildren<TMP_Text>();
 
-            DisplayFirstLine();
-        }
+			InputControlManager.Instance.playerControls.DialogueInteraction.Start.performed += _ => { InputControlManager.Instance.ChangeControls(ControlTypes.Menus); };
 
-        private void ContinueDialogue(int index)
-        {
-            if (Conversing)
-            {
-                if (currentStory.currentChoices.Count != 0)
-                {
-                    if (index > currentStory.currentChoices.Count)
-                    {
-                        Debug.LogError("OUT OF BOUNDS");
-                    }
+			InputControlManager.Instance.playerControls.DialogueInteraction.Option1.performed +=
+				_ => { ContinueDialogue(0); };
+			InputControlManager.Instance.playerControls.DialogueInteraction.Option2.performed +=
+				_ => { ContinueDialogue(1); };
+			InputControlManager.Instance.playerControls.DialogueInteraction.Option3.performed +=
+				_ => { ContinueDialogue(2); };
 
-                    currentStory.ChooseChoiceIndex(index);
-                }
+			eventInstance = AudioPlayer.GetEventInstance(AudioEventType.SFX_UI_Talking);
+		}
 
-                if (currentStory.canContinue)
-                {
-                    if (printing) return;
+		private void OnEnable()
+		{
+			OnEnterDialogueMode.Listeners      += EnterDialogueMode;
+			OnChooseNextDialogueLine.Listeners += ContinueDialogue;
+		}
 
-                    StopAllCoroutines();
-                    StartCoroutine(HandleNextLine(currentStory.Continue()));
-                }
-                else
-                {
-                    ExitDialogueMode();
-                }
-            }
-            else
-            {
-                Debug.LogError("NOT CURRENTLY CONVERSING");
-            }
-        }
+		private void OnDisable()
+		{
+			OnEnterDialogueMode.Listeners      -= EnterDialogueMode;
+			OnChooseNextDialogueLine.Listeners -= ContinueDialogue;
+		}
 
-        private void ContinueDialogue(OnChooseNextDialogueLine nextLine)
-        {
-            if (Conversing)
-            {
-                if (currentStory.currentChoices.Count != 0)
-                {
-                    if (nextLine.choiceIndex > currentStory.currentChoices.Count)
-                    {
-                        Debug.LogError("OUT OF BOUNDS");
-                    }
+		private void EnterDialogueMode(OnEnterDialogueMode onEnterDialogueMode)
+		{
+			Debug.Log("DIALOGUE SHOULD SHOW");
 
-                    currentStory.ChooseChoiceIndex(nextLine.choiceIndex);
-                }
+			InputControlManager.Instance.ChangeControls(ControlTypes.Dialogue);
 
-                if (currentStory.canContinue)
-                {
-                    if (printing) return;
+			dialogueCanvas.SetActive(true);
+			currentStory = new Story(onEnterDialogueMode.inkFile.text);
+			Conversing   = true;
+			dialogueText.Enable();
 
-                    StopAllCoroutines();
-                    StartCoroutine(HandleNextLine(currentStory.Continue()));
-                }
-                else
-                {
-                    ExitDialogueMode();
-                }
-            }
-            else
-            {
-                Debug.LogError("NOT CURRENTLY CONVERSING");
-            }
-        }
+			DisplayFirstLine();
+		}
 
-        private void DisplayFirstLine()
-        {
-            
-            
-            
-            if (currentStory.canContinue)
-            {
-                StopAllCoroutines();
-                StartCoroutine(HandleNextLine(currentStory.Continue()));
-            }
-            else
-            {
-                ExitDialogueMode();
-            }
-        }
+		private void ContinueDialogue(int index)
+		{
+			if (Conversing)
+			{
+				if (currentStory.currentChoices.Count != 0)
+				{
+					if (index > currentStory.currentChoices.Count)
+					{
+						Debug.LogError("OUT OF BOUNDS");
+					}
 
-        private void DisplayChoices()
-        {
-            
-            var choices = currentStory.currentChoices;
-            var index = 0;
-            Debug.Log(choices.Count);
-            foreach (var choice in choices)
-            {
-                choicesTextBoxes[index].text = index + ". " + choice.text;
-                index++;
-            }
-        }
+					currentStory.ChooseChoiceIndex(index);
+				}
 
-        private void HandleAuthor()
-        {
-            var tags = currentStory.currentTags;
-            Debug.Log(tags.Count);
-            if (tags.Count > 0)
-            {
-                nameText.text = tags[0].Split(':', 2)[1];
-            }
-        }
+				if (currentStory.canContinue)
+				{
+					if (printing) return;
 
-        private void ExitDialogueMode()
-        {
-            InputControlManager.Instance.ChangeControls(ControlTypes.Overworld);
-            dialogueCanvas.SetActive(false);
-            Conversing = false;
-            dialogueText.Disable();
-        }
+					StopAllCoroutines();
+					StartCoroutine(HandleNextLine(currentStory.Continue()));
+				}
+				else
+				{
+					ExitDialogueMode();
+				}
+			}
+			else
+			{
+				Debug.LogError("NOT CURRENTLY CONVERSING");
+			}
+		}
 
-        private IEnumerator HandleNextLine(string line)
-        {
-            printing = true;
-            HandleAuthor();
-            dialogueText.text = "";
+		private void ContinueDialogue(OnChooseNextDialogueLine nextLine)
+		{
+			if (Conversing)
+			{
+				if (currentStory.currentChoices.Count != 0)
+				{
+					if (nextLine.choiceIndex > currentStory.currentChoices.Count)
+					{
+						Debug.LogError("OUT OF BOUNDS");
+					}
 
-            foreach (var letter in line.ToCharArray())
-            {
-                dialogueText.text += letter;
-                yield return new WaitForSeconds(WaitTimer);
-            }
+					currentStory.ChooseChoiceIndex(nextLine.choiceIndex);
+				}
 
-            yield return new WaitForSeconds(SentenceWaitTimer);
+				if (currentStory.canContinue)
+				{
+					if (printing) return;
 
-            FinishLine();
-            Debug.Log(line);
-        }
+					StopAllCoroutines();
+					StartCoroutine(HandleNextLine(currentStory.Continue()));
+				}
+				else
+				{
+					ExitDialogueMode();
+				}
+			}
+			else
+			{
+				Debug.LogError("NOT CURRENTLY CONVERSING");
+			}
+		}
 
-        private void FinishLine()
-        {
-            printing = false;
-            DisplayChoices();
-        }
-    }
+		private void DisplayFirstLine()
+		{
+			if (currentStory.canContinue)
+			{
+				StopAllCoroutines();
+				StartCoroutine(HandleNextLine(currentStory.Continue()));
+			}
+			else
+			{
+				ExitDialogueMode();
+			}
+		}
+
+		private void DisplayChoices()
+		{
+			var choices = currentStory.currentChoices;
+			var index = 0;
+			Debug.Log(choices.Count);
+
+			foreach (var choice in choices)
+			{
+				choicesTextBoxes[index].text = index + ". " + choice.text;
+				index++;
+			}
+		}
+
+		private void HandleAuthor()
+		{
+			var tags = currentStory.currentTags;
+			Debug.Log(tags.Count);
+
+			if (tags.Count > 0)
+			{
+				nameText.text = tags[0].Split(':', 2)[1];
+			}
+		}
+
+		private void HandlePortrait()
+		{
+			var tags = currentStory.currentTags;
+			if (tags.Count <= 0) return;
+
+			var s = tags[0];
+			var s1 = s.Split(':', 2)[1].Trim();
+
+			Debug.Log(s1);
+
+			if (imagesByNames.TryGetValue(s1, out var byName))
+			{
+				sprite.GetComponent<Image>().sprite = byName;
+			}
+		}
+
+		private void ExitDialogueMode()
+		{
+			InputControlManager.Instance.ChangeControls(ControlTypes.Overworld);
+			dialogueCanvas.SetActive(false);
+			Conversing = false;
+			dialogueText.Disable();
+		}
+
+		private IEnumerator HandleNextLine(string line)
+		{
+			printing = true;
+			HandleAuthor();
+			HandlePortrait();
+			dialogueText.text = "";
+
+			foreach (char letter in line)
+			{
+				eventInstance.start();
+
+				//AudioPlayer.PlayOneShot2D(AudioEventType.SFX_UI_Talking);
+				dialogueText.text += letter;
+				yield return new WaitForSeconds(WaitTimer);
+			}
+
+			yield return new WaitForSeconds(SentenceWaitTimer);
+
+			FinishLine();
+			Debug.Log(line);
+		}
+
+		private void FinishLine()
+		{
+			printing = false;
+			DisplayChoices();
+		}
+	}
 }

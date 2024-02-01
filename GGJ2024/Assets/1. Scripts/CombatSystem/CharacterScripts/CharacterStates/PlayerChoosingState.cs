@@ -7,6 +7,7 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 	[RequireComponent(typeof(SelectedMoveHolder))]
 	public class PlayerChoosingState : AbstractCharacterState
 	{
+		// TODO: Make a global event, class-specific static events are just confusing
 		public static event Action<GameObject> StartedChoosingState = delegate { };
 		public static event Action<GameObject> EndedChoosingState = delegate { };
 
@@ -21,6 +22,7 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 			selectedMoveHolder.OnMoveSelected += Exit;
 		}
 
+        // TODO: override target selection when taunted?? (Can a player be taunted?)
 		public override void Enter()
 		{
 			StartedChoosingState.Invoke(gameObject);
