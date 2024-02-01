@@ -36,7 +36,7 @@ namespace CombatSystem.CharacterScripts
 			this.Disable();
 		}
 
-		private void Start()
+		private void OnEnable()
 		{
 			SetState(CharacterCombatStateType.Idle);
 		}

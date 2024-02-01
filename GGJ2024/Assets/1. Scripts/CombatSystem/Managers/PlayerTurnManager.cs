@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using CombatSystem.CharacterScripts.CharacterStates;
 using CombatSystem.Events;
+using UnityEditor;
 using UnityEngine;
 using VDFramework;
 using VDFramework.EventSystem;
@@ -37,11 +38,17 @@ namespace CombatSystem.Managers
 		{
 			characterPickingMoveQueue.Clear();
 		}
-
-		[ContextMenu("Start combat")] //TODO: remove
-		private void DebugStartCombat()
+		
+		[MenuItem("Combat/Start Combat")] //TODO: remove
+		private static void DebugStartCombat()
 		{
 			EventManager.RaiseEvent(new CombatStartedEvent(null));
+		}
+		
+		[MenuItem("Combat/Stop Combat")] //TODO: remove
+		private static void DebugEndCombat()
+		{
+			EventManager.RaiseEvent(new CombatEndedEvent());
 		}
 
 		private void AddToQueue(GameObject obj)

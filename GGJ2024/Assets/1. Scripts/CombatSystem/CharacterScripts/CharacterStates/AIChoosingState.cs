@@ -21,12 +21,13 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 			aiMoveset          = GetComponent<IAIMoveset>();
 		}
 
+		// TODO: Override target selection when taunted
 		public override void Enter()
 		{
 			AbstractCombatMove combatMove = aiMoveset.ChooseAIMove();
 			
 			//HACK: taking a random party member does not work if the opposing team is not a valid target (opposing team from enemy is the party)
-			selectedMoveHolder.SelectMove(combatMove, PlayerPartySingleton.Instance.Party.Where(obj => !obj.GetComponent<CharacterHealth>().IsDead).GetRandomElement()); //TODO: make better
+			selectedMoveHolder.SelectMove(combatMove, PlayerPartySingleton.Instance.Party.Where(obj => !obj.GetComponent<CharacterHealth>().IsDead).GetRandomElement()); //TODO: Don't take random party member
 			Exit();
 		}
 
