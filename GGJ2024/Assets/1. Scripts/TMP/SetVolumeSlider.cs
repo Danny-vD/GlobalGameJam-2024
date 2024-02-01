@@ -1,13 +1,12 @@
 using FMODUtilityPackage.Core;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-namespace TMP
+public class SetVolumeSlider : MonoBehaviour
 {
-    public class SetVolumeSlider : MonoBehaviour
+    public void SetMasterVolume(float Volume)
     {
-        public void SetMasterVolume(float Volume)
-        {
-            AudioManager.Instance.SetMasterVolume(Volume);
-        }
+        AudioManager.Instance.SetMasterVolume(Volume);
     }
 }

@@ -24,28 +24,6 @@ namespace CombatSystem.CharacterScripts.MoveSets
 			percentagedMoves = new PercentageLootTable<AbstractCombatMove>(moveChances);
 		}
 
-		public void AddMove(AbstractCombatMove abstractCombatMove, float percentage)
-		{
-			if (!moveChances.TryAdd(abstractCombatMove, percentage))
-			{
-				return;
-			}
-
-			percentagedMoves.TryAdd(new LootTableItem<AbstractCombatMove>(abstractCombatMove), percentage);
-		}
-		
-		public override void AddMove(AbstractCombatMove abstractCombatMove)
-		{
-			AddMove(abstractCombatMove, defaultPercentageForNewMove);
-		}
-
-		public override void RemoveMove(AbstractCombatMove abstractCombatMove)
-		{
-			moveChances.Remove(abstractCombatMove);
-			
-			percentagedMoves.TryRemove(abstractCombatMove);
-		}
-
 		public override List<AbstractCombatMove> GetMoves()
 		{
 			return moveChances.Keys.ToList();
@@ -54,6 +32,21 @@ namespace CombatSystem.CharacterScripts.MoveSets
 		public AbstractCombatMove ChooseAIMove()
 		{
 			return percentagedMoves.GetLoot();
+		}
+
+		public override T AddMove<T>()
+		{
+			return AddMove<T>(defaultPercentageForNewMove);
+		}
+
+		public T AddMove<T>(float percentage) where T : AbstractCombatMove
+		{
+			T combatMove = base.AddMove<T>();
+
+
+			percentagedMoves.Add(new LootTableItem<T>(combatMove), percentage);
+
+			return combatMove;
 		}
 	}
 }

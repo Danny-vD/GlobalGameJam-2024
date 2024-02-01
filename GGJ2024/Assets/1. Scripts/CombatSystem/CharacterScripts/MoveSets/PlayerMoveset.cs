@@ -7,26 +7,14 @@ namespace CombatSystem.CharacterScripts.MoveSets
 	public class PlayerMoveset : AbstractMoveset
 	{
 		[SerializeField]
-		protected List<AbstractCombatMove> moves;
-
-		public override void AddMove(AbstractCombatMove abstractCombatMove)
+		protected List<AbstractCombatMove> starterMoves;
+		
+		private void Start()
 		{
-			if (moves.Contains(abstractCombatMove))
+			foreach (AbstractCombatMove combatMove in starterMoves)
 			{
-				return;
+				base.AddMove(combatMove);
 			}
-			
-			moves.Add(abstractCombatMove);
-		}
-
-		public override void RemoveMove(AbstractCombatMove abstractCombatMove)
-		{
-			moves.Remove(abstractCombatMove);
-		}
-
-		public override List<AbstractCombatMove> GetMoves()
-		{
-			return moves;
 		}
 	}
 }

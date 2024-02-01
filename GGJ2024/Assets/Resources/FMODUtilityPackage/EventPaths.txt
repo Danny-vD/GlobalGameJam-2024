@@ -19,8 +19,3 @@ event:/SFX/Player/Footsteps
 event:/SFX/Battle/SwordAttack
 event:/SFX/UI/ButtonHover
 event:/SFX/Ambience/HellAmbience
-event:/SFX/UI/Talking
-event:/SFX/Cutscenes/Scene6
-event:/SFX/Cutscenes/Scene1
-event:/SFX/Cutscenes/Scene8
-event:/SFX/Battle/Death

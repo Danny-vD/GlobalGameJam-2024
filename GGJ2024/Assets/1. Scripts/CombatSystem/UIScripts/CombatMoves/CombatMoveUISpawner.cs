@@ -26,12 +26,6 @@ namespace CombatSystem.UIScripts.CombatMoves
 			PlayerTurnManager.OnChoosingQueueEmpty += HideMoves;
 		}
 
-		private void OnDestroy()
-		{
-			PlayerTurnManager.NewCharacterChoosingMove -= ShowMoves;
-			PlayerTurnManager.OnChoosingQueueEmpty     -= HideMoves;
-		}
-
 		private void ShowMoves(GameObject character)
 		{
 			IMoveset moveset = character.GetComponent<IMoveset>();

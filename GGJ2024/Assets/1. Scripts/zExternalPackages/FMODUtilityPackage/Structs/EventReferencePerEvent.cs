@@ -1,21 +1,21 @@
 ﻿using System;
 using FMODUnity;
-using FMODUtilityPackage.Enums;
 using UnityEngine;
 using VDFramework.Interfaces;
+using EventType = FMODUtilityPackage.Enums.EventType;
 
 namespace FMODUtilityPackage.Structs
 {
 	[Serializable]
-	public struct EventReferencePerEvent : IKeyValuePair<AudioEventType, EventReference>
+	public struct EventReferencePerEvent : IKeyValuePair<EventType, EventReference>
 	{
 		[SerializeField]
-		private AudioEventType key;
+		private EventType key;
 
 		[SerializeField]
 		private EventReference value;
 
-		public AudioEventType Key
+		public EventType Key
 		{
 			get => key;
 			set => key = value;
@@ -27,7 +27,7 @@ namespace FMODUtilityPackage.Structs
 			set => this.value = value;
 		}
 
-		public bool Equals(IKeyValuePair<AudioEventType, EventReference> other)
+		public bool Equals(IKeyValuePair<EventType, EventReference> other)
 		{
 			return other != null && other.Key == Key;
 		}

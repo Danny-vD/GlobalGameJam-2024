@@ -9,14 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 107b8bfc8f35493ab1a3e273ad63b5dd, type: 3}
+  m_Script: {fileID: 11500000, guid: 39c69be8d3e941dcb78d5026c95f06bb, type: 3}
   m_Name: Knight Attack
   m_EditorClassIdentifier: 
-  <AbilityName>k__BackingField: Knight Attack
-  <Description>k__BackingField: 
-  <Cost>k__BackingField: 0
-  <DamageType>k__BackingField: 0
-  <Potency>k__BackingField: 10
-  <ValidTargets>k__BackingField: 0
-  <AnimationTriggerName>k__BackingField: BasicAttack
-  audioType: 11
+  Name: Knight
+  Description: 
+  Cost: 0
+  CastingTime: 1
+  DamageType: 3
+  Potency: 0

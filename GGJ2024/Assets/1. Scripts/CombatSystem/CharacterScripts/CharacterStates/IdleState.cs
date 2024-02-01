@@ -13,7 +13,7 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 		public override CharacterCombatStateType NextState => CharacterCombatStateType.Choosing;
 		public float NormalizedTimer => timer / maximumIdleTime;
 
-		private float timer; // NOTE: If stun is it's own state, then it might be nice to be able to set this timer (for the UI) 
+		private float timer;
 
 		private Character character;
 
@@ -29,18 +29,12 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 
 		public override void Step()
 		{
-			// TODO: Seperate stun state, or is stun just halving the speed??
 			timer -= character.Statistics.Speed * Time.deltaTime;
 
 			if (timer <= 0)
 			{
 				Exit();
 			}
-		}
-
-		public void SkipTimer()
-		{
-			timer = 0;
 		}
 	}
 }

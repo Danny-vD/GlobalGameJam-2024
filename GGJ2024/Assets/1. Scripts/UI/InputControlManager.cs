@@ -1,10 +1,11 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UI;
+using UnityEngine;
 using UnityEngine.InputSystem;
 using VDFramework.Singleton;
 
-//TODO: Listeners should unsubscribe when they are destroyed
 public class InputControlManager : Singleton<InputControlManager>
 {
     public PlayerControls playerControls;
@@ -21,8 +22,8 @@ public class InputControlManager : Singleton<InputControlManager>
     protected override void Awake()
     {
         playerControls = new PlayerControls();
-        
         // playerControls.UIMenus.Enable();
+
 
         actionMapsByType = new Dictionary<ControlTypes, InputActionMap>
         {
@@ -37,6 +38,7 @@ public class InputControlManager : Singleton<InputControlManager>
 
         playerControls.UIMenus.Disable();
         playerControls.Overworld.Enable();
+
 
         base.Awake();
     }

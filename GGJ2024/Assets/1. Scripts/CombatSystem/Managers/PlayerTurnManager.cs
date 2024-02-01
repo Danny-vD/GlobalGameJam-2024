@@ -2,57 +2,35 @@
 using System.Collections.Generic;
 using CombatSystem.CharacterScripts.CharacterStates;
 using CombatSystem.Events;
-using UnityEditor;
 using UnityEngine;
 using VDFramework;
 using VDFramework.EventSystem;
 
 namespace CombatSystem.Managers
 {
-	public class PlayerTurnManager : BetterMonoBehaviour
+	public class PlayerTurnManager : BetterMonoBehaviour //TODO: Keep track of all the moves and apply them one by one
 	{
 		public static event Action<GameObject> NewCharacterChoosingMove = delegate { };
 		public static event Action OnChoosingQueueEmpty = delegate { };
 
 		private readonly Queue<GameObject> characterPickingMoveQueue = new Queue<GameObject>();
 
-		private void OnEnable()
+		private void Awake()
 		{
 			PlayerChoosingState.StartedChoosingState += AddToQueue;
 			PlayerChoosingState.EndedChoosingState   += RemoveFromQueue;
-			
-			CombatStartedEvent.ParameterlessListeners += ResetState;
-			CombatEndedEvent.ParameterlessListeners   += ResetState;
 		}
 
-		private void OnDisable()
-		{
-			PlayerChoosingState.StartedChoosingState -= AddToQueue;
-			PlayerChoosingState.EndedChoosingState   -= RemoveFromQueue;
-			
-			CombatStartedEvent.ParameterlessListeners -= ResetState;
-			CombatEndedEvent.ParameterlessListeners   -= ResetState;
-		}
-		
-		private void ResetState()
-		{
-			characterPickingMoveQueue.Clear();
-		}
-		
-		[MenuItem("Combat/Start Combat")] //TODO: remove
-		private static void DebugStartCombat()
+		[ContextMenu("Start combat")] //TODO: remove
+		private void DebugStartCombat()
 		{
 			EventManager.RaiseEvent(new CombatStartedEvent(null));
-		}
-		
-		[MenuItem("Combat/Stop Combat")] //TODO: remove
-		private static void DebugEndCombat()
-		{
-			EventManager.RaiseEvent(new CombatEndedEvent());
 		}
 
 		private void AddToQueue(GameObject obj)
 		{
+			Debug.Log($"Count: {characterPickingMoveQueue.Count}\n{obj.name}");
+			
 			if (characterPickingMoveQueue.Contains(obj))
 			{
 				Debug.LogError("The queue already contains this character!\n" + obj.name);
@@ -95,6 +73,12 @@ namespace CombatSystem.Managers
 			}
 
 			Debug.LogError("Trying to dequeue with an empty queue!");
+		}
+
+		private void OnDestroy()
+		{
+			PlayerChoosingState.StartedChoosingState -= AddToQueue;
+			PlayerChoosingState.EndedChoosingState   -= RemoveFromQueue;
 		}
 	}
 }
