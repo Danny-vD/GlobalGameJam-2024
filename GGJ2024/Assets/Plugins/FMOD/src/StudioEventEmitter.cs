@@ -136,6 +136,7 @@ namespace FMODUnity
                 if (instance.isValid())
                 {
                     RuntimeManager.DetachInstanceFromGameObject(instance);
+                    
                     if (eventDescription.isValid() && isOneshot)
                     {
                         instance.release();
@@ -167,7 +168,7 @@ namespace FMODUnity
         private void Lookup()
         {
             eventDescription = RuntimeManager.GetEventDescription(EventReference);
-
+            
             if (eventDescription.isValid())
             {
                 for (int i = 0; i < Params.Length; i++)

@@ -1,16 +1,13 @@
-﻿using System;
-using CombatSystem.Enums;
+﻿using CombatSystem.Enums;
+using CombatSystem.Events.CharacterStateEvents;
 using UnityEngine;
+using VDFramework.EventSystem;
 
 namespace CombatSystem.CharacterScripts.CharacterStates
 {
 	[RequireComponent(typeof(SelectedMoveHolder))]
 	public class PlayerChoosingState : AbstractCharacterState
 	{
-		// TODO: Make a global event, class-specific static events are just confusing
-		public static event Action<GameObject> StartedChoosingState = delegate { };
-		public static event Action<GameObject> EndedChoosingState = delegate { };
-
 		public override CharacterCombatStateType NextState => CharacterCombatStateType.Casting;
 
 		private SelectedMoveHolder selectedMoveHolder;
@@ -25,7 +22,7 @@ namespace CombatSystem.CharacterScripts.CharacterStates
         // TODO: override target selection when taunted?? (Can a player be taunted?)
 		public override void Enter()
 		{
-			StartedChoosingState.Invoke(gameObject);
+			EventManager.RaiseEvent(new PlayerStartedChoosingEvent(gameObject));
 		}
 
 		public override void Step()
@@ -36,7 +33,7 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 		{
 			base.Exit();
 
-			EndedChoosingState.Invoke(gameObject);
+			EventManager.RaiseEvent(new PlayerStoppedChoosingEvent(gameObject));
 		}
 
 		private void OnDestroy()

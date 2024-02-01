@@ -8,6 +8,7 @@ namespace CombatSystem.Managers
 {
 	public class CombatMoveManager : BetterMonoBehaviour
 	{
+		// TODO static event<GameObject/CastingState> for when a new move is cast (or do it in castingState)
 		private readonly Queue<CastingState> combatMoveReadyQueue = new Queue<CastingState>();
 
 		private bool isSomeoneCasting = false;

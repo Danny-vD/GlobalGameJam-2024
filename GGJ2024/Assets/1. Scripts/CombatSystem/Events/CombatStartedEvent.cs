@@ -6,8 +6,8 @@ namespace CombatSystem.Events
 {
 	public class CombatStartedEvent : VDEvent<CombatStartedEvent>
 	{
-
 		public readonly List<GameObject> Enemies;
+
 		public CombatStartedEvent(List<GameObject> enemies)
 		{
 			Enemies = enemies;

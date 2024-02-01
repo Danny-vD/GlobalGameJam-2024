@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using CombatSystem.CharacterScripts.CharacterStates;
 using CombatSystem.Events;
+using CombatSystem.Events.CharacterStateEvents;
 using UnityEditor;
 using UnityEngine;
 using VDFramework;
@@ -18,8 +19,8 @@ namespace CombatSystem.Managers
 
 		private void OnEnable()
 		{
-			PlayerChoosingState.StartedChoosingState += AddToQueue;
-			PlayerChoosingState.EndedChoosingState   += RemoveFromQueue;
+			PlayerStartedChoosingEvent.Listeners += AddToQueue;
+			PlayerStoppedChoosingEvent.Listeners += RemoveFromQueue;
 			
 			CombatStartedEvent.ParameterlessListeners += ResetState;
 			CombatEndedEvent.ParameterlessListeners   += ResetState;
@@ -27,8 +28,8 @@ namespace CombatSystem.Managers
 
 		private void OnDisable()
 		{
-			PlayerChoosingState.StartedChoosingState -= AddToQueue;
-			PlayerChoosingState.EndedChoosingState   -= RemoveFromQueue;
+			PlayerStartedChoosingEvent.Listeners -= AddToQueue;
+			PlayerStoppedChoosingEvent.Listeners -= RemoveFromQueue;
 			
 			CombatStartedEvent.ParameterlessListeners -= ResetState;
 			CombatEndedEvent.ParameterlessListeners   -= ResetState;
@@ -51,28 +52,32 @@ namespace CombatSystem.Managers
 			EventManager.RaiseEvent(new CombatEndedEvent());
 		}
 
-		private void AddToQueue(GameObject obj)
+		private void AddToQueue(PlayerStartedChoosingEvent startedChoosingEvent)
 		{
-			if (characterPickingMoveQueue.Contains(obj))
+			GameObject player = startedChoosingEvent.Player;
+			
+			if (characterPickingMoveQueue.Contains(player))
 			{
-				Debug.LogError("The queue already contains this character!\n" + obj.name);
+				Debug.LogError("The queue already contains this character!\n" + player.name);
 				return;
 			}
 
-			characterPickingMoveQueue.Enqueue(obj);
+			characterPickingMoveQueue.Enqueue(player);
 
 			if (characterPickingMoveQueue.Count == 1)
 			{
 				// First character added so it is always going to be the one that is choosing a move
-				NewCharacterChoosingMove.Invoke(obj);
+				NewCharacterChoosingMove.Invoke(player);
 			}
 		}
 
-		private void RemoveFromQueue(GameObject obj)
+		private void RemoveFromQueue(PlayerStoppedChoosingEvent stoppedChoosingEvent)
 		{
 			if (characterPickingMoveQueue.TryPeek(out GameObject next))
 			{
-				if (ReferenceEquals(obj, next))
+				GameObject player = stoppedChoosingEvent.Player;
+
+				if (ReferenceEquals(player, next))
 				{
 					characterPickingMoveQueue.Dequeue();
 
@@ -90,7 +95,7 @@ namespace CombatSystem.Managers
 					return;
 				}
 
-				Debug.LogError($"Attempting to dequeue the gameobject that is not next in line!\ndequeuing: {obj.name}\tNext: {next.name}");
+				Debug.LogError($"Attempting to dequeue the gameobject that is not next in line!\ndequeuing: {player.name}\tNext: {next.name}");
 				return;
 			}
 
