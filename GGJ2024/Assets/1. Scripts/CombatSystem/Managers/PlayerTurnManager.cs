@@ -39,7 +39,7 @@ namespace CombatSystem.Managers
 			characterPickingMoveQueue.Clear();
 		}
 		
-		[MenuItem("Combat/Start Combat")] //TODO: remove
+		[MenuItem("Combat/Start Combat &g")] //TODO: remove
 		private static void DebugStartCombat()
 		{
 			EventManager.RaiseEvent(new CombatStartedEvent(null));

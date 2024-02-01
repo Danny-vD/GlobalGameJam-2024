@@ -37,6 +37,7 @@ namespace Overworld.Navigation
         private void OnDisable()
         {
             if (!InputControlManager.IsInitialized) return;
+            
             InputControlManager.Instance.playerControls.UIMenus.Navigation.performed -= OnNavigationCancelled;
             InputControlManager.Instance.playerControls.UIMenus.Navigation.canceled -= OnNavigation;
 

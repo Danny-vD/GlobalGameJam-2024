@@ -11,6 +11,7 @@ namespace CombatSystem.Triggers
     {
 
         [SerializeField] private List<GameObject> Enemies;
+        
         private void OnTriggerEnter(Collider other)
         {
             EventManager.RaiseEvent(new CombatStartedEvent(Enemies));
