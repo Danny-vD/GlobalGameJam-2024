@@ -4,6 +4,7 @@
 	{
 		BackgroundMusic,
         BattleMusic,
-        VictoryMusic
+        VictoryMusic,
+        BossMusic
 	}
 }
