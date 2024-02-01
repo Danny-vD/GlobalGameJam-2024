@@ -1,5 +1,4 @@
-﻿using System;
-using CombatSystem.Enums;
+﻿using CombatSystem.Enums;
 using CombatSystem.Events.CharacterStateEvents;
 using UnityEngine;
 using VDFramework.EventSystem;
@@ -9,8 +8,6 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 	[RequireComponent(typeof(SelectedMoveHolder))]
 	public class PlayerChoosingState : AbstractCharacterState
 	{
-		// TODO: Make a global event, class-specific static events are just confusing
-
 		public override CharacterCombatStateType NextState => CharacterCombatStateType.Casting;
 
 		private SelectedMoveHolder selectedMoveHolder;
