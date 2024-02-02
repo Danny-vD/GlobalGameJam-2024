@@ -1,38 +1,25 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using CombatMoves.BaseClasses;
+using CombatMoves.BaseClasses.ScriptableObjects;
 using CombatSystem.Interfaces;
-using SerializableDictionaryPackage.SerializableDictionary;
+using LootTables.ScriptableObjects;
 using UnityEngine;
-using VDFramework.LootTables;
-using VDFramework.LootTables.LootTableItems;
-using VDFramework.LootTables.Variations;
 
 namespace CombatSystem.CharacterScripts.MoveSets
 {
 	public class AIMoveSet : AbstractMoveset, IAIMoveset
 	{
+		[SerializeField]
+		private WeightedLootTableObject<AbstractCombatMove> movesTable;
+		
 		[SerializeField, Tooltip("If no percentage is provided when adding a new move, this percentage will be used instead")]
 		private long defaultWeightForNewMove = 5;
-		
-		[SerializeField]
-		private SerializableDictionary<AbstractCombatMove, long> moveChances;
-
-		private WeightedLootTable<AbstractCombatMove> combatMovesLootTable;
-
-		private void Awake()
-		{
-			combatMovesLootTable = new WeightedLootTable<AbstractCombatMove>(moveChances);
-		}
 
 		public void AddMove(AbstractCombatMove abstractCombatMove, long weight)
 		{
-			if (!moveChances.TryAdd(abstractCombatMove, weight))
+			if (!movesTable.TryAdd(abstractCombatMove, weight))
 			{
 				return;
 			}
-
-			combatMovesLootTable.TryAdd(new LootTableItem<AbstractCombatMove>(abstractCombatMove), weight);
 		}
 		
 		public override void AddMove(AbstractCombatMove abstractCombatMove)
@@ -42,19 +29,17 @@ namespace CombatSystem.CharacterScripts.MoveSets
 
 		public override void RemoveMove(AbstractCombatMove abstractCombatMove)
 		{
-			moveChances.Remove(abstractCombatMove);
-			
-			combatMovesLootTable.TryRemove(abstractCombatMove);
+			movesTable.TryRemove(abstractCombatMove);
 		}
 
 		public override List<AbstractCombatMove> GetMoves()
 		{
-			return moveChances.Keys.ToList();
+			return null; //movesTable.GetLootTable().GetLootList();
 		}
 
 		public AbstractCombatMove ChooseAIMove()
 		{
-			return combatMovesLootTable.GetLoot();
+			return movesTable.GetLoot();
 		}
 	}
 }

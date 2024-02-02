@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using CombatMoves.BaseClasses;
+using CombatMoves.BaseClasses.ScriptableObjects;
 using UnityEngine;
 
 namespace CombatSystem.CharacterScripts.MoveSets

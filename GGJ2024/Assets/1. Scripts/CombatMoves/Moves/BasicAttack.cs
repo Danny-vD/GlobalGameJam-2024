@@ -1,4 +1,4 @@
-﻿using CombatMoves.BaseClasses;
+﻿using CombatMoves.BaseClasses.ScriptableObjects;
 using FMODUtilityPackage.Core;
 using FMODUtilityPackage.Enums;
 using UnityEngine;
