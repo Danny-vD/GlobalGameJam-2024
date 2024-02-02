@@ -6,5 +6,6 @@
 		Choosing,
 		Casting,
 		Dead,
+		Stunned,
 	}
 }

@@ -34,8 +34,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 296.8, y: 0}
-  m_SizeDelta: {x: 62.1401, y: 50}
+  m_AnchoredPosition: {x: 300, y: 0}
+  m_SizeDelta: {x: 75, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7998514084178710321
 CanvasRenderer:
@@ -67,7 +67,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Health
 
-    10/10
+    100/100
 
 '
   m_isRightToLeft: 0
@@ -324,8 +324,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 366.59998, y: 0}
-  m_SizeDelta: {x: 62.1401, y: 50}
+  m_AnchoredPosition: {x: 380, y: 0}
+  m_SizeDelta: {x: 75, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4979198162861236684
 CanvasRenderer:
@@ -357,7 +357,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'MP
 
-    20/20
+    {0}/{1}
 
 '
   m_isRightToLeft: 0

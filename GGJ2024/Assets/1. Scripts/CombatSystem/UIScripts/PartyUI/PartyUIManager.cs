@@ -1,6 +1,5 @@
-﻿using System;
-using CharacterScripts;
-using CombatSystem.CharacterScripts.CharacterStates;
+﻿using CharacterScripts;
+using CombatSystem.CharacterScripts;
 using CombatSystem.Structs;
 using TMPro;
 using UnityEngine;
@@ -29,8 +28,7 @@ namespace CombatSystem.UIScripts.PartyUI
 
 		private Character character;
 		private CharacterHealth characterHealth;
-		
-		private IdleState idleState;
+		private CharacterStaminaTimer staminaTimer;
 
 		private StringVariableWriter healthLabelWriter;
 		private StringVariableWriter mpLabelWriter;
@@ -45,12 +43,15 @@ namespace CombatSystem.UIScripts.PartyUI
 			characterHealth.OnHealthChanged += UpdateHealth;
 
 			nameLabel.text = characterStatistics.Name;
-			idleState      = player.GetComponent<IdleState>();
+			staminaTimer   = player.GetComponent<CharacterStaminaTimer>();
 
 			healthLabelWriter = new StringVariableWriter(healthLabel.text);
 			mpLabelWriter     = new StringVariableWriter(mpLabel.text);
+			
+			UpdateHealth();
+			UpdateMP();
 		}
-		
+
 		private void OnDisable()
 		{
 			characterHealth.OnHealthChanged -= UpdateHealth;
@@ -58,17 +59,17 @@ namespace CombatSystem.UIScripts.PartyUI
 
 		private void LateUpdate()
 		{
-			timerSlider.value = 1 - idleState.NormalizedTimer;
+			timerSlider.value = 1 - staminaTimer.NormalizedStaminaTimer;
 		}
 
 		private void UpdateHealth()
 		{
-			healthLabel.text = healthLabelWriter.UpdateText(characterHealth);
+			healthLabel.text = healthLabelWriter.UpdateText(characterHealth.Health, characterHealth.MaximumHealth);
 		}
 
 		private void UpdateMP()
 		{
-			mpLabel.text = mpLabelWriter.UpdateText(5); //TODO MP
+			mpLabel.text = mpLabelWriter.UpdateText(5, 10); //TODO MP
 		}
 	}
 }

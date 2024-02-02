@@ -4,8 +4,7 @@ using UnityEngine;
 
 namespace CombatSystem.CharacterScripts.CharacterStates
 {
-	[RequireComponent(typeof(Character))]
-	public class IdleState : AbstractCharacterState
+	public class StunnedState : AbstractCharacterState
 	{
 		public override CharacterCombatStateType NextState => CharacterCombatStateType.Choosing;
 
@@ -27,7 +26,8 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 
 		public override void Step()
 		{
-			characterStamina.DecreaseStamina(character.Statistics.Speed * Time.deltaTime);
+			// Stun is basically a slower idle
+			characterStamina.DecreaseStamina(character.Statistics.Speed / 2 * Time.deltaTime);
 		}
 
 		private void OnDestroy()

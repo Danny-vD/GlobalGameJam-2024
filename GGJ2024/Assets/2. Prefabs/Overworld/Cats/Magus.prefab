@@ -105,6 +105,7 @@ GameObject:
   - component: {fileID: 8878333353952968484}
   - component: {fileID: 2200131113038382580}
   - component: {fileID: 7018115281825185533}
+  - component: {fileID: 5215484374007804798}
   - component: {fileID: 1208957016206441545}
   - component: {fileID: 8126958419672109229}
   - component: {fileID: 7215463851340534749}
@@ -112,6 +113,7 @@ GameObject:
   - component: {fileID: 2443585238882384328}
   - component: {fileID: 41392662372473074}
   - component: {fileID: 747607144735702473}
+  - component: {fileID: 5184791889401032067}
   m_Layer: 0
   m_Name: Magus
   m_TagString: Untagged
@@ -247,13 +249,13 @@ CharacterController:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Height: 2.51
-  m_Radius: 1.1714286
+  m_Height: 2
+  m_Radius: 0.51
   m_SlopeLimit: 45
-  m_StepOffset: 0.3
+  m_StepOffset: 0.7
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0.13, z: 0}
+  m_Center: {x: 0, y: -0.04, z: 0}
 --- !u!114 &8878333353952968484
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -297,6 +299,19 @@ MonoBehaviour:
     SpecialAttackPower: 0
     Defense: 0
     SpecialDefense: 0
+--- !u!114 &5215484374007804798
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6520227370780432564}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7f2917593c2440c8046a7882d6adc34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <MaximumStaminaTimer>k__BackingField: 10
 --- !u!114 &1208957016206441545
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -344,6 +359,8 @@ MonoBehaviour:
       value: {fileID: 41392662372473074}
     - key: 3
       value: {fileID: 747607144735702473}
+    - key: 4
+      value: {fileID: 5184791889401032067}
 --- !u!114 &8260154641399801952
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -356,7 +373,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fa6946fb4b447b288cbb07ca7fe6942, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maximumIdleTime: 10
 --- !u!114 &2443585238882384328
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -391,5 +407,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea80a60c5e004688b13bef20ba7849ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5184791889401032067
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6520227370780432564}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71d8b977b6aa4074926e80f4c5d657b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

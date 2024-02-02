@@ -1496,10 +1496,6 @@ PrefabInstance:
       propertyPath: speed
       value: 5
       objectReference: {fileID: 0}
-    - target: {fileID: 5544402577739580422, guid: 991c08216419102498fdd01980bf48de, type: 3}
-      propertyPath: m_StepOffset
-      value: 0.7
-      objectReference: {fileID: 0}
     - target: {fileID: 6520227370780432564, guid: 991c08216419102498fdd01980bf48de, type: 3}
       propertyPath: m_Name
       value: Tank
@@ -5248,10 +5244,6 @@ PrefabInstance:
       propertyPath: speed
       value: 5
       objectReference: {fileID: 0}
-    - target: {fileID: 5544402577739580422, guid: 991c08216419102498fdd01980bf48de, type: 3}
-      propertyPath: m_StepOffset
-      value: 0.7
-      objectReference: {fileID: 0}
     - target: {fileID: 6520227370780432564, guid: 991c08216419102498fdd01980bf48de, type: 3}
       propertyPath: m_Name
       value: Knight
@@ -6242,6 +6234,12 @@ MonoBehaviour:
       value: bus:/
     emitterEvents:
     - key: 0
+      value: 0
+    - key: 1
+      value: 0
+    - key: 2
+      value: 0
+    - key: 3
       value: 0
   initialVolumes:
   - key: 0
@@ -13945,10 +13943,6 @@ PrefabInstance:
     - target: {fileID: 1830541541064778230, guid: 991c08216419102498fdd01980bf48de, type: 3}
       propertyPath: speed
       value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 5544402577739580422, guid: 991c08216419102498fdd01980bf48de, type: 3}
-      propertyPath: m_StepOffset
-      value: 0.7
       objectReference: {fileID: 0}
     - target: {fileID: 6520227370780432564, guid: 991c08216419102498fdd01980bf48de, type: 3}
       propertyPath: m_Name

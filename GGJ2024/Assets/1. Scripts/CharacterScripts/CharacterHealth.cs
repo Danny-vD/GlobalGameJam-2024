@@ -54,5 +54,10 @@ namespace CharacterScripts
 			Health -= amount;
 			OnHealthChanged.Invoke();
 		}
+
+		private void ResetHealth()
+		{
+			Health = MaximumHealth;
+		}
 	}
 }
