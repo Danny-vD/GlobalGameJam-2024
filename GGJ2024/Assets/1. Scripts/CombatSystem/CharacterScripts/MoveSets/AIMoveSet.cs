@@ -4,6 +4,7 @@ using CombatMoves.BaseClasses;
 using CombatSystem.Interfaces;
 using SerializableDictionaryPackage.SerializableDictionary;
 using UnityEngine;
+using VDFramework.LootTables;
 using VDFramework.LootTables.LootTableItems;
 using VDFramework.LootTables.Variations;
 
@@ -12,38 +13,38 @@ namespace CombatSystem.CharacterScripts.MoveSets
 	public class AIMoveSet : AbstractMoveset, IAIMoveset
 	{
 		[SerializeField, Tooltip("If no percentage is provided when adding a new move, this percentage will be used instead")]
-		private float defaultPercentageForNewMove = 5;
+		private long defaultWeightForNewMove = 5;
 		
 		[SerializeField]
-		private SerializableDictionary<AbstractCombatMove, float> moveChances;
+		private SerializableDictionary<AbstractCombatMove, long> moveChances;
 
-		private PercentageLootTable<AbstractCombatMove> percentagedMoves;
+		private WeightedLootTable<AbstractCombatMove> combatMovesLootTable;
 
 		private void Awake()
 		{
-			percentagedMoves = new PercentageLootTable<AbstractCombatMove>(moveChances);
+			combatMovesLootTable = new WeightedLootTable<AbstractCombatMove>(moveChances);
 		}
 
-		public void AddMove(AbstractCombatMove abstractCombatMove, float percentage)
+		public void AddMove(AbstractCombatMove abstractCombatMove, long weight)
 		{
-			if (!moveChances.TryAdd(abstractCombatMove, percentage))
+			if (!moveChances.TryAdd(abstractCombatMove, weight))
 			{
 				return;
 			}
 
-			percentagedMoves.TryAdd(new LootTableItem<AbstractCombatMove>(abstractCombatMove), percentage);
+			combatMovesLootTable.TryAdd(new LootTableItem<AbstractCombatMove>(abstractCombatMove), weight);
 		}
 		
 		public override void AddMove(AbstractCombatMove abstractCombatMove)
 		{
-			AddMove(abstractCombatMove, defaultPercentageForNewMove);
+			AddMove(abstractCombatMove, defaultWeightForNewMove);
 		}
 
 		public override void RemoveMove(AbstractCombatMove abstractCombatMove)
 		{
 			moveChances.Remove(abstractCombatMove);
 			
-			percentagedMoves.TryRemove(abstractCombatMove);
+			combatMovesLootTable.TryRemove(abstractCombatMove);
 		}
 
 		public override List<AbstractCombatMove> GetMoves()
@@ -53,7 +54,7 @@ namespace CombatSystem.CharacterScripts.MoveSets
 
 		public AbstractCombatMove ChooseAIMove()
 		{
-			return percentagedMoves.GetLoot();
+			return combatMovesLootTable.GetLoot();
 		}
 	}
 }
