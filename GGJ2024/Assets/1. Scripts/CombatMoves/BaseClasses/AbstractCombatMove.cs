@@ -50,7 +50,20 @@ namespace CombatMoves.BaseClasses
 			return TargetingValidatorUtil.GetValidators(ValidTargets).IsValidTarget(target, caster);
 		}
 		
+		/// <summary>
+		/// Start performing this combat move
+		/// </summary>
+		/// <param name="target">The target of the move</param>
+		/// <param name="caster">The gameobject that casts the move</param>
 		public abstract void StartCombatMove(GameObject target, GameObject caster);
+
+		/// <summary>
+		/// Immediately interrupts and stops the combat move
+		/// </summary>
+		public virtual void ForceStopCombatMove() // NOTE Public so that it can be directly called from Dead/Stun state
+		{
+			EndCombatMove();
+		}
 		
 		/// <summary>
 		/// Invokes all events at once

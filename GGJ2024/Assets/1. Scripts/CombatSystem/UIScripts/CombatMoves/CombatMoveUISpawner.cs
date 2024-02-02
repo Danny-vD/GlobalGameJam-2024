@@ -3,7 +3,6 @@ using CombatMoves.BaseClasses;
 using CombatSystem.CharacterScripts;
 using CombatSystem.Events.Queues;
 using CombatSystem.Interfaces;
-using CombatSystem.Managers;
 using UnityEngine;
 using VDFramework;
 using VDFramework.UnityExtensions;
