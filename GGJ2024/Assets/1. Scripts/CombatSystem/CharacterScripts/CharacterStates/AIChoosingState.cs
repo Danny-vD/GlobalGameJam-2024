@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using CharacterScripts;
-using CombatMoves.BaseClasses;
-using CombatMoves.BaseClasses.ScriptableObjects;
+using CombatMoves.ScriptableObjects.BaseClasses;
 using CombatSystem.Enums;
 using CombatSystem.Interfaces;
 using PlayerPartyScripts;

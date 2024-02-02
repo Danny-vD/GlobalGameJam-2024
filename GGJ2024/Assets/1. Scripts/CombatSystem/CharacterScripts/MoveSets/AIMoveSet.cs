@@ -1,24 +1,30 @@
 ﻿using System.Collections.Generic;
-using CombatMoves.BaseClasses.ScriptableObjects;
+using System.Linq;
+using CombatMoves.ScriptableObjects.BaseClasses;
 using CombatSystem.Interfaces;
-using LootTables.ScriptableObjects;
+using CombatSystem.ScriptableObjects;
 using UnityEngine;
+using VDFramework.LootTables;
+using VDFramework.LootTables.Interfaces;
+using VDFramework.LootTables.Structs;
 
 namespace CombatSystem.CharacterScripts.MoveSets
 {
 	public class AIMoveSet : AbstractMoveset, IAIMoveset
 	{
 		[SerializeField]
-		private WeightedLootTableObject<AbstractCombatMove> movesTable;
+		private AIMovesetLootTableObject movesWeightedLootTable;
 		
 		[SerializeField, Tooltip("If no percentage is provided when adding a new move, this percentage will be used instead")]
 		private long defaultWeightForNewMove = 5;
 
+		private List<AbstractCombatMove> cachedMovesList;
+
 		public void AddMove(AbstractCombatMove abstractCombatMove, long weight)
 		{
-			if (!movesTable.TryAdd(abstractCombatMove, weight))
+			if (movesWeightedLootTable.TryAdd(abstractCombatMove, weight))
 			{
-				return;
+				cachedMovesList = null; // Reset the cache
 			}
 		}
 		
@@ -29,17 +35,44 @@ namespace CombatSystem.CharacterScripts.MoveSets
 
 		public override void RemoveMove(AbstractCombatMove abstractCombatMove)
 		{
-			movesTable.TryRemove(abstractCombatMove);
-		}
-
-		public override List<AbstractCombatMove> GetMoves()
-		{
-			return null; //movesTable.GetLootTable().GetLootList();
+			if (movesWeightedLootTable.TryRemove(abstractCombatMove))
+			{
+				cachedMovesList = null; // Reset the cache
+			}
 		}
 
 		public AbstractCombatMove ChooseAIMove()
 		{
-			return movesTable.GetLoot();
+			return movesWeightedLootTable.GetLoot();
+		}
+		
+		public override List<AbstractCombatMove> GetMoves()
+		{
+			if (cachedMovesList != null)
+			{
+				return cachedMovesList;
+			}
+			
+			List<LootTablePair<AbstractCombatMove>> lootList = movesWeightedLootTable.GetLootTable().GetLootList();
+			cachedMovesList = new List<AbstractCombatMove>(lootList.Count);
+			
+			CacheLootList(lootList);
+			
+			return cachedMovesList;
+		}
+
+		private void CacheLootList(IEnumerable<LootTablePair<AbstractCombatMove>> lootList)
+		{
+			foreach (ILoot<AbstractCombatMove> loot in lootList.Select(pair => pair.Loot))
+			{
+				if (loot is WeightedLootTable<AbstractCombatMove> nestedTable)
+				{
+					CacheLootList(nestedTable.GetLootList());
+					continue;
+				}
+				
+				cachedMovesList.Add(loot.GetLoot());
+			}
 		}
 	}
 }

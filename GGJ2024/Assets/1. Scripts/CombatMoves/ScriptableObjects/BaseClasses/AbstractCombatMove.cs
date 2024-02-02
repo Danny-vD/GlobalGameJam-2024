@@ -6,7 +6,7 @@ using CombatSystem.Events.Queues;
 using UnityEngine;
 using VDFramework.EventSystem;
 
-namespace CombatMoves.BaseClasses.ScriptableObjects
+namespace CombatMoves.ScriptableObjects.BaseClasses
 {
 	public abstract class AbstractCombatMove : ScriptableObject
 	{

@@ -1,5 +1,4 @@
-﻿using CombatMoves.BaseClasses;
-using CombatMoves.BaseClasses.ScriptableObjects;
+﻿using CombatMoves.ScriptableObjects.BaseClasses;
 
 namespace CombatSystem.Interfaces
 {

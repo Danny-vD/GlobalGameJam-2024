@@ -1,10 +1,10 @@
-﻿using CombatMoves.BaseClasses.ScriptableObjects;
+﻿using CombatMoves.ScriptableObjects.BaseClasses;
 using FMODUtilityPackage.Core;
 using FMODUtilityPackage.Enums;
 using UnityEngine;
 using VDFramework.Utility.TimerUtil;
 
-namespace CombatMoves.Moves
+namespace CombatMoves.ScriptableObjects.Moves
 {
     [CreateAssetMenu(fileName = nameof(BasicAttack), menuName = "CombatMoves/" + nameof(BasicAttack))]
     public class BasicAttack : AbstractCombatMove

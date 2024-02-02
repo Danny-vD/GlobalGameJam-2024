@@ -1,6 +1,5 @@
 ﻿using System;
-using CombatMoves.BaseClasses;
-using CombatMoves.BaseClasses.ScriptableObjects;
+using CombatMoves.ScriptableObjects.BaseClasses;
 using CombatSystem.Enums;
 using CombatSystem.Events.Queues;
 using VDFramework.EventSystem;

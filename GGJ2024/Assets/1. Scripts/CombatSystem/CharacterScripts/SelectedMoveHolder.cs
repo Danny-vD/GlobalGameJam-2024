@@ -1,6 +1,5 @@
 ﻿using System;
-using CombatMoves.BaseClasses;
-using CombatMoves.BaseClasses.ScriptableObjects;
+using CombatMoves.ScriptableObjects.BaseClasses;
 using UnityEngine;
 using VDFramework;
 
