@@ -17,6 +17,12 @@ namespace CombatSystem.Managers
 			EventManager.AddListener<CombatEndedEvent>(OnCombatEnd);
 		}
 
+		private void OnDisable()
+		{
+			EventManager.RemoveListener<CombatStartedEvent>(OnCombatStart);
+			EventManager.RemoveListener<CombatEndedEvent>(OnCombatEnd);
+		}
+
 		private void OnCombatStart(CombatStartedEvent @event)
 		{
 			InputControlManager.Instance.ChangeControls(ControlTypes.Combat);
