@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using CombatSystem.CharacterScripts.CharacterStates;
 using CombatSystem.Events;
+using CombatSystem.Events.Queues;
 using UnityEngine;
 using VDFramework;
 
@@ -15,20 +16,18 @@ namespace CombatSystem.Managers
 
 		private void OnEnable()
 		{
-			CastingState.OnNewCharacterReadyToCast    += OnNewCharacterReadyToCast;
-			CastingState.OnCharacterFinishedCasting   += StartNextInQueue;
-			
-			CombatStartedEvent.ParameterlessListeners += ResetState;
-			CombatEndedEvent.ParameterlessListeners += ResetState;
+			NewCharacterReadyToCastEvent.Listeners             += OnNewCharacterReadyToCast;
+			NextCombatMoveCanStartEvent.ParameterlessListeners += StartNextInQueue;
+			CombatStartedEvent.ParameterlessListeners          += ResetState;
+			CombatEndedEvent.ParameterlessListeners            += ResetState;
 		}
 
 		private void OnDisable()
 		{
-			CastingState.OnNewCharacterReadyToCast  -= OnNewCharacterReadyToCast;
-			CastingState.OnCharacterFinishedCasting -= StartNextInQueue;
-			
-			CombatStartedEvent.ParameterlessListeners -= ResetState;
-			CombatEndedEvent.ParameterlessListeners   -= ResetState;
+			NewCharacterReadyToCastEvent.Listeners             -= OnNewCharacterReadyToCast;
+			NextCombatMoveCanStartEvent.ParameterlessListeners -= StartNextInQueue;
+			CombatStartedEvent.ParameterlessListeners          -= ResetState;
+			CombatEndedEvent.ParameterlessListeners            -= ResetState;
 		}
 
 		private void ResetState()
@@ -37,8 +36,10 @@ namespace CombatSystem.Managers
 			isSomeoneCasting = false;
 		}
 
-		private void OnNewCharacterReadyToCast(CastingState castingState)
+		private void OnNewCharacterReadyToCast(NewCharacterReadyToCastEvent newCharacterReadyToCastEvent)
 		{
+			CastingState castingState = newCharacterReadyToCastEvent.ReadyCastingState;
+
 			if (!isSomeoneCasting)
 			{
 				isSomeoneCasting = true;

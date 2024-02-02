@@ -11,8 +11,8 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 		private float maximumIdleTime = 10;
 		
 		public override CharacterCombatStateType NextState => CharacterCombatStateType.Choosing;
-		public float NormalizedTimer => timer / maximumIdleTime;
-
+		public float NormalizedTimer => timer / maximumIdleTime; // NOTE 2: Or just decouple the UI from this timer altogether, e.g. move stamina/timer to Character component
+		
 		private float timer; // NOTE: If stun is it's own state, then it might be nice to be able to set this timer (for the UI) 
 
 		private Character character;
@@ -29,7 +29,7 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 
 		public override void Step()
 		{
-			// TODO: Seperate stun state, or is stun just halving the speed??
+			// TODO: Seperate stun state
 			timer -= character.Statistics.Speed * Time.deltaTime;
 
 			if (timer <= 0)

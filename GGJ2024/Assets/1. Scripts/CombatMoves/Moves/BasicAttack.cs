@@ -15,8 +15,8 @@ namespace CombatMoves.Moves
         public override void StartCombatMove(GameObject target, GameObject caster)
         {
             AudioPlayer.PlayOneShot2D(audioType);
-            Debug.Log(caster.name);
-            TimerManager.StartNewTimer(1, InvokeCombatMoveEnded);
+            
+            TimerManager.StartNewTimer(1, EndCombatMove);
         }
     }
 }

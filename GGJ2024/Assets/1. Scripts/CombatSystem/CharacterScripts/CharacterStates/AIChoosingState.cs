@@ -31,9 +31,5 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 			selectedMoveHolder.SelectMove(combatMove, PlayerPartySingleton.Instance.Party.Where(obj => !obj.GetComponent<CharacterHealth>().IsDead).GetRandomElement()); //TODO: Don't take random party member
 			Exit();
 		}
-
-		public override void Step()
-		{
-		}
 	}
 }

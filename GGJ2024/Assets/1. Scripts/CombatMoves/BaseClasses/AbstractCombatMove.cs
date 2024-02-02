@@ -2,7 +2,9 @@
 using CombatMoves.TargetingLogic.Enums;
 using CombatMoves.TargetingLogic.TargetingValidators.Util;
 using CombatSystem.Enums;
+using CombatSystem.Events.Queues;
 using UnityEngine;
+using VDFramework.EventSystem;
 
 namespace CombatMoves.BaseClasses
 {
@@ -34,6 +36,14 @@ namespace CombatMoves.BaseClasses
 		[field: SerializeField]
 		public string AnimationTriggerName { get; protected set; }
 
+		/// <summary>
+		/// Allows another combat move to start
+		/// </summary>
+		protected static void AllowNextMoveToStart()
+		{
+			EventManager.RaiseEvent(new NextCombatMoveCanStartEvent());
+		}
+		
 		public bool IsValidTarget(GameObject target, GameObject caster)
 		{
 			//TODO: Cache the ITargetingValidator
@@ -41,9 +51,22 @@ namespace CombatMoves.BaseClasses
 		}
 		
 		public abstract void StartCombatMove(GameObject target, GameObject caster);
-
-		// TODO: Change so that we can say that someone else can start without explicitely ending our own casting yet (e.g. for charging/longer resting)
-		protected void InvokeCombatMoveEnded()
+		
+		/// <summary>
+		/// Invokes all events at once
+		/// </summary>
+		/// <seealso cref="AllowNextMoveToStart"/>
+		/// <seealso cref="InvokeOnCombatMoveEnded"/>
+		protected void EndCombatMove()
+		{
+			InvokeOnCombatMoveEnded();
+			AllowNextMoveToStart();
+		}
+		
+		/// <summary>
+		/// Invokes <see cref="OnCombatMoveEnded"/>
+		/// </summary>
+		protected void InvokeOnCombatMoveEnded()
 		{
 			OnCombatMoveEnded.Invoke();
 		}

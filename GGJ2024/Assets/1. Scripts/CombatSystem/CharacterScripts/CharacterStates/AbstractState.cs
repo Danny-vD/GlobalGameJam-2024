@@ -12,7 +12,9 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 		
 		public abstract void Enter();
 
-		public abstract void Step();
+		public virtual void Step()
+		{
+		}
 
 		protected virtual void Exit()
 		{

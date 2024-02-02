@@ -47,7 +47,7 @@ namespace CombatSystem.CharacterScripts
 		}
 
 		//TODO: Characters should be able to get stunned (create stun state maybe? Necessary to check if stunned later (e.g. Bard's 3AM Concierto))
-		private void SetState(CharacterCombatStateType stateType)
+		private void SetState(CharacterCombatStateType stateType) // TODO: find a elegant way to go to death/stunned state (public is undesirable, but not impossible)
 		{
 			if (currentState != null)
 			{
