@@ -24,6 +24,7 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 		// TODO: Override target selection when taunted
 		public override void Enter()
 		{
+			// NOTE: We can add a small time before this to mimic the AI 'thinking'
 			AbstractCombatMove combatMove = aiMoveset.ChooseAIMove();
 			
 			//HACK: taking a random party member does not work if the opposing team is not a valid target (opposing team from enemy is the party)

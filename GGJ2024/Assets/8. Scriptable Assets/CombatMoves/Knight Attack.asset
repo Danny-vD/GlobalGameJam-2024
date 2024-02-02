@@ -19,4 +19,4 @@ MonoBehaviour:
   <Potency>k__BackingField: 10
   <ValidTargets>k__BackingField: 0
   <AnimationTriggerName>k__BackingField: BasicAttack
-  audioType: 11
+  audioType: 14
