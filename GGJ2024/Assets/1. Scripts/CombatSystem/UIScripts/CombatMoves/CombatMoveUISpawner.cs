@@ -23,6 +23,7 @@ namespace CombatSystem.UIScripts.CombatMoves
 
 		private void Awake()
 		{
+			//TODO React to player death and stun
 			NewPlayerChoosingMoveEvent.Listeners            += ShowMoves;
 			AllPlayersChoseMoveEvent.ParameterlessListeners += HideMoves;
 		}

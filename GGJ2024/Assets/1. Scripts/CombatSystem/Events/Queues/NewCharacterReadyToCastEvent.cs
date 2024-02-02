@@ -5,11 +5,11 @@ namespace CombatSystem.Events.Queues
 {
 	public class NewCharacterReadyToCastEvent : VDEvent<NewCharacterReadyToCastEvent>
 	{
-		public readonly CastingState ReadyCastingState;
+		public readonly CastingState CastingState;
 
 		public NewCharacterReadyToCastEvent(CastingState castingState)
 		{
-			ReadyCastingState = castingState;
+			CastingState = castingState;
 		}
 	}
 }
