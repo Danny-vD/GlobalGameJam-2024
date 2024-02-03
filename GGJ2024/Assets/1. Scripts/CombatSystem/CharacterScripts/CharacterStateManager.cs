@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using CharacterScripts;
 using CombatSystem.CharacterScripts.CharacterStates;
 using CombatSystem.Enums;
 using CombatSystem.Events;
@@ -22,6 +23,7 @@ namespace CombatSystem.CharacterScripts
 		private List<AbstractCharacterState> states;
 
 		private AbstractCharacterState currentState;
+		private CharacterHealth characterHealth;
 
 		private void Awake()
 		{
@@ -33,21 +35,29 @@ namespace CombatSystem.CharacterScripts
 			CombatStartedEvent.ParameterlessListeners += this.Enable;
 			CombatEndedEvent.ParameterlessListeners   += this.Disable;
 
+			characterHealth = GetComponent<CharacterHealth>();
+
 			this.Disable();
 		}
 
 		private void OnEnable()
 		{
-			SetState(CharacterCombatStateType.Idle);
+			characterHealth.OnDied        += SetToDeadState;
+			characterHealth.OnResurrected += SetToIdleState;
+		}
+
+		private void OnDisable()
+		{
+			characterHealth.OnDied        -= SetToDeadState;
+			characterHealth.OnResurrected -= SetToIdleState;
 		}
 
 		private void Update()
 		{
 			currentState.Step();
 		}
-
-		//TODO: Characters should be able to get stunned (create stun state maybe? Necessary to check if stunned later (e.g. Bard's 3AM Concierto))
-		private void SetState(CharacterCombatStateType stateType) // TODO: find a elegant way to go to death/stunned state (public is undesirable, but not impossible)
+		
+		private void SetState(CharacterCombatStateType stateType)
 		{
 			if (currentState != null)
 			{
@@ -62,6 +72,21 @@ namespace CombatSystem.CharacterScripts
 			currentState.OnStateEnded += SetState;
 
 			currentState.Enter();
+		}
+
+		private void SetToDeadState()
+		{
+			SetState(CharacterCombatStateType.Dead);
+		}
+
+		private void SetToStunState()
+		{
+			SetState(CharacterCombatStateType.Stunned);
+		}
+
+		private void SetToIdleState()
+		{
+			SetState(CharacterCombatStateType.Idle);
 		}
 
 		private void OnDestroy()

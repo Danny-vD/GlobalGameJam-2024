@@ -14,7 +14,7 @@ namespace CombatSystem.UIScripts.CombatMoves
 
 		[SerializeField]
 		private TMP_Text nameLabel;
-		
+
 		[SerializeField]
 		private TMP_Text descriptionLabel;
 
@@ -24,10 +24,11 @@ namespace CombatSystem.UIScripts.CombatMoves
 		private AbstractCombatMove combatMove;
 		private SelectedMoveHolder selectedMoveHolder;
 
-		public void Initialize(AbstractCombatMove move, SelectedMoveHolder moveHolder)
+		public void Initialize(AbstractCombatMove move, GameObject character)
 		{
-			combatMove         = move;
-			selectedMoveHolder = moveHolder;
+			combatMove = move;
+
+			selectedMoveHolder = character.GetComponent<SelectedMoveHolder>();
 
 			//TODO: logic in between with events for Successful selection and failed selection
 			selectMoveButton.onClick.AddListener(SelectMove);

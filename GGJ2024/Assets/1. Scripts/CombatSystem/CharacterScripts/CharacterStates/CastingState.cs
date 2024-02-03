@@ -33,6 +33,7 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 
 		public void StartCasting()
 		{
+			//TODO: Check whether the target is still valid (might be dead)
 			AbstractCombatMove selectedMove = selectedMoveHolder.SelectedMove;
 
 			selectedMove.OnCombatMoveEnded += Exit;

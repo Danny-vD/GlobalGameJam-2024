@@ -15,7 +15,7 @@ namespace CombatSystem.CharacterScripts.MoveSets
 		[SerializeField]
 		private AIMovesetLootTableObject movesWeightedLootTable;
 		
-		[SerializeField, Tooltip("If no percentage is provided when adding a new move, this percentage will be used instead")]
+		[SerializeField, Tooltip("If no weight is provided when adding a new move, this weight will be used instead")]
 		private long defaultWeightForNewMove = 5;
 
 		private List<AbstractCombatMove> cachedMovesList;

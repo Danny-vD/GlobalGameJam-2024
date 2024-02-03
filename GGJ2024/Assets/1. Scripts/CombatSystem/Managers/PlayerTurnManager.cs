@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using CharacterScripts;
 using CombatSystem.Events;
 using CombatSystem.Events.CharacterStateEvents;
 using CombatSystem.Events.Queues;
@@ -12,6 +13,8 @@ namespace CombatSystem.Managers
 	public class PlayerTurnManager : BetterMonoBehaviour
 	{
 		private readonly Queue<GameObject> characterPickingMoveQueue = new Queue<GameObject>();
+
+		private GameObject currentlyActivePlayer;
 
 		private void OnEnable()
 		{
@@ -46,6 +49,13 @@ namespace CombatSystem.Managers
 			EventManager.RaiseEvent(new CombatEndedEvent());
 		}
 
+		public bool TryGetActivePlayer(out GameObject activePlayer)
+		{
+			activePlayer = currentlyActivePlayer;
+
+			return currentlyActivePlayer != null;
+		}
+
 		private void AddToQueue(PlayerEnteredChoosingStateEvent enteredChoosingStateEvent)
 		{
 			GameObject player = enteredChoosingStateEvent.Player;
@@ -61,7 +71,7 @@ namespace CombatSystem.Managers
 			if (characterPickingMoveQueue.Count == 1)
 			{
 				// First character added so it is always going to be the one that is choosing a move
-				EventManager.RaiseEvent(new NewPlayerChoosingMoveEvent(player));
+				SetNextInQueueActive();
 			}
 		}
 
@@ -75,16 +85,7 @@ namespace CombatSystem.Managers
 				{
 					characterPickingMoveQueue.Dequeue();
 
-					if (characterPickingMoveQueue.Count == 0)
-					{
-						// Queue is empty
-						EventManager.RaiseEvent(new AllPlayersChoseMoveEvent());
-					}
-					else
-					{
-						// Next in line gets to choose a move now
-						EventManager.RaiseEvent(new NewPlayerChoosingMoveEvent(characterPickingMoveQueue.Peek()));
-					}
+					SetNextInQueueActive();
 
 					return;
 				}
@@ -94,6 +95,46 @@ namespace CombatSystem.Managers
 			}
 
 			Debug.LogError("Trying to dequeue with an empty queue!");
+		}
+
+		private void SetNextInQueueActive()
+		{
+			if (characterPickingMoveQueue.Count == 0)
+			{
+				SetNoActivePlayer();
+				
+				// Queue is empty
+				EventManager.RaiseEvent(new AllPlayersChoseMoveEvent());
+			}
+			else
+			{
+				// Next in line gets to choose a move now
+				SetNewActivePlayer(characterPickingMoveQueue.Peek());
+			}
+		}
+
+		private void SetNewActivePlayer(GameObject player)
+		{
+			currentlyActivePlayer = player;
+
+			CharacterHealth characterHealth = currentlyActivePlayer.GetComponent<CharacterHealth>();
+			
+			characterHealth.OnDied += SetNextInQueueActive;
+
+			EventManager.RaiseEvent(new NewPlayerChoosingMoveEvent(player));
+		}
+
+		private void SetNoActivePlayer()
+		{
+			if (currentlyActivePlayer)
+			{
+				CharacterHealth character = currentlyActivePlayer.GetComponent<CharacterHealth>();
+				character.OnDied -= SetNextInQueueActive;
+			}
+
+			currentlyActivePlayer = null;
+
+			EventManager.RaiseEvent(new AllPlayersChoseMoveEvent());
 		}
 	}
 }

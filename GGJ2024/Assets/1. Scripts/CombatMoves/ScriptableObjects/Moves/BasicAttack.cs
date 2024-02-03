@@ -1,4 +1,5 @@
-﻿using CombatMoves.ScriptableObjects.BaseClasses;
+﻿using CharacterScripts;
+using CombatMoves.ScriptableObjects.BaseClasses;
 using FMODUtilityPackage.Core;
 using FMODUtilityPackage.Enums;
 using UnityEngine;
@@ -15,6 +16,8 @@ namespace CombatMoves.ScriptableObjects.Moves
         public override void StartCombatMove(GameObject target, GameObject caster)
         {
             AudioPlayer.PlayOneShot2D(audioType);
+            
+            target.GetComponent<CharacterHealth>().Damage((int)Potency);
             
             TimerManager.StartNewTimer(1, EndCombatMove);
         }

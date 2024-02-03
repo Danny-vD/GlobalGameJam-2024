@@ -10,7 +10,7 @@ namespace CharacterScripts
 		public event Action<int> OnHealed = delegate { };
 		
 		public event Action OnHealthChanged = delegate { };
-		public event Action OnDead = delegate { };
+		public event Action OnDied = delegate { };
 		public event Action OnResurrected = delegate { };
 
 		[field: SerializeField]
@@ -33,7 +33,7 @@ namespace CharacterScripts
 			if (Health <= 0)
 			{
 				IsDead = true;
-				OnDead.Invoke();
+				OnDied.Invoke();
 			}
 		}
 

@@ -15,8 +15,8 @@ namespace CombatSystem.UIScripts.CombatMoves
 		public static event Action OnHideMoves = delegate { };
 
 		[SerializeField]
-		private Transform combatMovesParent; 
-		
+		private Transform combatMovesParent;
+
 		[SerializeField]
 		private GameObject combatMovePrefab;
 
@@ -36,12 +36,11 @@ namespace CombatSystem.UIScripts.CombatMoves
 		private void ShowMoves(NewPlayerChoosingMoveEvent newPlayerChoosingMoveEvent)
 		{
 			GameObject player = newPlayerChoosingMoveEvent.Player;
-			
+
 			IMoveset moveset = player.GetComponent<IMoveset>();
-			SelectedMoveHolder selectedMoveHolder = player.GetComponent<SelectedMoveHolder>();
-			
-			InstantiateCombatMoves(moveset, selectedMoveHolder);
-			
+
+			InstantiateCombatMoves(moveset, player);
+
 			OnShowMoves.Invoke();
 		}
 
@@ -50,15 +49,15 @@ namespace CombatSystem.UIScripts.CombatMoves
 			OnHideMoves.Invoke();
 		}
 
-		private void InstantiateCombatMoves(IMoveset moveset, SelectedMoveHolder selectedMoveHolder)
+		private void InstantiateCombatMoves(IMoveset moveset, GameObject player)
 		{
 			combatMovesParent.DestroyChildren();
-			
+
 			foreach (AbstractCombatMove combatMove in moveset.GetMoves())
 			{
 				GameObject instance = Instantiate(combatMovePrefab, combatMovesParent);
 
-				instance.GetComponent<CombatMoveUIManager>().Initialize(combatMove, selectedMoveHolder);
+				instance.GetComponent<CombatMoveUIManager>().Initialize(combatMove, player);
 			}
 		}
 	}

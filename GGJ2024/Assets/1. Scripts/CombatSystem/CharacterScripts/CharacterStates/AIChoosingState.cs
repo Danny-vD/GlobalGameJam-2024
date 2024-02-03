@@ -28,7 +28,7 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 			AbstractCombatMove combatMove = aiMoveset.ChooseAIMove();
 			
 			//HACK: taking a random party member does not work if the opposing team is not a valid target (opposing team from enemy is the party)
-			//TODO: Use a separate 'AiTargetingLogic' script that can then differ per AI to make them smarter/dumber with their moves (e.g. 1 is always random but another targets the lowest HP party member)
+			//TODO: Use a separate 'AiTargetingLogic' script that can then differ per AI to make them smarter/dumber with their moves (e.g. one enemy is always random but another targets the lowest HP party member)
 			selectedMoveHolder.SelectMove(combatMove, PlayerPartySingleton.Instance.Party.Where(obj => !obj.GetComponent<CharacterHealth>().IsDead).GetRandomElement()); //TODO: Don't take random party member
 			Exit();
 		}

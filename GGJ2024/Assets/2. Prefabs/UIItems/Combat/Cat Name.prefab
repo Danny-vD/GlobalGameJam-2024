@@ -67,7 +67,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Health
 
-    100/100
+    {0}/{1}
 
 '
   m_isRightToLeft: 0
