@@ -1,10 +1,10 @@
-﻿using CombatMoves.BaseClasses;
+﻿using CombatMoves.ScriptableObjects.BaseClasses;
 using FMODUtilityPackage.Core;
 using FMODUtilityPackage.Enums;
 using UnityEngine;
 using VDFramework.Utility.TimerUtil;
 
-namespace CombatMoves.Moves
+namespace CombatMoves.ScriptableObjects.Moves
 {
     [CreateAssetMenu(fileName = nameof(BasicAttack), menuName = "CombatMoves/" + nameof(BasicAttack))]
     public class BasicAttack : AbstractCombatMove
@@ -15,8 +15,8 @@ namespace CombatMoves.Moves
         public override void StartCombatMove(GameObject target, GameObject caster)
         {
             AudioPlayer.PlayOneShot2D(audioType);
-            Debug.Log(caster.name);
-            TimerManager.StartNewTimer(1, InvokeCombatMoveEnded);
+            
+            TimerManager.StartNewTimer(1, EndCombatMove);
         }
     }
 }

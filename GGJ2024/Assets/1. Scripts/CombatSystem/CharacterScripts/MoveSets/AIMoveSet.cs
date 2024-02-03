@@ -1,59 +1,78 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using CombatMoves.BaseClasses;
+using CombatMoves.ScriptableObjects.BaseClasses;
 using CombatSystem.Interfaces;
-using SerializableDictionaryPackage.SerializableDictionary;
+using CombatSystem.ScriptableObjects;
 using UnityEngine;
-using VDFramework.LootTables.LootTableItems;
-using VDFramework.LootTables.Variations;
+using VDFramework.LootTables;
+using VDFramework.LootTables.Interfaces;
+using VDFramework.LootTables.Structs;
 
 namespace CombatSystem.CharacterScripts.MoveSets
 {
 	public class AIMoveSet : AbstractMoveset, IAIMoveset
 	{
-		[SerializeField, Tooltip("If no percentage is provided when adding a new move, this percentage will be used instead")]
-		private float defaultPercentageForNewMove = 5;
-		
 		[SerializeField]
-		private SerializableDictionary<AbstractCombatMove, float> moveChances;
+		private AIMovesetLootTableObject movesWeightedLootTable;
+		
+		[SerializeField, Tooltip("If no percentage is provided when adding a new move, this percentage will be used instead")]
+		private long defaultWeightForNewMove = 5;
 
-		private PercentageLootTable<AbstractCombatMove> percentagedMoves;
+		private List<AbstractCombatMove> cachedMovesList;
 
-		private void Awake()
+		public void AddMove(AbstractCombatMove abstractCombatMove, long weight)
 		{
-			percentagedMoves = new PercentageLootTable<AbstractCombatMove>(moveChances);
-		}
-
-		public void AddMove(AbstractCombatMove abstractCombatMove, float percentage)
-		{
-			if (!moveChances.TryAdd(abstractCombatMove, percentage))
+			if (movesWeightedLootTable.TryAdd(abstractCombatMove, weight))
 			{
-				return;
+				cachedMovesList = null; // Reset the cache
 			}
-
-			percentagedMoves.TryAdd(new LootTableItem<AbstractCombatMove>(abstractCombatMove), percentage);
 		}
 		
 		public override void AddMove(AbstractCombatMove abstractCombatMove)
 		{
-			AddMove(abstractCombatMove, defaultPercentageForNewMove);
+			AddMove(abstractCombatMove, defaultWeightForNewMove);
 		}
 
 		public override void RemoveMove(AbstractCombatMove abstractCombatMove)
 		{
-			moveChances.Remove(abstractCombatMove);
-			
-			percentagedMoves.TryRemove(abstractCombatMove);
-		}
-
-		public override List<AbstractCombatMove> GetMoves()
-		{
-			return moveChances.Keys.ToList();
+			if (movesWeightedLootTable.TryRemove(abstractCombatMove))
+			{
+				cachedMovesList = null; // Reset the cache
+			}
 		}
 
 		public AbstractCombatMove ChooseAIMove()
 		{
-			return percentagedMoves.GetLoot();
+			return movesWeightedLootTable.GetLoot();
+		}
+		
+		public override List<AbstractCombatMove> GetMoves()
+		{
+			if (cachedMovesList != null)
+			{
+				return cachedMovesList;
+			}
+			
+			List<LootTablePair<AbstractCombatMove>> lootList = movesWeightedLootTable.GetLootTable().GetLootList();
+			cachedMovesList = new List<AbstractCombatMove>(lootList.Count);
+			
+			CacheLootList(lootList);
+			
+			return cachedMovesList;
+		}
+
+		private void CacheLootList(IEnumerable<LootTablePair<AbstractCombatMove>> lootList)
+		{
+			foreach (ILoot<AbstractCombatMove> loot in lootList.Select(pair => pair.Loot))
+			{
+				if (loot is WeightedLootTable<AbstractCombatMove> nestedTable)
+				{
+					CacheLootList(nestedTable.GetLootList());
+					continue;
+				}
+				
+				cachedMovesList.Add(loot.GetLoot());
+			}
 		}
 	}
 }

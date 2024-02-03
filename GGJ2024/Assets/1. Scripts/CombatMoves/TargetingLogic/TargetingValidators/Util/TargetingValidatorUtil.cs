@@ -16,17 +16,16 @@ namespace CombatMoves.TargetingLogic.TargetingValidators.Util
 				ValidTargets.TeamMates => new TargetCombined(new TargetOther(), new TargetOwnTeam()),
 				ValidTargets.OwnTeam => new TargetOwnTeam(),
 				ValidTargets.OpposingTeam => new TargetOpposingTeam(),
+				ValidTargets.Self | ValidTargets.OpposingTeam => new TargetEither(new TargetSelf(), new TargetOpposingTeam()),
 				_ => null,
 			};
 
-			return validator ?? GetCombinedValidator(validTargets);
+			return validator; // ?? GetCombinedValidator(validTargets); // Self and Opposing team is the only combination that is not covered by any other value
 		}
 
 		private static ITargetingValidator GetCombinedValidator(ValidTargets validTargets)
 		{
 			List<ITargetingValidator> targetingValidators = new List<ITargetingValidator>();
-
-			// Self and Opposing team is the only combination that is not covered by any other value
 			
 			if ((validTargets & ValidTargets.Self) != 0)
 			{
@@ -38,7 +37,7 @@ namespace CombatMoves.TargetingLogic.TargetingValidators.Util
 				targetingValidators.Add(new TargetOpposingTeam());
 			}
 
-			return new TargetCombined(targetingValidators.ToArray());
+			return new TargetEither(targetingValidators.ToArray());
 		}
 	}
 }

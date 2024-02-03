@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using CombatSystem.CharacterScripts.CharacterStates;
 using CombatSystem.Events;
+using CombatSystem.Events.Queues;
 using UnityEngine;
 using VDFramework;
 
@@ -8,27 +9,24 @@ namespace CombatSystem.Managers
 {
 	public class CombatMoveManager : BetterMonoBehaviour
 	{
-		// TODO static event<GameObject/CastingState> for when a new move is cast (or do it in castingState)
 		private readonly Queue<CastingState> combatMoveReadyQueue = new Queue<CastingState>();
 
 		private bool isSomeoneCasting = false;
 
 		private void OnEnable()
 		{
-			CastingState.OnNewCharacterReadyToCast    += OnNewCharacterReadyToCast;
-			CastingState.OnCharacterFinishedCasting   += StartNextInQueue;
-			
-			CombatStartedEvent.ParameterlessListeners += ResetState;
-			CombatEndedEvent.ParameterlessListeners += ResetState;
+			NewCharacterReadyToCastEvent.Listeners             += OnNewCharacterReadyToCast;
+			NextCombatMoveCanStartEvent.ParameterlessListeners += StartNextInQueue;
+			CombatStartedEvent.ParameterlessListeners          += ResetState;
+			CombatEndedEvent.ParameterlessListeners            += ResetState;
 		}
 
 		private void OnDisable()
 		{
-			CastingState.OnNewCharacterReadyToCast  -= OnNewCharacterReadyToCast;
-			CastingState.OnCharacterFinishedCasting -= StartNextInQueue;
-			
-			CombatStartedEvent.ParameterlessListeners -= ResetState;
-			CombatEndedEvent.ParameterlessListeners   -= ResetState;
+			NewCharacterReadyToCastEvent.Listeners             -= OnNewCharacterReadyToCast;
+			NextCombatMoveCanStartEvent.ParameterlessListeners -= StartNextInQueue;
+			CombatStartedEvent.ParameterlessListeners          -= ResetState;
+			CombatEndedEvent.ParameterlessListeners            -= ResetState;
 		}
 
 		private void ResetState()
@@ -37,8 +35,10 @@ namespace CombatSystem.Managers
 			isSomeoneCasting = false;
 		}
 
-		private void OnNewCharacterReadyToCast(CastingState castingState)
+		private void OnNewCharacterReadyToCast(NewCharacterReadyToCastEvent newCharacterReadyToCastEvent)
 		{
+			CastingState castingState = newCharacterReadyToCastEvent.CastingState;
+
 			if (!isSomeoneCasting)
 			{
 				isSomeoneCasting = true;

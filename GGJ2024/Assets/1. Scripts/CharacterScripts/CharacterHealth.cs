@@ -11,6 +11,7 @@ namespace CharacterScripts
 		
 		public event Action OnHealthChanged = delegate { };
 		public event Action OnDead = delegate { };
+		public event Action OnResurrected = delegate { };
 
 		[field: SerializeField]
 		public int MaximumHealth { get; private set; } = 100;
@@ -38,13 +39,25 @@ namespace CharacterScripts
 
 		public void Heal(int amount)
 		{
-			RemoveHealth(amount);
+			RemoveHealth(-amount);
+			OnHealed.Invoke(amount);
+
+			if (IsDead && Health > 0)
+			{
+				IsDead = false;
+				OnResurrected.Invoke();
+			}
 		}
 
 		private void RemoveHealth(int amount)
 		{
 			Health -= amount;
 			OnHealthChanged.Invoke();
+		}
+
+		private void ResetHealth()
+		{
+			Health = MaximumHealth;
 		}
 	}
 }

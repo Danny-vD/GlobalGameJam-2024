@@ -22,18 +22,13 @@ namespace CombatSystem.CharacterScripts.CharacterStates
         // TODO: override target selection when taunted?? (Can a player be taunted?)
 		public override void Enter()
 		{
-			EventManager.RaiseEvent(new PlayerStartedChoosingEvent(gameObject));
-		}
-
-		public override void Step()
-		{
+			EventManager.RaiseEvent(new PlayerEnteredChoosingStateEvent(gameObject));
 		}
 
 		protected override void Exit()
 		{
+			EventManager.RaiseEvent(new PlayerExitedChoosingStateEvent(gameObject));
 			base.Exit();
-
-			EventManager.RaiseEvent(new PlayerStoppedChoosingEvent(gameObject));
 		}
 
 		private void OnDestroy()

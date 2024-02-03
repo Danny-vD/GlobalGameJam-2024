@@ -1,8 +1,8 @@
 ﻿using System;
-using CombatMoves.BaseClasses;
+using CombatMoves.ScriptableObjects.BaseClasses;
 using CombatSystem.CharacterScripts;
+using CombatSystem.Events.Queues;
 using CombatSystem.Interfaces;
-using CombatSystem.Managers;
 using UnityEngine;
 using VDFramework;
 using VDFramework.UnityExtensions;
@@ -22,20 +22,23 @@ namespace CombatSystem.UIScripts.CombatMoves
 
 		private void Awake()
 		{
-			PlayerTurnManager.NewCharacterChoosingMove += ShowMoves;
-			PlayerTurnManager.OnChoosingQueueEmpty += HideMoves;
+			//TODO React to player death and stun
+			NewPlayerChoosingMoveEvent.Listeners            += ShowMoves;
+			AllPlayersChoseMoveEvent.ParameterlessListeners += HideMoves;
 		}
 
 		private void OnDestroy()
 		{
-			PlayerTurnManager.NewCharacterChoosingMove -= ShowMoves;
-			PlayerTurnManager.OnChoosingQueueEmpty     -= HideMoves;
+			NewPlayerChoosingMoveEvent.Listeners            -= ShowMoves;
+			AllPlayersChoseMoveEvent.ParameterlessListeners -= HideMoves;
 		}
 
-		private void ShowMoves(GameObject character)
+		private void ShowMoves(NewPlayerChoosingMoveEvent newPlayerChoosingMoveEvent)
 		{
-			IMoveset moveset = character.GetComponent<IMoveset>();
-			SelectedMoveHolder selectedMoveHolder = character.GetComponent<SelectedMoveHolder>();
+			GameObject player = newPlayerChoosingMoveEvent.Player;
+			
+			IMoveset moveset = player.GetComponent<IMoveset>();
+			SelectedMoveHolder selectedMoveHolder = player.GetComponent<SelectedMoveHolder>();
 			
 			InstantiateCombatMoves(moveset, selectedMoveHolder);
 			

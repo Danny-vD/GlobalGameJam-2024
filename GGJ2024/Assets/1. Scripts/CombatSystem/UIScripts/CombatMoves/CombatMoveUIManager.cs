@@ -1,4 +1,4 @@
-﻿using CombatMoves.BaseClasses;
+﻿using CombatMoves.ScriptableObjects.BaseClasses;
 using CombatSystem.CharacterScripts;
 using TMPro;
 using UnityEngine;

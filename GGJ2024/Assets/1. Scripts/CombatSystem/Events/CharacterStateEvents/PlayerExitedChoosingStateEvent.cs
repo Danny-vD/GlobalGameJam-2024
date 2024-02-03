@@ -3,11 +3,11 @@ using VDFramework.EventSystem;
 
 namespace CombatSystem.Events.CharacterStateEvents
 {
-	public class PlayerStartedChoosingEvent : VDEvent<PlayerStartedChoosingEvent>
+	public class PlayerExitedChoosingStateEvent : VDEvent<PlayerExitedChoosingStateEvent>
 	{
 		public readonly GameObject Player;
 
-		public PlayerStartedChoosingEvent(GameObject player)
+		public PlayerExitedChoosingStateEvent(GameObject player)
 		{
 			Player = player;
 		}
