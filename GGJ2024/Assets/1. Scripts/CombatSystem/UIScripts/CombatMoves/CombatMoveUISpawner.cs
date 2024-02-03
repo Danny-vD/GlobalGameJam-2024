@@ -1,6 +1,5 @@
 ﻿using System;
 using CombatMoves.ScriptableObjects.BaseClasses;
-using CombatSystem.CharacterScripts;
 using CombatSystem.Events.Queues;
 using CombatSystem.Interfaces;
 using UnityEngine;
@@ -22,7 +21,6 @@ namespace CombatSystem.UIScripts.CombatMoves
 
 		private void Awake()
 		{
-			//TODO React to player death and stun
 			NewPlayerChoosingMoveEvent.Listeners            += ShowMoves;
 			AllPlayersChoseMoveEvent.ParameterlessListeners += HideMoves;
 		}

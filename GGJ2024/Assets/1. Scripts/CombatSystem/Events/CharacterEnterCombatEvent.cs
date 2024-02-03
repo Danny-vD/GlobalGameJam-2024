@@ -5,7 +5,7 @@ namespace CombatSystem.Events
 {
 	public class CharacterEnterCombatEvent : VDEvent<CharacterEnterCombatEvent>
 	{
-		public GameObject Character;
+		public readonly GameObject Character;
 
 		public CharacterEnterCombatEvent(GameObject character)
 		{

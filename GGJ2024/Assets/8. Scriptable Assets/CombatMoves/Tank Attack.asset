@@ -17,6 +17,6 @@ MonoBehaviour:
   <Cost>k__BackingField: 0
   <DamageType>k__BackingField: 0
   <Potency>k__BackingField: 10
-  <ValidTargets>k__BackingField: 0
+  <ValidTargets>k__BackingField: 4294967292
   <AnimationTriggerName>k__BackingField: BasicAttack
   audioType: 10

@@ -1,7 +1,5 @@
-﻿using System;
-using CombatSystem.Events.CharacterSelection;
+﻿using CombatSystem.Events.CharacterSelection;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UtilityPackage.CursorManagement.CursorUtility;
 using VDFramework.EventSystem;
 using VDFramework.Singleton;
@@ -9,7 +7,6 @@ using VDFramework.Singleton;
 namespace CameraScripts
 {
 	public class CursorHoverManager : Singleton<CursorHoverManager>
-
 	{
 		[SerializeField]
 		private LayerMask layerMask;
@@ -28,7 +25,7 @@ namespace CameraScripts
 		private void Update()
 		{
 			// TODO: Frames?
-			CreateRaycast();
+			//CreateRaycast();
 		}
 
 		private void CreateRaycast()

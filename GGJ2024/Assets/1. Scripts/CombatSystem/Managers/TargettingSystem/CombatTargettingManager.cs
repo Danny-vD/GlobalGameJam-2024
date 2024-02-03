@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using CombatMoves.ScriptableObjects.BaseClasses;
 using CombatSystem.CharacterScripts;
 using CombatSystem.Events;
@@ -8,7 +7,6 @@ using PlayerPartyScripts;
 using UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using VDFramework;
 using VDFramework.EventSystem;
 using VDFramework.Singleton;
 
@@ -16,6 +14,9 @@ namespace CombatSystem.Managers.TargettingSystem
 {
 	public class CombatTargettingManager : Singleton<CombatTargettingManager>
 	{
+		[SerializeField]
+		private GameObject currentSelectedCharacterIndicator;
+
 		private List<GameObject> characterList = new List<GameObject>();
 
 		private GameObject currentSelectedCharacter;
@@ -29,43 +30,45 @@ namespace CombatSystem.Managers.TargettingSystem
 		protected override void Awake()
 		{
 			base.Awake();
-			
+
 			combatManager = GetComponent<CombatManager>();
 
 			EventManager.AddListener<CombatStartedEvent>(OnCombatStart);
+			EventManager.AddListener<CombatEndedEvent>(StopListeneningToConfirmInput);
+
 			EventManager.AddListener<CharacterEnterCombatEvent>(OnCharacterEnterCombat);
-
 			EventManager.AddListener<CharacterHoveredEvent>(OnCharacterHovered);
-
-			// EventManager.AddListener<>();
 		}
 
 		public void ChooseMove(AbstractCombatMove move, GameObject caster)
 		{
-			InputControlManager.Instance.playerControls.Combat.MoveConfirm.performed += OnCharacterSelectConfirm;
-			toBeConfirmedMove                                                        =  move;
-			casterToBe                                                               =  caster;
+			StartListeneningToConfirmInput();
+
+			toBeConfirmedMove = move;
+			casterToBe        = caster;
 		}
-		
+
 
 		private void OnCharacterHovered(CharacterHoveredEvent @event)
 		{
 			if (!characterList.Contains(@event.Character)) return;
 
-			Debug.Log("CHARACTER SELECTED " + @event.Character.gameObject.name);
 			currentSelectedCharacter = @event.Character.gameObject;
+
+			currentSelectedCharacterIndicator.transform.position = currentSelectedCharacter.transform.position;
+			currentSelectedCharacterIndicator.transform.Translate(Vector3.up * 1.5f);
 		}
 
-		private void OnCharacterSelectConfirm(InputAction.CallbackContext obj)
+		private void OnTargetSelectConfirm(InputAction.CallbackContext obj)
 		{
 			if (!toBeConfirmedMove) return;
 
-			//TODO: check if legal target?
 			if (toBeConfirmedMove.IsValidTarget(currentSelectedCharacter, casterToBe))
 			{
-				casterToBe.GetComponent<ConfirmedMoveHolder>().SelectMove(toBeConfirmedMove, currentSelectedCharacter);
-				
-				InputControlManager.Instance.playerControls.Combat.MoveConfirm.performed -= OnCharacterSelectConfirm;
+				ConfirmedMoveHolder confirmedMoveHolder = casterToBe.GetComponent<ConfirmedMoveHolder>();
+				confirmedMoveHolder.SelectMove(toBeConfirmedMove, currentSelectedCharacter);
+
+				StopListeneningToConfirmInput();
 			}
 		}
 
@@ -89,6 +92,27 @@ namespace CombatSystem.Managers.TargettingSystem
 			if (characterList.Contains(@event.Character)) return;
 
 			characterList.Add(@event.Character);
+		}
+
+		private void StartListeneningToConfirmInput()
+		{
+			InputControlManager.Instance.playerControls.Combat.MoveConfirm.performed += OnTargetSelectConfirm;
+		}
+
+		private void StopListeneningToConfirmInput()
+		{
+			InputControlManager.Instance.playerControls.Combat.MoveConfirm.performed -= OnTargetSelectConfirm;
+		}
+
+		protected override void OnDestroy()
+		{
+			EventManager.RemoveListener<CombatStartedEvent>(OnCombatStart);
+			EventManager.RemoveListener<CombatEndedEvent>(StopListeneningToConfirmInput);
+
+			EventManager.RemoveListener<CharacterEnterCombatEvent>(OnCharacterEnterCombat);
+			EventManager.RemoveListener<CharacterHoveredEvent>(OnCharacterHovered);
+
+			base.OnDestroy();
 		}
 	}
 }

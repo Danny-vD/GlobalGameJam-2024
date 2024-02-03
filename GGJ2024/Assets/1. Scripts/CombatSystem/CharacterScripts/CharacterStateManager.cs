@@ -13,7 +13,7 @@ namespace CombatSystem.CharacterScripts
 {
 	public class CharacterStateManager : BetterMonoBehaviour
 	{
-		public event Action OnStateChanged = delegate { };
+		public event Action<CharacterCombatStateType> OnStateChanged = delegate { };
 
 		[SerializeField]
 		private SerializableEnumDictionary<CharacterCombatStateType, AbstractCharacterState> statesPerType;
@@ -69,7 +69,7 @@ namespace CombatSystem.CharacterScripts
 			CurrentStateType = stateType;
 
 			currentState = statesPerType[CurrentStateType];
-			OnStateChanged.Invoke();
+			OnStateChanged.Invoke(stateType);
 
 			currentState.OnStateEnded += SetState;
 

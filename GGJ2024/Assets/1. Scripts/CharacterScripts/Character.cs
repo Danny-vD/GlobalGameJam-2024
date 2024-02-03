@@ -1,5 +1,4 @@
-﻿using System;
-using CombatSystem.Events.CharacterSelection;
+﻿using CombatSystem.Events.CharacterSelection;
 using CombatSystem.Structs;
 using UnityEngine;
 using VDFramework;
@@ -17,11 +16,6 @@ namespace CharacterScripts
 		private void OnMouseEnter()
 		{
 			EventManager.RaiseEvent(new CharacterHoveredEvent(gameObject));
-		}
-
-		private void OnMouseExit()
-		{
-			//
 		}
 	}
 }

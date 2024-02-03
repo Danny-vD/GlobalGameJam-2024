@@ -10,6 +10,7 @@ namespace CombatMoves.TargetingLogic.TargetingValidators.Util
 		{
 			ITargetingValidator validator = validTargets switch
 			{
+				0 => new TargetNone(),
 				ValidTargets.Any => new TargetAny(),
 				ValidTargets.Self => new TargetSelf(),
 				ValidTargets.Other => new TargetOther(),

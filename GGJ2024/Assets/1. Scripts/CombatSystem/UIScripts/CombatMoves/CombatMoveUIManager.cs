@@ -1,7 +1,6 @@
 ﻿using CharacterScripts;
 using CombatMoves.ScriptableObjects.BaseClasses;
 using CombatSystem.CharacterScripts;
-using CombatSystem.Managers;
 using CombatSystem.Managers.TargettingSystem;
 using TMPro;
 using UnityEngine;

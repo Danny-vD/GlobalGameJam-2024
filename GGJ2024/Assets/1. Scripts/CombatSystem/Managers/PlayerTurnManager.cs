@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using CharacterScripts;
+using CombatSystem.CharacterScripts;
+using CombatSystem.Enums;
 using CombatSystem.Events;
 using CombatSystem.Events.CharacterStateEvents;
 using CombatSystem.Events.Queues;
@@ -60,6 +62,11 @@ namespace CombatSystem.Managers
 		{
 			GameObject player = enteredChoosingStateEvent.Player;
 
+			AddToQueue(player);
+		}
+
+		private void AddToQueue(GameObject player)
+		{
 			if (characterPickingMoveQueue.Contains(player))
 			{
 				Debug.LogError("The queue already contains this character!\n" + player.name);
@@ -77,10 +84,13 @@ namespace CombatSystem.Managers
 
 		private void RemoveFromQueue(PlayerExitedChoosingStateEvent exitedChoosingStateEvent)
 		{
+			RemoveFromQueue(exitedChoosingStateEvent.Player);
+		}
+
+		private void RemoveFromQueue(GameObject player)
+		{
 			if (characterPickingMoveQueue.TryPeek(out GameObject next))
 			{
-				GameObject player = exitedChoosingStateEvent.Player;
-
 				if (ReferenceEquals(player, next))
 				{
 					SetNextInQueueActive();
@@ -92,35 +102,49 @@ namespace CombatSystem.Managers
 				return;
 			}
 
-			Debug.LogError("Trying to dequeue with an empty queue!");
+			Debug.LogError("Trying to dequeue with an empty queue! " + player.name);
 		}
 
 		private void SetNextInQueueActive()
 		{
 			characterPickingMoveQueue.Dequeue();
-			
+
 			if (characterPickingMoveQueue.Count == 0)
 			{
 				SetNoActivePlayer();
-				
+
 				// Queue is empty
 				EventManager.RaiseEvent(new AllPlayersChoseMoveEvent());
 			}
 			else
 			{
 				// Next in line gets to choose a move now
-				SetNewActivePlayer(characterPickingMoveQueue.Peek());
+				GameObject player = characterPickingMoveQueue.Peek();
+				CharacterStateManager characterStateManager = player.GetComponent<CharacterStateManager>();
+
+				bool isValidPlayer = characterStateManager.CurrentStateType is CharacterCombatStateType.Dead or CharacterCombatStateType.Stunned;
+
+				if (isValidPlayer)
+				{
+					SetNewActivePlayer(player, characterStateManager);
+				}
+				else
+				{
+					SetNextInQueueActive();
+				}
 			}
 		}
 
-		private void SetNewActivePlayer(GameObject player)
+		private void SetNewActivePlayer(GameObject player, CharacterStateManager characterStateManager = null)
 		{
 			currentlyActivePlayer = player;
 
-			CharacterHealth characterHealth = currentlyActivePlayer.GetComponent<CharacterHealth>();
-			
-			// TODO: care about any character this is in the queue, not just the currently active one
-			characterHealth.OnDied += SetNextInQueueActive;
+			if (!characterStateManager)
+			{
+				characterStateManager = currentlyActivePlayer.GetComponent<CharacterStateManager>();
+			}
+
+			characterStateManager.OnStateChanged += OnActiveCharacterStateChanged;
 
 			EventManager.RaiseEvent(new NewPlayerChoosingMoveEvent(player));
 		}
@@ -129,13 +153,21 @@ namespace CombatSystem.Managers
 		{
 			if (currentlyActivePlayer)
 			{
-				CharacterHealth character = currentlyActivePlayer.GetComponent<CharacterHealth>();
-				character.OnDied -= SetNextInQueueActive;
+				CharacterStateManager characterStateManager = currentlyActivePlayer.GetComponent<CharacterStateManager>();
+				characterStateManager.OnStateChanged -= OnActiveCharacterStateChanged;
 			}
 
 			currentlyActivePlayer = null;
 
 			EventManager.RaiseEvent(new AllPlayersChoseMoveEvent());
+		}
+
+		private void OnActiveCharacterStateChanged(CharacterCombatStateType combatState)
+		{
+			if (combatState is CharacterCombatStateType.Dead or CharacterCombatStateType.Stunned)
+			{
+				SetNextInQueueActive();
+			}
 		}
 	}
 }
