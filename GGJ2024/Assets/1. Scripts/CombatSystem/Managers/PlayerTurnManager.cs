@@ -119,6 +119,7 @@ namespace CombatSystem.Managers
 
 			CharacterHealth characterHealth = currentlyActivePlayer.GetComponent<CharacterHealth>();
 			
+			// TODO: care about any character this is in the queue, not just the currently active one
 			characterHealth.OnDied += SetNextInQueueActive;
 
 			EventManager.RaiseEvent(new NewPlayerChoosingMoveEvent(player));

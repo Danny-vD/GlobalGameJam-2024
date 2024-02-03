@@ -26,8 +26,10 @@ namespace CombatSystem.Managers.TargettingSystem
 
 		private GameObject casterToBe;
 
-		private void Awake()
+		protected override void Awake()
 		{
+			base.Awake();
+			
 			combatManager = GetComponent<CombatManager>();
 
 			EventManager.AddListener<CombatStartedEvent>(OnCombatStart);
