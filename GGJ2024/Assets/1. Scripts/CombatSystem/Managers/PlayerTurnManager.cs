@@ -71,7 +71,7 @@ namespace CombatSystem.Managers
 			if (characterPickingMoveQueue.Count == 1)
 			{
 				// First character added so it is always going to be the one that is choosing a move
-				SetNextInQueueActive();
+				SetNewActivePlayer(player);
 			}
 		}
 
@@ -83,8 +83,6 @@ namespace CombatSystem.Managers
 
 				if (ReferenceEquals(player, next))
 				{
-					characterPickingMoveQueue.Dequeue();
-
 					SetNextInQueueActive();
 
 					return;
@@ -99,6 +97,8 @@ namespace CombatSystem.Managers
 
 		private void SetNextInQueueActive()
 		{
+			characterPickingMoveQueue.Dequeue();
+			
 			if (characterPickingMoveQueue.Count == 0)
 			{
 				SetNoActivePlayer();
