@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using CombatMoves.ScriptableObjects.BaseClasses;
+using CombatSystem.CharacterScripts;
 using CombatSystem.Events;
 using CombatSystem.Events.CharacterSelection;
 using PlayerPartyScripts;
@@ -8,16 +10,21 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using VDFramework;
 using VDFramework.EventSystem;
+using VDFramework.Singleton;
 
 namespace CombatSystem.Managers.TargettingSystem
 {
-	public class CombatTargettingManager : BetterMonoBehaviour
+	public class CombatTargettingManager : Singleton<CombatTargettingManager>
 	{
 		private List<GameObject> characterList = new List<GameObject>();
 
 		private GameObject currentSelectedCharacter;
 
 		private CombatManager combatManager;
+
+		private AbstractCombatMove toBeConfirmedMove;
+
+		private GameObject casterToBe;
 
 		private void Awake()
 		{
@@ -27,14 +34,17 @@ namespace CombatSystem.Managers.TargettingSystem
 			EventManager.AddListener<CharacterEnterCombatEvent>(OnCharacterEnterCombat);
 
 			EventManager.AddListener<CharacterHoveredEvent>(OnCharacterHovered);
-			
+
 			// EventManager.AddListener<>();
 		}
 
-		private void Start()
+		public void ChooseMove(AbstractCombatMove move, GameObject caster)
 		{
 			InputControlManager.Instance.playerControls.Combat.MoveConfirm.performed += OnCharacterSelectConfirm;
+			toBeConfirmedMove                                                        =  move;
+			casterToBe                                                               =  caster;
 		}
+		
 
 		private void OnCharacterHovered(CharacterHoveredEvent @event)
 		{
@@ -51,9 +61,17 @@ namespace CombatSystem.Managers.TargettingSystem
 
 		private void OnCharacterSelectConfirm(InputAction.CallbackContext obj)
 		{
-			
+			if (!toBeConfirmedMove) return;
+
+			//TODO: check if legal target?
+			if (toBeConfirmedMove.IsValidTarget(currentSelectedCharacter, casterToBe))
+			{
+				casterToBe.GetComponent<ConfirmedMoveHolder>().SelectMove(toBeConfirmedMove, currentSelectedCharacter);
+				
+				InputControlManager.Instance.playerControls.Combat.MoveConfirm.performed -= OnCharacterSelectConfirm;
+			}
 		}
-		
+
 		private void OnCombatStart(CombatStartedEvent @event)
 		{
 			characterList.Clear();

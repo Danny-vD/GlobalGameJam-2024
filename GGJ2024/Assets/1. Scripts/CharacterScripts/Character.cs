@@ -12,7 +12,7 @@ namespace CharacterScripts
 		[field: SerializeField]
 		public CharacterStatistics Statistics { get; private set; }
 
-		public int currentMP;
+		public int CurrentMP { get; private set; }
 
 		private void OnMouseEnter()
 		{

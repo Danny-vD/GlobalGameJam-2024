@@ -1,6 +1,8 @@
 ﻿using CharacterScripts;
 using CombatMoves.ScriptableObjects.BaseClasses;
 using CombatSystem.CharacterScripts;
+using CombatSystem.Managers;
+using CombatSystem.Managers.TargettingSystem;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -24,15 +26,17 @@ namespace CombatSystem.UIScripts.CombatMoves
 
 		private AbstractCombatMove combatMove;
 		private ConfirmedMoveHolder confirmedMoveHolder;
+		private GameObject characterCaster;
 
 		public void Initialize(AbstractCombatMove move, GameObject character)
 		{
-			combatMove = move;
+			combatMove      = move;
+			characterCaster = character;
 
 			confirmedMoveHolder = character.GetComponent<ConfirmedMoveHolder>();
 
 			//TODO: logic in between with events for Successful selection and failed selection
-			if (character.GetComponent<Character>().currentMP >= move.Cost)
+			if (character.GetComponent<Character>().CurrentMP >= move.Cost)
 			{
 				selectMoveButton.onClick.AddListener(SelectMove);
 			}
@@ -45,6 +49,11 @@ namespace CombatSystem.UIScripts.CombatMoves
 		}
 
 		private void SelectMove()
+		{
+			CombatTargettingManager.Instance.ChooseMove(combatMove, characterCaster);
+		}
+
+		private void a()
 		{
 			//TODO: validate target
 			//TODO: select target (support multiple targets as well)
