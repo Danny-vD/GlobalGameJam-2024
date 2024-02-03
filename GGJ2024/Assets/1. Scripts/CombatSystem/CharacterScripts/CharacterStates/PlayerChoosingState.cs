@@ -5,18 +5,18 @@ using VDFramework.EventSystem;
 
 namespace CombatSystem.CharacterScripts.CharacterStates
 {
-	[RequireComponent(typeof(SelectedMoveHolder))]
+	[RequireComponent(typeof(ConfirmedMoveHolder))]
 	public class PlayerChoosingState : AbstractCharacterState
 	{
 		public override CharacterCombatStateType NextState => CharacterCombatStateType.Casting;
 
-		private SelectedMoveHolder selectedMoveHolder;
+		private ConfirmedMoveHolder confirmedMoveHolder;
 
 		private void Awake()
 		{
-			selectedMoveHolder = GetComponent<SelectedMoveHolder>();
+			confirmedMoveHolder = GetComponent<ConfirmedMoveHolder>();
 
-			selectedMoveHolder.OnMoveSelected += Exit;
+			confirmedMoveHolder.OnMoveSelected += Exit;
 		}
 
         // TODO: override target selection when taunted?? (Can a player be taunted?)
@@ -33,7 +33,7 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 
 		private void OnDestroy()
 		{
-			selectedMoveHolder.OnMoveSelected -= Exit;
+			confirmedMoveHolder.OnMoveSelected -= Exit;
 		}
 	}
 }

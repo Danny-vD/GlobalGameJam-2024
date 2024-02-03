@@ -22,13 +22,13 @@ namespace CombatSystem.UIScripts.CombatMoves
 		private TMP_Text costLabel;
 
 		private AbstractCombatMove combatMove;
-		private SelectedMoveHolder selectedMoveHolder;
+		private ConfirmedMoveHolder confirmedMoveHolder;
 
 		public void Initialize(AbstractCombatMove move, GameObject character)
 		{
 			combatMove = move;
 
-			selectedMoveHolder = character.GetComponent<SelectedMoveHolder>();
+			confirmedMoveHolder = character.GetComponent<ConfirmedMoveHolder>();
 
 			//TODO: logic in between with events for Successful selection and failed selection
 			selectMoveButton.onClick.AddListener(SelectMove);
@@ -43,7 +43,7 @@ namespace CombatSystem.UIScripts.CombatMoves
 		{
 			//TODO: validate target
 			//TODO: select target (support multiple targets as well)
-			selectedMoveHolder.SelectMove(combatMove, null);
+			confirmedMoveHolder.SelectMove(combatMove, null);
 		}
 	}
 }

@@ -42,6 +42,8 @@ namespace CombatSystem.CharacterScripts
 
 		private void OnEnable()
 		{
+			SetState(CharacterCombatStateType.Idle);
+			
 			characterHealth.OnDied        += SetToDeadState;
 			characterHealth.OnResurrected += SetToIdleState;
 		}
