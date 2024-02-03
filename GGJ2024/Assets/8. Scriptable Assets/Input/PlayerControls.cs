@@ -198,6 +198,61 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
+                    ""name"": ""2D Vector - PS4"",
+                    ""id"": ""b304494f-dad3-47ab-82f3-3e8d676b731d"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Movement"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""ee1cfde1-399b-497a-a27a-48d984e5ec48"",
+                    ""path"": ""<Joystick>/stick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""ed9d96a2-bf0d-4ad8-ab1a-f1cf2991fbaf"",
+                    ""path"": ""<Joystick>/stick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""093914d8-4ac9-4503-811f-deffc0495fe0"",
+                    ""path"": ""<Joystick>/stick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""1f4fca53-83bc-457b-b8ce-e3ca6d87b92f"",
+                    ""path"": ""<Joystick>/stick/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
                     ""name"": """",
                     ""id"": ""16245caa-b73c-4f28-935a-19478c1692a4"",
                     ""path"": ""<Keyboard>/e"",
@@ -248,9 +303,18 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             ""id"": ""31a4c1a6-b66d-4681-9af3-d9351990f17e"",
             ""actions"": [
                 {
-                    ""name"": ""New action"",
+                    ""name"": ""Start"",
                     ""type"": ""Button"",
                     ""id"": ""f918cca5-f043-4460-a468-840d82b8c1ac"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MoveConfirm"",
+                    ""type"": ""Button"",
+                    ""id"": ""507d7724-bac4-4917-b355-19543ae9e2ac"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -265,7 +329,29 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""New action"",
+                    ""action"": ""Start"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7ce8a3c3-2a7b-4ac8-b23f-414872588dd8"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MoveConfirm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d5667d25-f5ef-429f-89eb-149e114d09e0"",
+                    ""path"": ""<HID::Open Stick Community GP2040-CE (PS4)>/button2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MoveConfirm"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -596,6 +682,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""New action"",
+                    ""type"": ""Button"",
+                    ""id"": ""ef9a3372-588b-4abf-9ec3-de2506128457"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -686,6 +781,50 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""Start "",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f7ab7ef0-bc3d-4d77-8727-670d7221d638"",
+                    ""path"": ""<HID::Open Stick Community GP2040-CE (PS4)>/button10"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Start "",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""66b1a3b1-d460-4015-8078-d3837e3a2f3d"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""New action"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""1a58020c-1456-48b7-94a8-416ad018f14c"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""New action"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""a9363151-980c-499f-bd37-6307e435dd3f"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""New action"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         }
@@ -700,7 +839,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Overworld_Start = m_Overworld.FindAction("Start", throwIfNotFound: true);
         // Combat
         m_Combat = asset.FindActionMap("Combat", throwIfNotFound: true);
-        m_Combat_Newaction = m_Combat.FindAction("New action", throwIfNotFound: true);
+        m_Combat_Start = m_Combat.FindAction("Start", throwIfNotFound: true);
+        m_Combat_MoveConfirm = m_Combat.FindAction("MoveConfirm", throwIfNotFound: true);
         // UI-Menus
         m_UIMenus = asset.FindActionMap("UI-Menus", throwIfNotFound: true);
         m_UIMenus_Start = m_UIMenus.FindAction("Start", throwIfNotFound: true);
@@ -713,6 +853,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_DialogueInteraction_Option2 = m_DialogueInteraction.FindAction("Option2", throwIfNotFound: true);
         m_DialogueInteraction_Option3 = m_DialogueInteraction.FindAction("Option3", throwIfNotFound: true);
         m_DialogueInteraction_Start = m_DialogueInteraction.FindAction("Start ", throwIfNotFound: true);
+        m_DialogueInteraction_Newaction = m_DialogueInteraction.FindAction("New action", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -844,12 +985,14 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     // Combat
     private readonly InputActionMap m_Combat;
     private List<ICombatActions> m_CombatActionsCallbackInterfaces = new List<ICombatActions>();
-    private readonly InputAction m_Combat_Newaction;
+    private readonly InputAction m_Combat_Start;
+    private readonly InputAction m_Combat_MoveConfirm;
     public struct CombatActions
     {
         private @PlayerControls m_Wrapper;
         public CombatActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Newaction => m_Wrapper.m_Combat_Newaction;
+        public InputAction @Start => m_Wrapper.m_Combat_Start;
+        public InputAction @MoveConfirm => m_Wrapper.m_Combat_MoveConfirm;
         public InputActionMap Get() { return m_Wrapper.m_Combat; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -859,16 +1002,22 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_CombatActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_CombatActionsCallbackInterfaces.Add(instance);
-            @Newaction.started += instance.OnNewaction;
-            @Newaction.performed += instance.OnNewaction;
-            @Newaction.canceled += instance.OnNewaction;
+            @Start.started += instance.OnStart;
+            @Start.performed += instance.OnStart;
+            @Start.canceled += instance.OnStart;
+            @MoveConfirm.started += instance.OnMoveConfirm;
+            @MoveConfirm.performed += instance.OnMoveConfirm;
+            @MoveConfirm.canceled += instance.OnMoveConfirm;
         }
 
         private void UnregisterCallbacks(ICombatActions instance)
         {
-            @Newaction.started -= instance.OnNewaction;
-            @Newaction.performed -= instance.OnNewaction;
-            @Newaction.canceled -= instance.OnNewaction;
+            @Start.started -= instance.OnStart;
+            @Start.performed -= instance.OnStart;
+            @Start.canceled -= instance.OnStart;
+            @MoveConfirm.started -= instance.OnMoveConfirm;
+            @MoveConfirm.performed -= instance.OnMoveConfirm;
+            @MoveConfirm.canceled -= instance.OnMoveConfirm;
         }
 
         public void RemoveCallbacks(ICombatActions instance)
@@ -964,6 +1113,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_DialogueInteraction_Option2;
     private readonly InputAction m_DialogueInteraction_Option3;
     private readonly InputAction m_DialogueInteraction_Start;
+    private readonly InputAction m_DialogueInteraction_Newaction;
     public struct DialogueInteractionActions
     {
         private @PlayerControls m_Wrapper;
@@ -972,6 +1122,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         public InputAction @Option2 => m_Wrapper.m_DialogueInteraction_Option2;
         public InputAction @Option3 => m_Wrapper.m_DialogueInteraction_Option3;
         public InputAction @Start => m_Wrapper.m_DialogueInteraction_Start;
+        public InputAction @Newaction => m_Wrapper.m_DialogueInteraction_Newaction;
         public InputActionMap Get() { return m_Wrapper.m_DialogueInteraction; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -993,6 +1144,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Start.started += instance.OnStart;
             @Start.performed += instance.OnStart;
             @Start.canceled += instance.OnStart;
+            @Newaction.started += instance.OnNewaction;
+            @Newaction.performed += instance.OnNewaction;
+            @Newaction.canceled += instance.OnNewaction;
         }
 
         private void UnregisterCallbacks(IDialogueInteractionActions instance)
@@ -1009,6 +1163,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Start.started -= instance.OnStart;
             @Start.performed -= instance.OnStart;
             @Start.canceled -= instance.OnStart;
+            @Newaction.started -= instance.OnNewaction;
+            @Newaction.performed -= instance.OnNewaction;
+            @Newaction.canceled -= instance.OnNewaction;
         }
 
         public void RemoveCallbacks(IDialogueInteractionActions instance)
@@ -1035,7 +1192,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     }
     public interface ICombatActions
     {
-        void OnNewaction(InputAction.CallbackContext context);
+        void OnStart(InputAction.CallbackContext context);
+        void OnMoveConfirm(InputAction.CallbackContext context);
     }
     public interface IUIMenusActions
     {
@@ -1050,5 +1208,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnOption2(InputAction.CallbackContext context);
         void OnOption3(InputAction.CallbackContext context);
         void OnStart(InputAction.CallbackContext context);
+        void OnNewaction(InputAction.CallbackContext context);
     }
 }

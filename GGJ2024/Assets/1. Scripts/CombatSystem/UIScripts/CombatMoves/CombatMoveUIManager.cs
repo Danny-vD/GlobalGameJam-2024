@@ -1,4 +1,5 @@
-﻿using CombatMoves.ScriptableObjects.BaseClasses;
+﻿using CharacterScripts;
+using CombatMoves.ScriptableObjects.BaseClasses;
 using CombatSystem.CharacterScripts;
 using TMPro;
 using UnityEngine;
@@ -31,7 +32,11 @@ namespace CombatSystem.UIScripts.CombatMoves
 			selectedMoveHolder = character.GetComponent<SelectedMoveHolder>();
 
 			//TODO: logic in between with events for Successful selection and failed selection
-			selectMoveButton.onClick.AddListener(SelectMove);
+			if (character.GetComponent<Character>().currentMP >= move.Cost)
+			{
+				selectMoveButton.onClick.AddListener(SelectMove);
+			}
+			
 
 			nameLabel.text = combatMove.AbilityName;
 

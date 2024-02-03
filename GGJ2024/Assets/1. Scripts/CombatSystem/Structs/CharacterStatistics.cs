@@ -14,5 +14,8 @@ namespace CombatSystem.Structs
 
 		public float Defense;
 		public float SpecialDefense;
+
+		public int MaxHP;
+		public int MaxMP;
 	}
 }

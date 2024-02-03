@@ -176,6 +176,61 @@
                     "isPartOfComposite": true
                 },
                 {
+                    "name": "2D Vector - PS4",
+                    "id": "b304494f-dad3-47ab-82f3-3e8d676b731d",
+                    "path": "2DVector",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Movement",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "ee1cfde1-399b-497a-a27a-48d984e5ec48",
+                    "path": "<Joystick>/stick/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "ed9d96a2-bf0d-4ad8-ab1a-f1cf2991fbaf",
+                    "path": "<Joystick>/stick/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "093914d8-4ac9-4503-811f-deffc0495fe0",
+                    "path": "<Joystick>/stick/left",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "1f4fca53-83bc-457b-b8ce-e3ca6d87b92f",
+                    "path": "<Joystick>/stick/right",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
                     "name": "",
                     "id": "16245caa-b73c-4f28-935a-19478c1692a4",
                     "path": "<Keyboard>/e",
@@ -226,9 +281,18 @@
             "id": "31a4c1a6-b66d-4681-9af3-d9351990f17e",
             "actions": [
                 {
-                    "name": "New action",
+                    "name": "Start",
                     "type": "Button",
                     "id": "f918cca5-f043-4460-a468-840d82b8c1ac",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "MoveConfirm",
+                    "type": "Button",
+                    "id": "507d7724-bac4-4917-b355-19543ae9e2ac",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -243,7 +307,29 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "New action",
+                    "action": "Start",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7ce8a3c3-2a7b-4ac8-b23f-414872588dd8",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MoveConfirm",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d5667d25-f5ef-429f-89eb-149e114d09e0",
+                    "path": "<HID::Open Stick Community GP2040-CE (PS4)>/button2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MoveConfirm",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -574,6 +660,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "New action",
+                    "type": "Button",
+                    "id": "ef9a3372-588b-4abf-9ec3-de2506128457",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -664,6 +759,50 @@
                     "action": "Start ",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f7ab7ef0-bc3d-4d77-8727-670d7221d638",
+                    "path": "<HID::Open Stick Community GP2040-CE (PS4)>/button10",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Start ",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "1D Axis",
+                    "id": "66b1a3b1-d460-4015-8078-d3837e3a2f3d",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "New action",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "1a58020c-1456-48b7-94a8-416ad018f14c",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "New action",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "a9363151-980c-499f-bd37-6307e435dd3f",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "New action",
+                    "isComposite": false,
+                    "isPartOfComposite": true
                 }
             ]
         }

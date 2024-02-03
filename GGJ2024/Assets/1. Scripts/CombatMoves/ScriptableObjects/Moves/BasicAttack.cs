@@ -1,4 +1,5 @@
-﻿using CharacterScripts;
+﻿using System;
+using CharacterScripts;
 using CombatMoves.ScriptableObjects.BaseClasses;
 using FMODUtilityPackage.Core;
 using FMODUtilityPackage.Enums;
@@ -17,7 +18,16 @@ namespace CombatMoves.ScriptableObjects.Moves
         {
             AudioPlayer.PlayOneShot2D(audioType);
             
-            target.GetComponent<CharacterHealth>().Damage((int)Potency);
+            try
+            {
+                target.GetComponent<CharacterHealth>().Damage((int)Potency);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                Debug.Log(caster.name);
+                Debug.Log(target.name);
+            }
             
             TimerManager.StartNewTimer(1, EndCombatMove);
         }
