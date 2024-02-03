@@ -47,7 +47,7 @@ namespace CombatSystem.UIScripts.PartyUI
 
 			healthLabelWriter = new StringVariableWriter(healthLabel.text);
 			mpLabelWriter     = new StringVariableWriter(mpLabel.text);
-			
+
 			UpdateHealth();
 			UpdateMP();
 		}
@@ -69,7 +69,7 @@ namespace CombatSystem.UIScripts.PartyUI
 
 		private void UpdateMP()
 		{
-			mpLabel.text = mpLabelWriter.UpdateText(5, 10); //TODO MP
+			mpLabel.text = mpLabelWriter.UpdateText(character.CurrentMP, character.Statistics.MaxMP); //TODO MP
 		}
 	}
 }

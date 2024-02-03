@@ -1,5 +1,4 @@
 ﻿using System;
-using UnityEngine;
 using VDFramework;
 
 namespace CharacterScripts
@@ -13,16 +12,19 @@ namespace CharacterScripts
 		public event Action OnDied = delegate { };
 		public event Action OnResurrected = delegate { };
 
-		[field: SerializeField]
-		public int MaximumHealth { get; private set; } = 100;
+		public int MaximumHealth => character.Statistics.MaxHP;
 
 		public int Health { get; private set; }
 		
 		public bool IsDead { get; private set; }
 
+		private Character character;
+		
 		private void Awake()
 		{
-			Health = MaximumHealth;
+			character = GetComponent<Character>();
+			
+			Health    = MaximumHealth;
 		}
 
 		public void Damage(int amount)

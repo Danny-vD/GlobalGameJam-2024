@@ -12,13 +12,13 @@ namespace CombatSystem.AnimationScripts
 		
 		private Animator animator;
 		private CastingState castingState;
-		private SelectedMoveHolder selectedMoveHolder;
+		private ConfirmedMoveHolder confirmedMoveHolder;
 
 		private void Awake()
 		{
 			animator           = GetComponent<Animator>();
 			castingState       = GetComponent<CastingState>();
-			selectedMoveHolder = GetComponent<SelectedMoveHolder>();
+			confirmedMoveHolder = GetComponent<ConfirmedMoveHolder>();
 			
 			castingState.OnCastingStarted += OnStartedCasting;
 		}
@@ -26,7 +26,7 @@ namespace CombatSystem.AnimationScripts
 		private void OnStartedCasting()
 		{
 			// Using the move name as the trigger allows us to dynamically set the respective animation
-			animator.SetTrigger(GetParameterID(selectedMoveHolder.SelectedMove.AnimationTriggerName));
+			animator.SetTrigger(GetParameterID(confirmedMoveHolder.SelectedMove.AnimationTriggerName));
 		}
 
 		private void OnDestroy()

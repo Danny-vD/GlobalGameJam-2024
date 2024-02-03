@@ -14,11 +14,11 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 
 		public override CharacterCombatStateType NextState => CharacterCombatStateType.Idle;
 
-		private SelectedMoveHolder selectedMoveHolder;
+		private ConfirmedMoveHolder confirmedMoveHolder;
 
 		private void Awake()
 		{
-			selectedMoveHolder = GetComponent<SelectedMoveHolder>();
+			confirmedMoveHolder = GetComponent<ConfirmedMoveHolder>();
 		}
 
 		public override void Enter()
@@ -34,11 +34,11 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 		public void StartCasting()
 		{
 			//TODO: Check whether the target is still valid (might be dead)
-			AbstractCombatMove selectedMove = selectedMoveHolder.SelectedMove;
+			AbstractCombatMove selectedMove = confirmedMoveHolder.SelectedMove;
 
 			selectedMove.OnCombatMoveEnded += Exit;
 
-			selectedMove.StartCombatMove(selectedMoveHolder.SelectedTarget, CachedGameObject);
+			selectedMove.StartCombatMove(confirmedMoveHolder.SelectedTarget, CachedGameObject);
 
 			IsCasting = true;
 			OnCastingStarted.Invoke();
@@ -46,7 +46,7 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 
 		public void StopCasting()
 		{
-			selectedMoveHolder.SelectedMove.OnCombatMoveEnded -= Exit;
+			confirmedMoveHolder.SelectedMove.OnCombatMoveEnded -= Exit;
 
 			IsCasting = false;
 			base.Exit();
