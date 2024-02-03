@@ -24,7 +24,6 @@ namespace CombatMoves.ScriptableObjects.Moves
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
                 Debug.Log(caster.name);
                 Debug.Log(target.name);
             }

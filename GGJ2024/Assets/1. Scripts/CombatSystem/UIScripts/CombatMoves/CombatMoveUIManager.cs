@@ -52,12 +52,5 @@ namespace CombatSystem.UIScripts.CombatMoves
 		{
 			CombatTargettingManager.Instance.ChooseMove(combatMove, characterCaster);
 		}
-
-		private void a()
-		{
-			//TODO: validate target
-			//TODO: select target (support multiple targets as well)
-			confirmedMoveHolder.SelectMove(combatMove, null);
-		}
 	}
 }

@@ -54,11 +54,6 @@ namespace CombatSystem.Managers.TargettingSystem
 			currentSelectedCharacter = @event.Character.gameObject;
 		}
 
-		private void OnCharacterHoverExit()
-		{
-			currentSelectedCharacter = null;
-		}
-
 		private void OnCharacterSelectConfirm(InputAction.CallbackContext obj)
 		{
 			if (!toBeConfirmedMove) return;
