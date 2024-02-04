@@ -5,7 +5,7 @@ namespace CombatSystem.Events.CharacterSelection
 {
 	public class CharacterHoveredEvent : VDEvent<CharacterHoveredEvent>
 	{
-		public GameObject Character;
+		public readonly GameObject Character;
 
 		public CharacterHoveredEvent(GameObject character)
 		{

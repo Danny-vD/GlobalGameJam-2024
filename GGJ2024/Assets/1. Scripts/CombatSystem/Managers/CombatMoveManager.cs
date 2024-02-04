@@ -9,6 +9,7 @@ namespace CombatSystem.Managers
 {
 	public class CombatMoveManager : BetterMonoBehaviour
 	{
+		// TODO: Change to a list so that a dead/stunned player can be immediately removed
 		private readonly Queue<CastingState> combatMoveReadyQueue = new Queue<CastingState>();
 
 		private bool isSomeoneCasting = false;

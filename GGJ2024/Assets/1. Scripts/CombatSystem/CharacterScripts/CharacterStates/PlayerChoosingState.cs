@@ -18,8 +18,7 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 
 			confirmedMoveHolder.OnMoveSelected += Exit;
 		}
-
-        // TODO: override target selection when taunted?? (Can a player be taunted?)
+		
 		public override void Enter()
 		{
 			EventManager.RaiseEvent(new PlayerEnteredChoosingStateEvent(gameObject));

@@ -1,7 +1,4 @@
 ﻿using System.Collections.Generic;
-using CharacterScripts;
-using CombatSystem.CharacterScripts;
-using CombatSystem.Enums;
 using CombatSystem.Events;
 using CombatSystem.Events.CharacterStateEvents;
 using CombatSystem.Events.Queues;
@@ -14,7 +11,8 @@ namespace CombatSystem.Managers
 {
 	public class PlayerTurnManager : BetterMonoBehaviour
 	{
-		private readonly Queue<GameObject> characterPickingMoveQueue = new Queue<GameObject>();
+		// A list that acts like a queue, we use a list to be able to remove from any position (in case of dead/stunned)
+		private readonly List<GameObject> playerTurnQueue = new List<GameObject>(6);
 
 		private GameObject currentlyActivePlayer;
 
@@ -22,21 +20,16 @@ namespace CombatSystem.Managers
 		{
 			PlayerEnteredChoosingStateEvent.Listeners += AddToQueue;
 			PlayerExitedChoosingStateEvent.Listeners  += RemoveFromQueue;
-			CombatStartedEvent.ParameterlessListeners += ResetState;
-			CombatEndedEvent.ParameterlessListeners   += ResetState;
+			CombatStartedEvent.ParameterlessListeners += ResetQueue;
+			CombatEndedEvent.ParameterlessListeners   += ResetQueue;
 		}
 
 		private void OnDisable()
 		{
 			PlayerEnteredChoosingStateEvent.Listeners -= AddToQueue;
 			PlayerExitedChoosingStateEvent.Listeners  -= RemoveFromQueue;
-			CombatStartedEvent.ParameterlessListeners -= ResetState;
-			CombatEndedEvent.ParameterlessListeners   -= ResetState;
-		}
-
-		private void ResetState()
-		{
-			characterPickingMoveQueue.Clear();
+			CombatStartedEvent.ParameterlessListeners -= ResetQueue;
+			CombatEndedEvent.ParameterlessListeners   -= ResetQueue;
 		}
 
 		[MenuItem("Combat/Start Combat &g")] //TODO: remove
@@ -57,6 +50,11 @@ namespace CombatSystem.Managers
 
 			return currentlyActivePlayer != null;
 		}
+		
+		private void ResetQueue()
+		{
+			playerTurnQueue.Clear();
+		}
 
 		private void AddToQueue(PlayerEnteredChoosingStateEvent enteredChoosingStateEvent)
 		{
@@ -64,110 +62,76 @@ namespace CombatSystem.Managers
 
 			AddToQueue(player);
 		}
+		
+		private void RemoveFromQueue(PlayerExitedChoosingStateEvent exitedChoosingStateEvent)
+		{
+			RemoveFromQueue(exitedChoosingStateEvent.Player);
+		}
 
 		private void AddToQueue(GameObject player)
 		{
-			if (characterPickingMoveQueue.Contains(player))
+			if (playerTurnQueue.Contains(player))
 			{
 				Debug.LogError("The queue already contains this character!\n" + player.name);
 				return;
 			}
 
-			characterPickingMoveQueue.Enqueue(player);
+			playerTurnQueue.Add(player);
 
-			if (characterPickingMoveQueue.Count == 1)
+			if (playerTurnQueue.Count == 1)
 			{
 				// First character added so it is always going to be the one that is choosing a move
 				SetNewActivePlayer(player);
 			}
 		}
 
-		private void RemoveFromQueue(PlayerExitedChoosingStateEvent exitedChoosingStateEvent)
-		{
-			RemoveFromQueue(exitedChoosingStateEvent.Player);
-		}
-
 		private void RemoveFromQueue(GameObject player)
 		{
-			if (characterPickingMoveQueue.TryPeek(out GameObject next))
+			if (playerTurnQueue.Contains(player))
 			{
-				if (ReferenceEquals(player, next))
+				if (ReferenceEquals(player, currentlyActivePlayer))
 				{
 					SetNextInQueueActive();
-
-					return;
 				}
-
-				Debug.LogError($"Attempting to dequeue the gameobject that is not next in line!\ndequeuing: {player.name}\tNext: {next.name}");
-				return;
+				else
+				{
+					playerTurnQueue.Remove(player);
+				}
 			}
-
-			Debug.LogError("Trying to dequeue with an empty queue! " + player.name);
+			else
+			{
+				Debug.LogError($"Attempting to dequeue an gameobject that is not in line!\ndequeuing: {player.name}");
+			}
 		}
 
 		private void SetNextInQueueActive()
 		{
-			characterPickingMoveQueue.Dequeue();
+			playerTurnQueue.RemoveAt(0); // Dequeue the first player
 
-			if (characterPickingMoveQueue.Count == 0)
+			if (playerTurnQueue.Count == 0) // Queue is empty
 			{
 				SetNoActivePlayer();
-
-				// Queue is empty
-				EventManager.RaiseEvent(new AllPlayersChoseMoveEvent());
 			}
 			else
 			{
-				// Next in line gets to choose a move now
-				GameObject player = characterPickingMoveQueue.Peek();
-				CharacterStateManager characterStateManager = player.GetComponent<CharacterStateManager>();
-
-				bool isValidPlayer = characterStateManager.CurrentStateType is CharacterCombatStateType.Dead or CharacterCombatStateType.Stunned;
-
-				if (isValidPlayer)
-				{
-					SetNewActivePlayer(player, characterStateManager);
-				}
-				else
-				{
-					SetNextInQueueActive();
-				}
+				GameObject next = playerTurnQueue[0];
+				
+				SetNewActivePlayer(next);
 			}
 		}
 
-		private void SetNewActivePlayer(GameObject player, CharacterStateManager characterStateManager = null)
+		private void SetNewActivePlayer(GameObject player)
 		{
 			currentlyActivePlayer = player;
-
-			if (!characterStateManager)
-			{
-				characterStateManager = currentlyActivePlayer.GetComponent<CharacterStateManager>();
-			}
-
-			characterStateManager.OnStateChanged += OnActiveCharacterStateChanged;
 
 			EventManager.RaiseEvent(new NewPlayerChoosingMoveEvent(player));
 		}
 
 		private void SetNoActivePlayer()
 		{
-			if (currentlyActivePlayer)
-			{
-				CharacterStateManager characterStateManager = currentlyActivePlayer.GetComponent<CharacterStateManager>();
-				characterStateManager.OnStateChanged -= OnActiveCharacterStateChanged;
-			}
-
 			currentlyActivePlayer = null;
 
 			EventManager.RaiseEvent(new AllPlayersChoseMoveEvent());
-		}
-
-		private void OnActiveCharacterStateChanged(CharacterCombatStateType combatState)
-		{
-			if (combatState is CharacterCombatStateType.Dead or CharacterCombatStateType.Stunned)
-			{
-				SetNextInQueueActive();
-			}
 		}
 	}
 }

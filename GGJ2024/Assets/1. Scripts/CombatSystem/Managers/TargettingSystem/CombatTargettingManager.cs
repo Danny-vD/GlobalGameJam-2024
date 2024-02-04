@@ -12,7 +12,7 @@ using VDFramework.Singleton;
 
 namespace CombatSystem.Managers.TargettingSystem
 {
-	public class CombatTargettingManager : Singleton<CombatTargettingManager>
+	public class CombatTargettingManager : Singleton<CombatTargettingManager> // TODO: override target selection when taunted?? (Can a player be taunted?)
 	{
 		[SerializeField]
 		private GameObject currentSelectedCharacterIndicator;
