@@ -28,7 +28,18 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 
 		public override void Exit()
 		{
-			StopCasting();
+			if (IsCasting)
+			{
+				// This prevents other moves from starting if this was called before the selected move called AllowNextMoveToStart (should never happen)
+				
+				// no call to base because StopCasting already calls it
+				confirmedMoveHolder.SelectedMove.ForceStopCombatMove();
+			}
+			else
+			{
+				EventManager.RaiseEvent(new CastingPreventedEvent(this));
+				base.Exit();
+			}
 		}
 
 		public void StartCasting()
@@ -36,18 +47,18 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 			//TODO: Check whether the target is still valid (might be dead)
 			AbstractCombatMove selectedMove = confirmedMoveHolder.SelectedMove;
 
-			selectedMove.OnCombatMoveEnded += Exit;
+			selectedMove.OnCombatMoveEnded += StopCasting;
 
 			selectedMove.StartCombatMove(confirmedMoveHolder.SelectedTarget, CachedGameObject);
 
 			IsCasting = true;
-			
+
 			OnCastingStarted.Invoke();
 		}
 
 		public void StopCasting()
 		{
-			confirmedMoveHolder.SelectedMove.OnCombatMoveEnded -= Exit;
+			confirmedMoveHolder.SelectedMove.OnCombatMoveEnded -= StopCasting;
 
 			IsCasting = false;
 			base.Exit();

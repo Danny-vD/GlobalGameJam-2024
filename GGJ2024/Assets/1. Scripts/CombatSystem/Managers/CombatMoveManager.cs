@@ -10,7 +10,9 @@ namespace CombatSystem.Managers
 	public class CombatMoveManager : BetterMonoBehaviour
 	{
 		// TODO: Change to a list so that a dead/stunned player can be immediately removed
-		private readonly Queue<CastingState> combatMoveReadyQueue = new Queue<CastingState>();
+		//private readonly Queue<CastingState> combatMoveReadyQueue = new Queue<CastingState>();
+
+		private readonly List<CastingState> combatMoveReadyQueue = new List<CastingState>();
 
 		private bool isSomeoneCasting = false;
 
@@ -18,16 +20,20 @@ namespace CombatSystem.Managers
 		{
 			NewCharacterReadyToCastEvent.Listeners             += OnNewCharacterReadyToCast;
 			NextCombatMoveCanStartEvent.ParameterlessListeners += StartNextInQueue;
-			CombatStartedEvent.ParameterlessListeners          += ResetState;
-			CombatEndedEvent.ParameterlessListeners            += ResetState;
+
+			CastingPreventedEvent.Listeners           += OnCastingPrevented;
+			CombatStartedEvent.ParameterlessListeners += ResetState;
+			CombatEndedEvent.ParameterlessListeners   += ResetState;
 		}
 
 		private void OnDisable()
 		{
 			NewCharacterReadyToCastEvent.Listeners             -= OnNewCharacterReadyToCast;
 			NextCombatMoveCanStartEvent.ParameterlessListeners -= StartNextInQueue;
-			CombatStartedEvent.ParameterlessListeners          -= ResetState;
-			CombatEndedEvent.ParameterlessListeners            -= ResetState;
+			CastingPreventedEvent.Listeners                    -= OnCastingPrevented;
+
+			CombatStartedEvent.ParameterlessListeners -= ResetState;
+			CombatEndedEvent.ParameterlessListeners   -= ResetState;
 		}
 
 		private void ResetState()
@@ -38,8 +44,16 @@ namespace CombatSystem.Managers
 
 		private void OnNewCharacterReadyToCast(NewCharacterReadyToCastEvent newCharacterReadyToCastEvent)
 		{
-			CastingState castingState = newCharacterReadyToCastEvent.CastingState;
+			HandleNewCharacterReadyToCast(newCharacterReadyToCastEvent.CastingState);
+		}
 
+		private void OnCastingPrevented(CastingPreventedEvent castingPreventedEvent)
+		{
+			RemoveFromQueue(castingPreventedEvent.CastingState);
+		}
+
+		private void HandleNewCharacterReadyToCast(CastingState castingState)
+		{
 			if (!isSomeoneCasting)
 			{
 				isSomeoneCasting = true;
@@ -59,12 +73,37 @@ namespace CombatSystem.Managers
 				return;
 			}
 
-			combatMoveReadyQueue.Enqueue(castingState);
+			combatMoveReadyQueue.Add(castingState);
 		}
 
-		private void StartNextInQueue() // Called when a character starts casting
+		private void RemoveFromQueue(CastingState castingState)
 		{
-			if (combatMoveReadyQueue.TryDequeue(out CastingState castingState)) // Dequeue will succeed so long as at least 1 object is in the queue
+			if (!combatMoveReadyQueue.Contains(castingState))
+			{
+				Debug.LogError("The queue does not contain this character!\n" + castingState.gameObject.name);
+				return;
+			}
+
+			combatMoveReadyQueue.Remove(castingState);
+		}
+
+		private bool TryGetNextInLine(out CastingState castingState)
+		{
+			if (combatMoveReadyQueue.Count > 0)
+			{
+				castingState = combatMoveReadyQueue[0];
+				
+				combatMoveReadyQueue.RemoveAt(0);
+				return true;
+			}
+
+			castingState = null;
+			return false;
+		}
+
+		private void StartNextInQueue() // Called when a character enters CastingState
+		{
+			if (TryGetNextInLine(out CastingState castingState)) // Will succeed so long as at least 1 object is in the queue
 			{
 				castingState.StartCasting();
 			}

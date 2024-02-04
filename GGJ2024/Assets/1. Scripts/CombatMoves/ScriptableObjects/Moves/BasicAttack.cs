@@ -17,24 +17,6 @@ namespace CombatMoves.ScriptableObjects.Moves
 		{
 			AudioPlayer.PlayOneShot2D(audioType);
 
-			if (!caster)
-			{
-				Debug.Log("Caster is null");
-			}
-			else
-			{
-				Debug.LogError("Caster: " + caster.name);
-			}
-
-			if (!target)
-			{
-				Debug.Log("Target is null");
-			}
-			else
-			{
-				Debug.LogError("Target: " + target.name);
-			}
-
 			target.GetComponent<CharacterHealth>().Damage((int)Potency);
 
 			TimerManager.StartNewTimer(1, EndCombatMove);

@@ -10,7 +10,7 @@ namespace CombatMoves.ScriptableObjects.BaseClasses
 {
 	public abstract class AbstractCombatMove : ScriptableObject
 	{
-		public event Action OnCombatMoveEnded = delegate { };
+		public event Action OnCombatMoveEnded = delegate { }; // TODO: Test whether this delegate is shared between characters
 
 		[Header("General data")]
 		[field: SerializeField]
@@ -60,20 +60,21 @@ namespace CombatMoves.ScriptableObjects.BaseClasses
 		/// <summary>
 		/// Immediately interrupts and stops the combat move
 		/// </summary>
-		public virtual void ForceStopCombatMove() // NOTE Public so that it can be directly called from Dead/Stun state
+		public virtual void ForceStopCombatMove()
 		{
-			EndCombatMove();
+			// If we died/got stunned while performing a move, we already allowed the next one to start
+			InvokeOnCombatMoveEnded();
 		}
 
 		/// <summary>
-		/// Invokes all events at once
+		/// Tells the casting state that the move ended and allows another move to start
 		/// </summary>
 		/// <seealso cref="AllowNextMoveToStart"/>
 		/// <seealso cref="InvokeOnCombatMoveEnded"/>
 		protected void EndCombatMove()
 		{
-			InvokeOnCombatMoveEnded();
 			AllowNextMoveToStart();
+			InvokeOnCombatMoveEnded();
 		}
 
 		/// <summary>
