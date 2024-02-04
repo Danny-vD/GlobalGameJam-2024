@@ -26,7 +26,7 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 			EventManager.RaiseEvent(new NewCharacterReadyToCastEvent(this));
 		}
 
-		protected override void Exit()
+		public override void Exit()
 		{
 			StopCasting();
 		}
@@ -41,6 +41,7 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 			selectedMove.StartCombatMove(confirmedMoveHolder.SelectedTarget, CachedGameObject);
 
 			IsCasting = true;
+			
 			OnCastingStarted.Invoke();
 		}
 

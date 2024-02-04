@@ -25,7 +25,7 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 			EventManager.RaiseEvent(new PlayerEnteredChoosingStateEvent(gameObject));
 		}
 
-		protected override void Exit()
+		public override void Exit()
 		{
 			EventManager.RaiseEvent(new PlayerExitedChoosingStateEvent(gameObject));
 			base.Exit();

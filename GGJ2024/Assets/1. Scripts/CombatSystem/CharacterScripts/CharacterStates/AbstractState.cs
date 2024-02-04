@@ -16,7 +16,7 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 		{
 		}
 
-		protected virtual void Exit()
+		public virtual void Exit()
 		{
 			OnStateEnded.Invoke(NextState);
 		}

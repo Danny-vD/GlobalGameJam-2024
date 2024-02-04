@@ -39,17 +39,17 @@ namespace CombatMoves.ScriptableObjects.BaseClasses
 		/// <summary>
 		/// Allows another combat move to start
 		/// </summary>
-		protected static void AllowNextMoveToStart()
+		private static void AllowNextMoveToStart()
 		{
 			EventManager.RaiseEvent(new NextCombatMoveCanStartEvent());
 		}
-		
+
 		public bool IsValidTarget(GameObject target, GameObject caster)
 		{
 			//TODO: Cache the ITargetingValidator
 			return TargetingValidatorUtil.GetValidators(ValidTargets).IsValidTarget(target, caster);
 		}
-		
+
 		/// <summary>
 		/// Start performing this combat move
 		/// </summary>
@@ -64,7 +64,7 @@ namespace CombatMoves.ScriptableObjects.BaseClasses
 		{
 			EndCombatMove();
 		}
-		
+
 		/// <summary>
 		/// Invokes all events at once
 		/// </summary>
@@ -75,7 +75,7 @@ namespace CombatMoves.ScriptableObjects.BaseClasses
 			InvokeOnCombatMoveEnded();
 			AllowNextMoveToStart();
 		}
-		
+
 		/// <summary>
 		/// Invokes <see cref="OnCombatMoveEnded"/>
 		/// </summary>

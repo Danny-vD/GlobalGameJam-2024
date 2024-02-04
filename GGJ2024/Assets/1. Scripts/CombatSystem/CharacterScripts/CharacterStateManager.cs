@@ -43,22 +43,25 @@ namespace CombatSystem.CharacterScripts
 		private void OnEnable()
 		{
 			SetState(CharacterCombatStateType.Idle);
-			
-			characterHealth.OnDied        += SetToDeadState;
-			characterHealth.OnResurrected += SetToIdleState;
+
+			characterHealth.OnDied += ForceDeadState;
 		}
 
 		private void OnDisable()
 		{
-			characterHealth.OnDied        -= SetToDeadState;
-			characterHealth.OnResurrected -= SetToIdleState;
+			characterHealth.OnDied -= ForceDeadState;
 		}
 
 		private void Update()
 		{
 			currentState.Step();
 		}
-		
+
+		public void RestartCurrentState()
+		{
+			ForceState(CurrentStateType);
+		}
+
 		private void SetState(CharacterCombatStateType stateType)
 		{
 			if (currentState != null)
@@ -76,19 +79,25 @@ namespace CombatSystem.CharacterScripts
 			currentState.Enter();
 		}
 
-		private void SetToDeadState()
+		/// <summary>
+		/// Forcibly exits the current state and starts a new one
+		/// </summary>
+		private void ForceState(CharacterCombatStateType stateType)
 		{
-			SetState(CharacterCombatStateType.Dead);
+			currentState.OnStateEnded -= SetState; // Stop reacting to the current state ending so that we do not set up the state that would've come after
+			currentState.Exit();
+			
+			SetState(stateType);
 		}
 
-		private void SetToStunState()
+		private void ForceDeadState()
 		{
-			SetState(CharacterCombatStateType.Stunned);
+			ForceState(CharacterCombatStateType.Dead);
 		}
 
-		private void SetToIdleState()
+		private void ForceStunnedState()
 		{
-			SetState(CharacterCombatStateType.Idle);
+			ForceState(CharacterCombatStateType.Stunned);
 		}
 
 		private void OnDestroy()
