@@ -1,5 +1,6 @@
 ﻿using CombatMoves.ScriptableObjects.BaseClasses;
 using CombatSystem.CharacterScripts;
+using CombatSystem.Enums;
 using UnityEngine;
 
 namespace CombatMoves.ScriptableObjects.Moves
@@ -9,7 +10,7 @@ namespace CombatMoves.ScriptableObjects.Moves
 	{
 		public override void StartCombatMove(GameObject target, GameObject caster)
 		{
-			caster.GetComponent<CharacterStateManager>().RestartCurrentState();
+			caster.GetComponent<CharacterStateManager>().ForceState(CharacterCombatStateType.Choosing);
 			EndCombatMove();
 		}
 	}
