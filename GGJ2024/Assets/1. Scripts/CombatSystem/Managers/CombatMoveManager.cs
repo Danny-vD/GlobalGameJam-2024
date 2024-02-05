@@ -66,7 +66,7 @@ namespace CombatSystem.Managers
 		{
 			if (combatMoveReadyQueue.Contains(castingState))
 			{
-				Debug.LogError("The queue already contains this character!\n" + castingState.gameObject.name);
+				Debug.LogError("The queue already contains this character!\n" + castingState.transform.root.gameObject.name);
 				return;
 			}
 
@@ -77,7 +77,7 @@ namespace CombatSystem.Managers
 		{
 			if (!combatMoveReadyQueue.Contains(castingState))
 			{
-				Debug.LogError("The queue does not contain this character!\n" + castingState.gameObject.name);
+				Debug.LogError("The queue does not contain this character!\n" + castingState.transform.root.gameObject.name);
 				return;
 			}
 

@@ -61,6 +61,17 @@ namespace CombatSystem.CharacterScripts
 		{
 			ForceState(CurrentStateType);
 		}
+		
+		/// <summary>
+		/// Forcibly exits the current state and starts a new one
+		/// </summary>
+		public void ForceState(CharacterCombatStateType stateType)
+		{
+			currentState.OnStateEnded -= SetState; // Stop reacting to the current state ending so that we do not set up the state that would've come after
+			currentState.Exit();
+			
+			SetState(stateType);
+		}
 
 		private void SetState(CharacterCombatStateType stateType)
 		{
@@ -77,17 +88,6 @@ namespace CombatSystem.CharacterScripts
 			currentState.OnStateEnded += SetState;
 
 			currentState.Enter();
-		}
-
-		/// <summary>
-		/// Forcibly exits the current state and starts a new one
-		/// </summary>
-		private void ForceState(CharacterCombatStateType stateType)
-		{
-			currentState.OnStateEnded -= SetState; // Stop reacting to the current state ending so that we do not set up the state that would've come after
-			currentState.Exit();
-			
-			SetState(stateType);
 		}
 
 		private void ForceDeadState()

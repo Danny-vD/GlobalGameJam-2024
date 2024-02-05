@@ -116,6 +116,7 @@ GameObject:
   - component: {fileID: 2062246126843909053}
   - component: {fileID: 3439753606574343076}
   - component: {fileID: 5927419800603599913}
+  - component: {fileID: 2794653225212349654}
   m_Layer: 6
   m_Name: Rufus
   m_TagString: Untagged
@@ -130,7 +131,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9119918708184582830}
-  m_LocalRotation: {x: -0, y: -0.96635723, z: -0, w: 0.2572036}
+  m_LocalRotation: {x: 0, y: -0.9663581, z: 0, w: 0.25720036}
   m_LocalPosition: {x: 0, y: 0, z: 7}
   m_LocalScale: {x: 0.34, y: 0.34, z: 0.34}
   m_ConstrainProportionsScale: 1
@@ -223,12 +224,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Statistics>k__BackingField:
     Name: Rufus
-    Speed: 1
+    Speed: 5
     AttackPower: 0
     SpecialAttackPower: 10
     Defense: 10
     SpecialDefense: 10
-    MaxHP: 0
+    MaxHP: 100
     MaxMP: 0
 --- !u!114 &7164288441423933955
 MonoBehaviour:
@@ -456,3 +457,15 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 6.0499997, y: 7.36, z: 0.20000017}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2794653225212349654
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9119918708184582830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed1a39ca880f49409832cbc66903b17b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -1,8 +1,6 @@
-﻿using CombatSystem.Events.CharacterSelection;
-using CombatSystem.Structs;
+﻿using CombatSystem.Structs;
 using UnityEngine;
 using VDFramework;
-using VDFramework.EventSystem;
 
 namespace CharacterScripts
 {
@@ -12,10 +10,5 @@ namespace CharacterScripts
 		public CharacterStatistics Statistics { get; private set; }
 
 		public int CurrentMP { get; private set; }
-
-		private void OnMouseEnter()
-		{
-			EventManager.RaiseEvent(new CharacterHoveredEvent(gameObject));
-		}
 	}
 }

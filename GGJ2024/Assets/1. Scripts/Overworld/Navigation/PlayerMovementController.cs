@@ -1,24 +1,33 @@
 using UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using VDFramework.Singleton;
+using VDFramework;
 
 namespace Overworld.Navigation
 {
-	public class PlayerMovementController : Singleton<PlayerMovementController>
+	public class PlayerMovementController : SafeEnableBehaviour
 	{
 		[SerializeField, Tooltip("The speed of the player in m/s")]
-		private float speed;
+		private float speed = 10;
 
 		private bool isMoving;
 		private Vector3 deltaMovement;
 
 		private CharacterController controller;
 
-		protected override void Awake()
+		protected void Awake()
 		{
-			base.Awake();
 			controller = GetComponent<CharacterController>();
+		}
+
+		protected override void OnEnabled()
+		{
+			InputControlManager.Instance.playerControls.Overworld.Movement.performed += MovementOnPerformed;
+			InputControlManager.Instance.playerControls.Overworld.Movement.canceled  += MovementOnCanceled;
+
+			InputControlManager.Instance.playerControls.Overworld.Interact.performed += OnInteract;
+			InputControlManager.Instance.playerControls.Overworld.Select.performed   += OnSelect;
+			InputControlManager.Instance.playerControls.Overworld.Start.performed    += OnStart;
 		}
 
 		private void OnDisable()
@@ -27,6 +36,7 @@ namespace Overworld.Navigation
 
 			InputControlManager.Instance.playerControls.Overworld.Movement.performed -= MovementOnPerformed;
 			InputControlManager.Instance.playerControls.Overworld.Movement.canceled  -= MovementOnCanceled;
+			
 			InputControlManager.Instance.playerControls.Overworld.Interact.performed -= OnInteract;
 			InputControlManager.Instance.playerControls.Overworld.Select.performed   -= OnSelect;
 			InputControlManager.Instance.playerControls.Overworld.Start.performed    -= OnStart;
@@ -44,17 +54,6 @@ namespace Overworld.Navigation
 			Vector2 vector = obj.ReadValue<Vector2>();
 
 			deltaMovement = new Vector3(vector.x, 0, vector.y);
-		}
-
-		// Start is called before the first frame update
-		private void Start()
-		{
-			InputControlManager.Instance.playerControls.Overworld.Movement.performed += MovementOnPerformed;
-			InputControlManager.Instance.playerControls.Overworld.Movement.canceled  += MovementOnCanceled;
-
-			InputControlManager.Instance.playerControls.Overworld.Interact.performed += OnInteract;
-			InputControlManager.Instance.playerControls.Overworld.Select.performed   += OnSelect;
-			InputControlManager.Instance.playerControls.Overworld.Start.performed    += OnStart;
 		}
 
 		private void OnSelect(InputAction.CallbackContext obj)
