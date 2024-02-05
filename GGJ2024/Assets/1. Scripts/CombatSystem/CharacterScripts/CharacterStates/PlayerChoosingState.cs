@@ -21,12 +21,12 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 		
 		public override void Enter()
 		{
-			EventManager.RaiseEvent(new PlayerEnteredChoosingStateEvent(gameObject));
+			EventManager.RaiseEvent(new PlayerEnteredChoosingStateEvent(transform.root.gameObject));
 		}
 
 		public override void Exit()
 		{
-			EventManager.RaiseEvent(new PlayerExitedChoosingStateEvent(gameObject));
+			EventManager.RaiseEvent(new PlayerExitedChoosingStateEvent(transform.root.gameObject));
 			base.Exit();
 		}
 

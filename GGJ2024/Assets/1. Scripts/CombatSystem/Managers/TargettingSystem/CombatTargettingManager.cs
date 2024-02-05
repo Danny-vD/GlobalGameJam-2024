@@ -65,7 +65,7 @@ namespace CombatSystem.Managers.TargettingSystem
 
 			if (toBeConfirmedMove.IsValidTarget(currentSelectedCharacter, casterToBe))
 			{
-				ConfirmedMoveHolder confirmedMoveHolder = casterToBe.GetComponent<ConfirmedMoveHolder>();
+				ConfirmedMoveHolder confirmedMoveHolder = casterToBe.GetComponentInChildren<ConfirmedMoveHolder>();
 				confirmedMoveHolder.SelectMove(toBeConfirmedMove, currentSelectedCharacter);
 
 				StopListeneningToConfirmInput();
