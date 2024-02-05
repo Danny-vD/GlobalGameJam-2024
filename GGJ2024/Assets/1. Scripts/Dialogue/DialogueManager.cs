@@ -62,7 +62,7 @@ namespace Dialogue
             InputControlManager.Instance.playerControls.DialogueInteraction.Option3.performed +=
                 _ => { ContinueDialogue(2); };
 
-            eventInstance = AudioPlayer.GetEventInstance(AudioEventType.SFX_UI_Talking);
+           //  eventInstance = AudioPlayer.GetEventInstance(AudioEventType.SFX_UI_Talking);
         }
 
         private void OnEnable()
@@ -249,7 +249,7 @@ namespace Dialogue
             {
                 eventInstance.start();
 
-                //AudioPlayer.PlayOneShot2D(AudioEventType.SFX_UI_Talking);
+                AudioPlayer.PlayOneShot2D(AudioEventType.SFX_UI_Talking);
                 dialogueText.text += letter;
                 yield return new WaitForSeconds(WaitTimer);
             }

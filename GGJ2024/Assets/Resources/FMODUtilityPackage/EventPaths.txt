@@ -6,12 +6,16 @@ event:/Music/BattleVictory
 event:/SFX/Battle/HitEnemy
 event:/SFX/UI/ButtonWrong
 event:/SFX/Battle/MissAttack
+event:/SFX/UI/Talking
 event:/SFX/Battle/MageSpells/Shower
 event:/SFX/Battle/MageSpells/Furrball
 event:/SFX/Battle/SuperStrongPowerDowerSlam
 event:/SFX/Battle/MageSpells/Hairdryer
 event:/SFX/Battle/TankBuff
+event:/SFX/Cutscenes/Scene6
+event:/SFX/Cutscenes/Scene1
 event:/SFX/Battle/PlayerHurt
+event:/SFX/Cutscenes/Scene8
 event:/SFX/Battle/MageSpells/SupersonicMeow
 event:/SFX/Battle/MageSpells/MagicSuperSmack
 event:/SFX/UI/ButtonClick
@@ -19,8 +23,4 @@ event:/SFX/Player/Footsteps
 event:/SFX/Battle/SwordAttack
 event:/SFX/UI/ButtonHover
 event:/SFX/Ambience/HellAmbience
-event:/SFX/UI/Talking
-event:/SFX/Cutscenes/Scene6
-event:/SFX/Cutscenes/Scene1
-event:/SFX/Cutscenes/Scene8
 event:/SFX/Battle/Death

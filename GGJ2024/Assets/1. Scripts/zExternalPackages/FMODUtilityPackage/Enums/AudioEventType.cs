@@ -49,6 +49,11 @@ namespace FMODUtilityPackage.Enums
 		SFX_Battle_MissAttack,
 
 		/// <FMODEventPath>
+		/// event:/SFX/UI/Talking
+		/// </FMODEventPath>
+		SFX_UI_Talking,
+
+		/// <FMODEventPath>
 		/// event:/SFX/Battle/MageSpells/Shower
 		/// </FMODEventPath>
 		SFX_Battle_MageSpells_Shower,
@@ -74,9 +79,24 @@ namespace FMODUtilityPackage.Enums
 		SFX_Battle_TankBuff,
 
 		/// <FMODEventPath>
+		/// event:/SFX/Cutscenes/Scene6
+		/// </FMODEventPath>
+		SFX_Cutscenes_Scene6,
+
+		/// <FMODEventPath>
+		/// event:/SFX/Cutscenes/Scene1
+		/// </FMODEventPath>
+		SFX_Cutscenes_Scene1,
+
+		/// <FMODEventPath>
 		/// event:/SFX/Battle/PlayerHurt
 		/// </FMODEventPath>
 		SFX_Battle_PlayerHurt,
+
+		/// <FMODEventPath>
+		/// event:/SFX/Cutscenes/Scene8
+		/// </FMODEventPath>
+		SFX_Cutscenes_Scene8,
 
 		/// <FMODEventPath>
 		/// event:/SFX/Battle/MageSpells/SupersonicMeow
@@ -112,26 +132,6 @@ namespace FMODUtilityPackage.Enums
 		/// event:/SFX/Ambience/HellAmbience
 		/// </FMODEventPath>
 		SFX_Ambience_HellAmbience,
-
-		/// <FMODEventPath>
-		/// event:/SFX/UI/Talking
-		/// </FMODEventPath>
-		SFX_UI_Talking,
-
-		/// <FMODEventPath>
-		/// event:/SFX/Cutscenes/Scene6
-		/// </FMODEventPath>
-		SFX_Cutscenes_Scene6,
-
-		/// <FMODEventPath>
-		/// event:/SFX/Cutscenes/Scene1
-		/// </FMODEventPath>
-		SFX_Cutscenes_Scene1,
-
-		/// <FMODEventPath>
-		/// event:/SFX/Cutscenes/Scene8
-		/// </FMODEventPath>
-		SFX_Cutscenes_Scene8,
 
 		/// <FMODEventPath>
 		/// event:/SFX/Battle/Death

@@ -16,8 +16,6 @@ public class PlayerAudioFootsteps : MonoBehaviour
     private void PlayFootsteps()
     {
         footstepInstance.start();
-
-        //AudioPlayer.PlayOneShot2D(AudioEventType.SFX_Player_Footsteps);
     }
     
     private void OnDestroy()
