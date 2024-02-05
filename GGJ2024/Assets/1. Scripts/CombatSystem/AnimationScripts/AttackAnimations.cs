@@ -26,7 +26,7 @@ namespace CombatSystem.AnimationScripts
 		private void OnStartedCasting()
 		{
 			// Using the move name as the trigger allows us to dynamically set the respective animation
-			animator.SetTrigger(GetParameterID(confirmedMoveHolder.SelectedMove.AnimationTriggerName));
+			//animator.SetTrigger(GetParameterID(confirmedMoveHolder.SelectedMove.AnimationTriggerName));
 		}
 
 		private void OnDestroy()
