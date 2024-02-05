@@ -6117,12 +6117,20 @@ MonoBehaviour:
     - key: 8
       value:
         Guid:
+          Data1: -665194152
+          Data2: 1079437962
+          Data3: 184073380
+          Data4: 1038940930
+        Path: event:/SFX/UI/Talking
+    - key: 9
+      value:
+        Guid:
           Data1: 548493427
           Data2: 1311476021
           Data3: 1631237292
           Data4: 29430389
         Path: event:/SFX/Battle/MageSpells/Shower
-    - key: 9
+    - key: 10
       value:
         Guid:
           Data1: -196411532
@@ -6130,7 +6138,7 @@ MonoBehaviour:
           Data3: -1147340887
           Data4: -1325991576
         Path: event:/SFX/Battle/MageSpells/Furrball
-    - key: 10
+    - key: 11
       value:
         Guid:
           Data1: 1710655093
@@ -6138,7 +6146,7 @@ MonoBehaviour:
           Data3: -27408496
           Data4: -306871611
         Path: event:/SFX/Battle/SuperStrongPowerDowerSlam
-    - key: 11
+    - key: 12
       value:
         Guid:
           Data1: -220118652
@@ -6146,7 +6154,7 @@ MonoBehaviour:
           Data3: -1100630655
           Data4: 1115729377
         Path: event:/SFX/Battle/MageSpells/Hairdryer
-    - key: 12
+    - key: 13
       value:
         Guid:
           Data1: 1446734994
@@ -6154,79 +6162,7 @@ MonoBehaviour:
           Data3: 1436789948
           Data4: 1956805464
         Path: event:/SFX/Battle/TankBuff
-    - key: 13
-      value:
-        Guid:
-          Data1: -1488738381
-          Data2: 1207834650
-          Data3: 508354440
-          Data4: 1922579165
-        Path: event:/SFX/Battle/PlayerHurt
     - key: 14
-      value:
-        Guid:
-          Data1: -858585150
-          Data2: 1073821285
-          Data3: -1664795463
-          Data4: -1038943321
-        Path: event:/SFX/Battle/MageSpells/SupersonicMeow
-    - key: 15
-      value:
-        Guid:
-          Data1: -1700295986
-          Data2: 1271545414
-          Data3: 1021670051
-          Data4: -826018882
-        Path: event:/SFX/Battle/MageSpells/MagicSuperSmack
-    - key: 16
-      value:
-        Guid:
-          Data1: -1299404327
-          Data2: 1194976004
-          Data3: -448180046
-          Data4: -1465747438
-        Path: event:/SFX/UI/ButtonClick
-    - key: 17
-      value:
-        Guid:
-          Data1: 339470811
-          Data2: 1108484599
-          Data3: 1657465766
-          Data4: 2056216108
-        Path: event:/SFX/Player/Footsteps
-    - key: 18
-      value:
-        Guid:
-          Data1: -505116708
-          Data2: 1296991354
-          Data3: -129354341
-          Data4: -2126867703
-        Path: event:/SFX/Battle/SwordAttack
-    - key: 19
-      value:
-        Guid:
-          Data1: -1937830430
-          Data2: 1189342228
-          Data3: 1427883683
-          Data4: 1174092788
-        Path: event:/SFX/UI/ButtonHover
-    - key: 20
-      value:
-        Guid:
-          Data1: 714086883
-          Data2: 1158917428
-          Data3: -1420750940
-          Data4: -1544819916
-        Path: event:/SFX/Ambience/HellAmbience
-    - key: 21
-      value:
-        Guid:
-          Data1: -665194152
-          Data2: 1079437962
-          Data3: 184073380
-          Data4: 1038940930
-        Path: event:/SFX/UI/Talking
-    - key: 22
       value:
         Guid:
           Data1: -517145440
@@ -6234,7 +6170,7 @@ MonoBehaviour:
           Data3: 1421026948
           Data4: -922749817
         Path: event:/SFX/Cutscenes/Scene6
-    - key: 23
+    - key: 15
       value:
         Guid:
           Data1: -99057750
@@ -6242,7 +6178,15 @@ MonoBehaviour:
           Data3: -585780595
           Data4: 499407190
         Path: event:/SFX/Cutscenes/Scene1
-    - key: 24
+    - key: 16
+      value:
+        Guid:
+          Data1: -1488738381
+          Data2: 1207834650
+          Data3: 508354440
+          Data4: 1922579165
+        Path: event:/SFX/Battle/PlayerHurt
+    - key: 17
       value:
         Guid:
           Data1: -2059410753
@@ -6250,6 +6194,62 @@ MonoBehaviour:
           Data3: -784173413
           Data4: -1823787148
         Path: event:/SFX/Cutscenes/Scene8
+    - key: 18
+      value:
+        Guid:
+          Data1: -858585150
+          Data2: 1073821285
+          Data3: -1664795463
+          Data4: -1038943321
+        Path: event:/SFX/Battle/MageSpells/SupersonicMeow
+    - key: 19
+      value:
+        Guid:
+          Data1: -1700295986
+          Data2: 1271545414
+          Data3: 1021670051
+          Data4: -826018882
+        Path: event:/SFX/Battle/MageSpells/MagicSuperSmack
+    - key: 20
+      value:
+        Guid:
+          Data1: -1299404327
+          Data2: 1194976004
+          Data3: -448180046
+          Data4: -1465747438
+        Path: event:/SFX/UI/ButtonClick
+    - key: 21
+      value:
+        Guid:
+          Data1: 339470811
+          Data2: 1108484599
+          Data3: 1657465766
+          Data4: 2056216108
+        Path: event:/SFX/Player/Footsteps
+    - key: 22
+      value:
+        Guid:
+          Data1: -505116708
+          Data2: 1296991354
+          Data3: -129354341
+          Data4: -2126867703
+        Path: event:/SFX/Battle/SwordAttack
+    - key: 23
+      value:
+        Guid:
+          Data1: -1937830430
+          Data2: 1189342228
+          Data3: 1427883683
+          Data4: 1174092788
+        Path: event:/SFX/UI/ButtonHover
+    - key: 24
+      value:
+        Guid:
+          Data1: 714086883
+          Data2: 1158917428
+          Data3: -1420750940
+          Data4: -1544819916
+        Path: event:/SFX/Ambience/HellAmbience
     - key: 25
       value:
         Guid:
@@ -10197,7 +10197,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &1511807230
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -14213,7 +14213,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1195346798982504421, guid: 9b487d0cab57e0646ba991440bc5ea9e, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1736494708953250083, guid: 9b487d0cab57e0646ba991440bc5ea9e, type: 3}
       propertyPath: m_Pivot.x
@@ -14253,7 +14253,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1736494708953250083, guid: 9b487d0cab57e0646ba991440bc5ea9e, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -251.99997
+      value: -314
       objectReference: {fileID: 0}
     - target: {fileID: 1844185226430999828, guid: 9b487d0cab57e0646ba991440bc5ea9e, type: 3}
       propertyPath: m_ReferenceResolution.x
@@ -14417,7 +14417,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7779116955073878756, guid: 9b487d0cab57e0646ba991440bc5ea9e, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -245
+      value: -296
       objectReference: {fileID: 0}
     - target: {fileID: 8687498971619382667, guid: 9b487d0cab57e0646ba991440bc5ea9e, type: 3}
       propertyPath: m_Spacing.x
