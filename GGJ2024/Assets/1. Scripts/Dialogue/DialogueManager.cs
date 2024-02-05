@@ -1,16 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using FMOD.Studio;
-using FMODUtilityPackage.Core;
-using FMODUtilityPackage.Enums;
 using Ink.Runtime;
 using SerializableDictionaryPackage.SerializableDictionary;
 using TMPro;
 using UI;
 using UnityEngine;
 using UnityEngine.UI;
-using VDFramework.EventSystem;
 using VDFramework.Singleton;
 using VDFramework.UnityExtensions;
 
@@ -19,28 +15,23 @@ namespace Dialogue
     public class DialogueManager : Singleton<DialogueManager>
     {
         private bool printing;
+        private string nextLine;
         public bool Conversing { get; private set; }
-
-        private Queue<string> _lines;
+        
         private const float WaitTimer = 0.05f;
         private const float SentenceWaitTimer = 0.5f;
 
         private Story currentStory;
 
         [SerializeField] public GameObject dialogueCanvas;
-
         [SerializeField] private GameObject sprite;
-
         [SerializeField] private SerializableDictionary<string, Sprite> imagesByNames;
-
         [SerializeField] public TextMeshProUGUI nameText;
-
         [SerializeField] public TextMeshProUGUI dialogueText;
-
         [SerializeField] public GameObject ChoicesPanel;
+        [SerializeField] private SerializableDictionary<char, float> characterTimes;
 
         private TMP_Text[] choicesTextBoxes;
-
         private EventInstance eventInstance;
 
         private void Start()
@@ -68,13 +59,11 @@ namespace Dialogue
         private void OnEnable()
         {
             OnEnterDialogueMode.Listeners += EnterDialogueMode;
-            OnChooseNextDialogueLine.Listeners += ContinueDialogue;
         }
 
         private void OnDisable()
         {
             OnEnterDialogueMode.Listeners -= EnterDialogueMode;
-            OnChooseNextDialogueLine.Listeners -= ContinueDialogue;
         }
 
         private void EnterDialogueMode(OnEnterDialogueMode onEnterDialogueMode)
@@ -93,25 +82,19 @@ namespace Dialogue
 
         private void ContinueDialogue(int index)
         {
-            if (Conversing)
-            {
-                if (currentStory.currentChoices.Count != 0)
-                {
-                    if (index > currentStory.currentChoices.Count)
-                    {
-                        Debug.LogError("OUT OF BOUNDS");
-                    }
-                    else
-                    {
-                        currentStory.ChooseChoiceIndex(index);
-                    }
-                    
-                }   
 
+            if (!Conversing) return;
+
+            if (printing)
+            {
+                SkipDialogue();
+            }
+            else
+            {
+                if (currentStory.currentChoices.Count >= index && currentStory.currentChoices.Count != 0) currentStory.ChooseChoiceIndex(index);
+                
                 if (currentStory.canContinue)
                 {
-                    if (printing) return;
-
                     StopAllCoroutines();
                     StartCoroutine(HandleNextLine(currentStory.Continue()));
                 }
@@ -120,44 +103,7 @@ namespace Dialogue
                     ExitDialogueMode();
                 }
             }
-            else
-            {
-                Debug.LogError("NOT CURRENTLY CONVERSING");
-            }
-        }
-
-        private void ContinueDialogue(OnChooseNextDialogueLine nextLine)
-        {
-            if (Conversing)
-            {
-                if (currentStory.currentChoices.Count != 0)
-                {
-                    
-                    if (nextLine.choiceIndex > currentStory.currentChoices.Count)
-                    {
-                        Debug.LogError("OUT OF BOUNDS");
-                    }
-
-                    currentStory.ChooseChoiceIndex(nextLine.choiceIndex);
-                   
-                }
-
-                if (currentStory.canContinue)
-                {
-                    if (printing) return;
-
-                    StopAllCoroutines();
-                    StartCoroutine(HandleNextLine(currentStory.Continue()));
-                }
-                else
-                {
-                    ExitDialogueMode();
-                }
-            }
-            else
-            {
-                Debug.LogError("NOT CURRENTLY CONVERSING");
-            }
+            
         }
 
         private void DisableAllChoices()
@@ -179,6 +125,15 @@ namespace Dialogue
             {
                 ExitDialogueMode();
             }
+        }
+
+        private void SkipDialogue()
+        {
+            dialogueText.text = nextLine;
+            StopAllCoroutines();
+            FinishLine();
+            Debug.Log(nextLine);
+            
         }
 
         private void DisplayChoices()
@@ -239,6 +194,8 @@ namespace Dialogue
 
         private IEnumerator HandleNextLine(string line)
         {
+            nextLine = line;
+            
             printing = true;
             HandleAuthor();
             HandlePortrait();
@@ -249,7 +206,7 @@ namespace Dialogue
             {
                 eventInstance.start();
 
-                AudioPlayer.PlayOneShot2D(AudioEventType.SFX_UI_Talking);
+                // AudioPlayer.PlayOneShot2D(AudioEventType.SFX_UI_Talking);
                 dialogueText.text += letter;
                 yield return new WaitForSeconds(WaitTimer);
             }
@@ -263,6 +220,7 @@ namespace Dialogue
         private void FinishLine()
         {
             printing = false;
+            nextLine = "";
             DisplayChoices();
         }
     }
