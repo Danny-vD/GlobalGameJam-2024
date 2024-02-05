@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Dialogue.Events;
 using FMOD.Studio;
 using Ink.Runtime;
 using SerializableDictionaryPackage.SerializableDictionary;
@@ -7,6 +8,7 @@ using TMPro;
 using UI;
 using UnityEngine;
 using UnityEngine.UI;
+using VDFramework.EventSystem;
 using VDFramework.Singleton;
 using VDFramework.UnityExtensions;
 
@@ -53,6 +55,7 @@ namespace Dialogue
             InputControlManager.Instance.playerControls.DialogueInteraction.Option3.performed +=
                 _ => { ContinueDialogue(2); };
 
+            EventManager.AddListener<OnChooseNextDialogueLineEvent>(ContinueDialogue);
            //  eventInstance = AudioPlayer.GetEventInstance(AudioEventType.SFX_UI_Talking);
         }
 
@@ -103,7 +106,35 @@ namespace Dialogue
                     ExitDialogueMode();
                 }
             }
-            
+        }
+        
+        /// <summary>
+        /// Triggers Continue Dialogue Logic through OnChooseNextDialogueLine event
+        /// </summary>
+        /// <param name="event"></param>
+        private void ContinueDialogue(OnChooseNextDialogueLineEvent @event)
+        {
+
+            if (!Conversing) return;
+
+            if (printing)
+            {
+                SkipDialogue();
+            }
+            else
+            {
+                if (currentStory.currentChoices.Count >= @event.ChoiceIndex && currentStory.currentChoices.Count != 0) currentStory.ChooseChoiceIndex(@event.ChoiceIndex);
+                
+                if (currentStory.canContinue)
+                {
+                    StopAllCoroutines();
+                    StartCoroutine(HandleNextLine(currentStory.Continue()));
+                }
+                else
+                {
+                    ExitDialogueMode();
+                }
+            }
         }
 
         private void DisableAllChoices()
@@ -221,7 +252,7 @@ namespace Dialogue
         {
             printing = false;
             nextLine = "";
-            DisplayChoices();
+            EventManager.RaiseEvent(new OnChoicesParsedEvent(currentStory.currentChoices));
         }
     }
 }
