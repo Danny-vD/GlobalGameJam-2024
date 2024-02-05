@@ -35,15 +35,15 @@ namespace CombatSystem.UIScripts.PartyUI
 
 		public void Initialize(GameObject player)
 		{
-			character = player.GetComponent<Character>();
+			character = player.GetComponentInChildren<Character>();
 
 			CharacterStatistics characterStatistics = character.Statistics;
-			characterHealth = player.GetComponent<CharacterHealth>();
+			characterHealth = player.GetComponentInChildren<CharacterHealth>();
 
 			characterHealth.OnHealthChanged += UpdateHealth;
 
 			nameLabel.text = characterStatistics.Name;
-			staminaTimer   = player.GetComponent<CharacterStaminaTimer>();
+			staminaTimer   = player.GetComponentInChildren<CharacterStaminaTimer>();
 
 			healthLabelWriter = new StringVariableWriter(healthLabel.text);
 			mpLabelWriter     = new StringVariableWriter(mpLabel.text);

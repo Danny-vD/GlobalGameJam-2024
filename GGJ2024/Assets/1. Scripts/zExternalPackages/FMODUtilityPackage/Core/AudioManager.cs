@@ -41,6 +41,7 @@ namespace FMODUtilityPackage.Core
 					FMODUnity.EventManager.Startup();
 				}
 #endif
+				
 				EventPaths = new EventPaths(true);
 				OnBeforeSerialize();
 			}

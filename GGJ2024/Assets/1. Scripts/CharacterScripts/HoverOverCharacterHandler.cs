@@ -4,7 +4,7 @@ using VDFramework.EventSystem;
 
 namespace CharacterScripts
 { 
-	public class CharacterHoverHandler : BetterMonoBehaviour
+	public class HoverOverCharacterHandler : BetterMonoBehaviour
 	{
 		private void OnMouseEnter()
 		{

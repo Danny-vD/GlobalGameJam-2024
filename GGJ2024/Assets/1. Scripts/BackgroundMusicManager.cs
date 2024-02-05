@@ -1,12 +1,9 @@
-using System;
-using System.Collections.Generic;
 using CombatSystem.Events;
 using FMODUtilityPackage.Core;
 using FMODUtilityPackage.Enums;
 using VDFramework;
 using VDFramework.EventSystem;
 using VDFramework.Extensions;
-using VDFramework.Utility;
 
 public class BackgroundMusicManager : BetterMonoBehaviour
 {
@@ -18,7 +15,6 @@ public class BackgroundMusicManager : BetterMonoBehaviour
         
         AudioPlayer.SetEmitterEvent(EmitterType.VictoryMusic, AudioEventType.Music_BattleVictory);
         AudioPlayer.SetEmitterEvent(EmitterType.BattleMusic, AudioEventType.Music_Battle);
-        
     }
     
     private void OnEnable()
