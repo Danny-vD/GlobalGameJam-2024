@@ -46,6 +46,11 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 		{
 			//TODO: Check whether the target is still valid (might be dead)
 			AbstractCombatMove selectedMove = confirmedMoveHolder.SelectedMove;
+			
+			if (confirmedMoveHolder.SelectedTarget.GetComponent<CharacterStateManager>().CurrentStateType == CharacterCombatStateType.Dead) // HACK refactor this
+			{
+				base.Exit();
+			}
 
 			selectedMove.OnCombatMoveEnded += StopCasting;
 

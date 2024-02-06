@@ -11,7 +11,7 @@ namespace CombatMoves.ScriptableObjects.Moves
 		public override void StartCombatMove(GameObject target, GameObject caster)
 		{
 			// TODO: this causes an infinite loop for AI when this is the only move because choosing state immediately exists into casting
-			caster.GetComponent<CharacterStateManager>().ForceState(CharacterCombatStateType.Idle);
+			caster.GetComponent<CharacterStateManager>().ForceState(CharacterCombatStateType.Idle); // HACK use state.Choosing instead
 			EndCombatMove();
 		}
 	}

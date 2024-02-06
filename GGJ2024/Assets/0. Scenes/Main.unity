@@ -13235,7 +13235,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 137561049341733908, guid: 911ba4592087b8145a92f246808e82cc, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -24.899
+      value: -19.31
       objectReference: {fileID: 0}
     - target: {fileID: 137561049341733908, guid: 911ba4592087b8145a92f246808e82cc, type: 3}
       propertyPath: m_LocalPosition.y
@@ -13272,6 +13272,10 @@ PrefabInstance:
     - target: {fileID: 137561049341733908, guid: 911ba4592087b8145a92f246808e82cc, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7393760778562563843, guid: 911ba4592087b8145a92f246808e82cc, type: 3}
+      propertyPath: <Statistics>k__BackingField.Name
+      value: Cat Knight
       objectReference: {fileID: 0}
     - target: {fileID: 8876287744669851448, guid: 911ba4592087b8145a92f246808e82cc, type: 3}
       propertyPath: m_Name
@@ -13784,7 +13788,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 137561049341733908, guid: 911ba4592087b8145a92f246808e82cc, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -21.121962
+      value: -21.81
       objectReference: {fileID: 0}
     - target: {fileID: 137561049341733908, guid: 911ba4592087b8145a92f246808e82cc, type: 3}
       propertyPath: m_LocalPosition.y
@@ -13822,6 +13826,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7393760778562563843, guid: 911ba4592087b8145a92f246808e82cc, type: 3}
+      propertyPath: <Statistics>k__BackingField.Name
+      value: Cat Tank
+      objectReference: {fileID: 0}
     - target: {fileID: 8876287744669851448, guid: 911ba4592087b8145a92f246808e82cc, type: 3}
       propertyPath: m_Name
       value: Cat Tank
@@ -13841,6 +13849,10 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2448765494653014451, guid: 193af9b1a0781cb48a59adaf1b3f2f36, type: 3}
       propertyPath: m_Name
+      value: Magus
+      objectReference: {fileID: 0}
+    - target: {fileID: 4345623804695421320, guid: 193af9b1a0781cb48a59adaf1b3f2f36, type: 3}
+      propertyPath: <Statistics>k__BackingField.Name
       value: Magus
       objectReference: {fileID: 0}
     - target: {fileID: 6574583212893561503, guid: 193af9b1a0781cb48a59adaf1b3f2f36, type: 3}
@@ -13883,9 +13895,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 7643958893866211197, guid: 193af9b1a0781cb48a59adaf1b3f2f36, type: 3}
-    - {fileID: 6047898050724385331, guid: 193af9b1a0781cb48a59adaf1b3f2f36, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

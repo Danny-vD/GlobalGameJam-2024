@@ -17,7 +17,7 @@ namespace CombatMoves.ScriptableObjects.Moves
 		{
 			AudioPlayer.PlayOneShot2D(audioType);
 
-			target.GetComponentInChildren<CharacterHealth>().Damage((int)Potency);
+			target.GetComponent<CharacterHealth>().Damage((int)Potency);
 
 			TimerManager.StartNewTimer(1, EndCombatMove);
 		}
