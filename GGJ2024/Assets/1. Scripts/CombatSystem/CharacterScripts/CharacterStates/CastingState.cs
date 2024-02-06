@@ -2,6 +2,7 @@
 using CombatMoves.ScriptableObjects.BaseClasses;
 using CombatSystem.Enums;
 using CombatSystem.Events.Queues;
+using UnityEngine;
 using VDFramework.EventSystem;
 
 namespace CombatSystem.CharacterScripts.CharacterStates
@@ -54,11 +55,11 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 
 			selectedMove.OnCombatMoveEnded += StopCasting;
 
-			selectedMove.StartCombatMove(confirmedMoveHolder.SelectedTarget, CachedGameObject);
-
 			IsCasting = true;
-
-			OnCastingStarted.Invoke();
+			
+			OnCastingStarted.Invoke(); // invoked before the move starts because otherwise it would be invoked after OnStateEnded if the move immediately finishes
+			
+			selectedMove.StartCombatMove(confirmedMoveHolder.SelectedTarget, CachedGameObject);
 		}
 
 		public void StopCasting()

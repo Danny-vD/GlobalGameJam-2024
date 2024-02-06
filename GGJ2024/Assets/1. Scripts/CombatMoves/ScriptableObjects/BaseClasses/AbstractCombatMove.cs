@@ -39,7 +39,7 @@ namespace CombatMoves.ScriptableObjects.BaseClasses
 		/// <summary>
 		/// Allows another combat move to start
 		/// </summary>
-		private static void AllowNextMoveToStart()
+		protected static void AllowNextMoveToStart()
 		{
 			EventManager.RaiseEvent(new NextCombatMoveCanStartEvent());
 		}
