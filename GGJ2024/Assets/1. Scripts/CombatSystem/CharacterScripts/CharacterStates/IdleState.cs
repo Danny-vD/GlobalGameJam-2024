@@ -16,13 +16,12 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 		{
 			character        = GetComponent<Character>();
 			characterStamina = GetComponent<CharacterStaminaTimer>();
-
-			characterStamina.OnStaminaTimerExpired += Exit;
 		}
 
 		public override void Enter()
 		{
 			characterStamina.ResetStamina();
+			characterStamina.OnStaminaTimerExpired += Exit;
 		}
 
 		public override void Step()
@@ -30,9 +29,10 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 			characterStamina.DecreaseStamina(character.Statistics.Speed * Time.deltaTime);
 		}
 
-		private void OnDestroy()
+		public override void Exit()
 		{
 			characterStamina.OnStaminaTimerExpired -= Exit;
+			base.Exit();
 		}
 	}
 }

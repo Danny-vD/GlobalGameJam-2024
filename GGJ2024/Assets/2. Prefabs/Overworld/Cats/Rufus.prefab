@@ -224,7 +224,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Statistics>k__BackingField:
     Name: Rufus
-    Speed: 5
+    Speed: 1
     AttackPower: 0
     SpecialAttackPower: 10
     Defense: 10

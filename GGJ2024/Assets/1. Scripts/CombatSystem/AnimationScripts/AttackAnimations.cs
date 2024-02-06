@@ -9,29 +9,32 @@ namespace CombatSystem.AnimationScripts
 	public class AttackAnimations : BetterMonoBehaviour
 	{
 		private static readonly Dictionary<string, int> parameterIDs = new Dictionary<string, int>();
-		
+
 		private Animator animator;
 		private CastingState castingState;
 		private ConfirmedMoveHolder confirmedMoveHolder;
 
 		private void Awake()
 		{
-			animator           = GetComponent<Animator>();
-			castingState       = GetComponent<CastingState>();
-			confirmedMoveHolder = GetComponent<ConfirmedMoveHolder>();
-			
+			animator            = GetComponent<Animator>();
+			castingState        = GetComponentInParent<CastingState>();
+			confirmedMoveHolder = GetComponentInParent<ConfirmedMoveHolder>();
+		}
+
+		private void OnEnable()
+		{
 			castingState.OnCastingStarted += OnStartedCasting;
+		}
+
+		private void OnDisable()
+		{
+			castingState.OnCastingStarted -= OnStartedCasting;
 		}
 
 		private void OnStartedCasting()
 		{
 			// Using the move name as the trigger allows us to dynamically set the respective animation
-			//animator.SetTrigger(GetParameterID(confirmedMoveHolder.SelectedMove.AnimationTriggerName));
-		}
-
-		private void OnDestroy()
-		{
-			castingState.OnCastingStarted += OnStartedCasting;
+			animator.SetTrigger(GetParameterID(confirmedMoveHolder.SelectedMove.AnimationTriggerName));
 		}
 
 		private static int GetParameterID(string combatMoveName)
@@ -42,7 +45,7 @@ namespace CombatSystem.AnimationScripts
 			}
 
 			id = Animator.StringToHash(combatMoveName);
-			
+
 			parameterIDs.Add(combatMoveName, id);
 
 			return id;
