@@ -3165,6 +3165,7 @@ GameObject:
   m_Component:
   - component: {fileID: 653941296}
   - component: {fileID: 653941297}
+  - component: {fileID: 653941298}
   m_Layer: 0
   m_Name: DiscordManager
   m_TagString: Untagged
@@ -3202,6 +3203,24 @@ MonoBehaviour:
   discordIsRequiredForGameToWork: 0
   reconnectTimer: 2
   maximumConnectionAttempts: 6
+--- !u!114 &653941298
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 653941295}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a099ff20567c4ded967a147504de1a7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  images:
+    serializedDictionary:
+    - key: 0
+      value:
+        imageID: 
+        <ImageText>k__BackingField: 
 --- !u!1 &660212656
 GameObject:
   m_ObjectHideFlags: 0
@@ -4729,7 +4748,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   showDetails: 1
-  details: Developing Game
+  details: Beginning a new adventure
   showState: 0
   state: 
   timerShown: 1
