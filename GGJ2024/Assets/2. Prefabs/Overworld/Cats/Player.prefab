@@ -293,14 +293,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Player
-  <PermanentStatistics>k__BackingField:
-    Speed: 4
-    AttackPower: 10
-    SpecialAttackPower: 10
-    Defense: 10
-    SpecialDefense: 10
-    MaxHP: 100
-    MaxMP: 50
+  <PermanentAttributes>k__BackingField:
+    <Speed>k__BackingField: 3
+    <AttackPower>k__BackingField: 10
+    <SpecialAttackPower>k__BackingField: 10
+    <Defense>k__BackingField: 10
+    <SpecialDefense>k__BackingField: 10
+    <MaxHP>k__BackingField: 100
+    <MaxMP>k__BackingField: 50
 --- !u!114 &2369066928389871040
 MonoBehaviour:
   m_ObjectHideFlags: 0
