@@ -51,7 +51,7 @@ namespace Dialogue
 
         private void OnClicked()
         {
-            EventManager.RaiseEvent<OnChooseNextDialogueLineEvent>(new OnChooseNextDialogueLineEvent(index));
+            EventManager.RaiseEvent<ChoiceSelectedEvent>(new ChoiceSelectedEvent(index, false));
         }
     }
 }
