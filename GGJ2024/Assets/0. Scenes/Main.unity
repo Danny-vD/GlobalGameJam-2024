@@ -910,6 +910,276 @@ Transform:
   - {fileID: 1737945708}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &136539062
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 136539064}
+  - component: {fileID: 136539063}
+  m_Layer: 0
+  m_Name: Audio Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &136539063
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 136539062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 192818366e274e34969aa4b801ee7558, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EventPaths:
+    events:
+    - key: 0
+      value:
+        Guid:
+          Data1: -571623662
+          Data2: 1323839750
+          Data3: -1417151841
+          Data4: 1583263938
+        Path: event:/Music/Battle
+    - key: 1
+      value:
+        Guid:
+          Data1: -2103579860
+          Data2: 1341378342
+          Data3: 1659879305
+          Data4: -547227752
+        Path: event:/Music/Hell
+    - key: 2
+      value:
+        Guid:
+          Data1: -1715072943
+          Data2: 1180205317
+          Data3: 39655053
+          Data4: -578409225
+        Path: event:/Music/QuirkyCat
+    - key: 3
+      value:
+        Guid:
+          Data1: -503301471
+          Data2: 1207143358
+          Data3: 641356990
+          Data4: -2023728310
+        Path: event:/Music/Finalboss
+    - key: 4
+      value:
+        Guid:
+          Data1: 851400959
+          Data2: 1120797796
+          Data3: 1445915836
+          Data4: -1057713989
+        Path: event:/Music/BattleVictory
+    - key: 5
+      value:
+        Guid:
+          Data1: -1048673783
+          Data2: 1265608011
+          Data3: -392292933
+          Data4: 1885073217
+        Path: event:/SFX/Battle/HitEnemy
+    - key: 6
+      value:
+        Guid:
+          Data1: -1591707868
+          Data2: 1285081201
+          Data3: -606865258
+          Data4: -260985581
+        Path: event:/SFX/UI/ButtonWrong
+    - key: 7
+      value:
+        Guid:
+          Data1: -2010514882
+          Data2: 1245229847
+          Data3: 731382719
+          Data4: 525731058
+        Path: event:/SFX/Battle/MissAttack
+    - key: 8
+      value:
+        Guid:
+          Data1: 548493427
+          Data2: 1311476021
+          Data3: 1631237292
+          Data4: 29430389
+        Path: event:/SFX/Battle/MageSpells/Shower
+    - key: 9
+      value:
+        Guid:
+          Data1: -196411532
+          Data2: 1212755501
+          Data3: -1147340887
+          Data4: -1325991576
+        Path: event:/SFX/Battle/MageSpells/Furrball
+    - key: 10
+      value:
+        Guid:
+          Data1: 1710655093
+          Data2: 1230002297
+          Data3: -27408496
+          Data4: -306871611
+        Path: event:/SFX/Battle/SuperStrongPowerDowerSlam
+    - key: 11
+      value:
+        Guid:
+          Data1: -220118652
+          Data2: 1328142822
+          Data3: -1100630655
+          Data4: 1115729377
+        Path: event:/SFX/Battle/MageSpells/Hairdryer
+    - key: 12
+      value:
+        Guid:
+          Data1: 1446734994
+          Data2: 1138050921
+          Data3: 1436789948
+          Data4: 1956805464
+        Path: event:/SFX/Battle/TankBuff
+    - key: 13
+      value:
+        Guid:
+          Data1: -1488738381
+          Data2: 1207834650
+          Data3: 508354440
+          Data4: 1922579165
+        Path: event:/SFX/Battle/PlayerHurt
+    - key: 14
+      value:
+        Guid:
+          Data1: -858585150
+          Data2: 1073821285
+          Data3: -1664795463
+          Data4: -1038943321
+        Path: event:/SFX/Battle/MageSpells/SupersonicMeow
+    - key: 15
+      value:
+        Guid:
+          Data1: -1700295986
+          Data2: 1271545414
+          Data3: 1021670051
+          Data4: -826018882
+        Path: event:/SFX/Battle/MageSpells/MagicSuperSmack
+    - key: 16
+      value:
+        Guid:
+          Data1: -1299404327
+          Data2: 1194976004
+          Data3: -448180046
+          Data4: -1465747438
+        Path: event:/SFX/UI/ButtonClick
+    - key: 17
+      value:
+        Guid:
+          Data1: 339470811
+          Data2: 1108484599
+          Data3: 1657465766
+          Data4: 2056216108
+        Path: event:/SFX/Player/Footsteps
+    - key: 18
+      value:
+        Guid:
+          Data1: -505116708
+          Data2: 1296991354
+          Data3: -129354341
+          Data4: -2126867703
+        Path: event:/SFX/Battle/SwordAttack
+    - key: 19
+      value:
+        Guid:
+          Data1: -1937830430
+          Data2: 1189342228
+          Data3: 1427883683
+          Data4: 1174092788
+        Path: event:/SFX/UI/ButtonHover
+    - key: 20
+      value:
+        Guid:
+          Data1: 714086883
+          Data2: 1158917428
+          Data3: -1420750940
+          Data4: -1544819916
+        Path: event:/SFX/Ambience/HellAmbience
+    - key: 21
+      value:
+        Guid:
+          Data1: -665194152
+          Data2: 1079437962
+          Data3: 184073380
+          Data4: 1038940930
+        Path: event:/SFX/UI/Talking
+    - key: 22
+      value:
+        Guid:
+          Data1: -517145440
+          Data2: 1231351942
+          Data3: 1421026948
+          Data4: -922749817
+        Path: event:/SFX/Cutscenes/Scene6
+    - key: 23
+      value:
+        Guid:
+          Data1: -99057750
+          Data2: 1260753202
+          Data3: -585780595
+          Data4: 499407190
+        Path: event:/SFX/Cutscenes/Scene1
+    - key: 24
+      value:
+        Guid:
+          Data1: -2059410753
+          Data2: 1094164804
+          Data3: -784173413
+          Data4: -1823787148
+        Path: event:/SFX/Cutscenes/Scene8
+    - key: 25
+      value:
+        Guid:
+          Data1: -712222999
+          Data2: 1267167033
+          Data3: -1852723559
+          Data4: 1789634121
+        Path: event:/SFX/Battle/Death
+    buses:
+    - key: 0
+      value: bus:/
+    emitterEvents:
+    - key: 0
+      value: 2
+    - key: 1
+      value: 0
+    - key: 2
+      value: 4
+    - key: 3
+      value: 3
+  initialVolumes:
+  - key: 0
+    value: 1
+    isMuted: 0
+--- !u!4 &136539064
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 136539062}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &145251108
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5469,7 +5739,6 @@ GameObject:
   - component: {fileID: 963194227}
   - component: {fileID: 963194229}
   - component: {fileID: 963194230}
-  - component: {fileID: 963194231}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -5572,22 +5841,6 @@ MonoBehaviour:
   offset: {x: 0, y: -3, z: 10}
   farOffSet: {x: 0, y: -3, z: 15}
   farOff: 0
---- !u!114 &963194231
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 963194225}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a29d431e07f4986ae297d6c803b580e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 64
-  raycastDistance: 1000000
 --- !u!1 &964851107
 GameObject:
   m_ObjectHideFlags: 0
@@ -6751,6 +7004,85 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1070485744}
   m_Mesh: {fileID: 4300100, guid: a7cc7f41ce50a474aa1df610be0b810f, type: 3}
+--- !u!1 &1071581607
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1071581611}
+  - component: {fileID: 1071581610}
+  - component: {fileID: 1071581609}
+  - component: {fileID: 1071581608}
+  m_Layer: 0
+  m_Name: CursorManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1071581608
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1071581607}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef0067047d464443b87cd2306c87caba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mouseClickData:
+    serializedDictionary: []
+--- !u!114 &1071581609
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1071581607}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3af0bf6f5ea94775a2bfd29525ab1016, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  idleDatum:
+    CursorTexture: {fileID: 0}
+    Hotspot: {x: 0, y: 0}
+--- !u!114 &1071581610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1071581607}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8efc290918b74a979b983c1cf300cbb3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cursorMode: 0
+  cursorComponents:
+  - {fileID: 1071581609}
+  - {fileID: 1071581608}
+--- !u!4 &1071581611
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1071581607}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1088433213
 GameObject:
   m_ObjectHideFlags: 0
@@ -7006,6 +7338,50 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1130807631}
   m_Mesh: {fileID: 4300100, guid: a7cc7f41ce50a474aa1df610be0b810f, type: 3}
+--- !u!1 &1137711706
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1137711708}
+  - component: {fileID: 1137711707}
+  m_Layer: 0
+  m_Name: Timer Updater
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1137711707
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1137711706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 62906614, guid: 05444455f359c6c4098553dd809c092f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1137711708
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1137711706}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1173499975
 GameObject:
   m_ObjectHideFlags: 0
@@ -9126,6 +9502,105 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1502733060}
   m_Mesh: {fileID: 4300100, guid: a7cc7f41ce50a474aa1df610be0b810f, type: 3}
+--- !u!1 &1502914046
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1502914052}
+  - component: {fileID: 1502914051}
+  - component: {fileID: 1502914050}
+  - component: {fileID: 1502914049}
+  - component: {fileID: 1502914048}
+  - component: {fileID: 1502914047}
+  m_Layer: 0
+  m_Name: CombatEventHandler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1502914047
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1502914046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33e463361c8243ea9bf90c743f5f6153, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentSelectedCharacterIndicator: {fileID: 1511807229}
+--- !u!114 &1502914048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1502914046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 388539ad933ce9e47aaa79753c27dd04, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1502914049
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1502914046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f6becc17b104a6bb443c90ebea4472a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1502914050
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1502914046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de653ebf876047ac9f31c608566e8887, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1502914051
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1502914046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1852aca497044d7812e1b3e28b664c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectsToEnable:
+  - {fileID: 1631581988}
+--- !u!4 &1502914052
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1502914046}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 961.2003, y: -218.40002, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1503274240
 GameObject:
   m_ObjectHideFlags: 0
@@ -13479,6 +13954,10 @@ SceneRoots:
   m_Roots:
   - {fileID: 963194228}
   - {fileID: 705507995}
+  - {fileID: 136539064}
+  - {fileID: 1137711708}
+  - {fileID: 1071581611}
+  - {fileID: 1502914052}
   - {fileID: 8732212653696693165}
   - {fileID: 2377593760586336923}
   - {fileID: 766839992}
