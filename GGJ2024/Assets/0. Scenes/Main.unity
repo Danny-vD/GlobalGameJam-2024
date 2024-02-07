@@ -12365,6 +12365,10 @@ PrefabInstance:
       propertyPath: <Statistics>k__BackingField.Name
       value: Cat Knight
       objectReference: {fileID: 0}
+    - target: {fileID: 7393760778562563843, guid: 911ba4592087b8145a92f246808e82cc, type: 3}
+      propertyPath: <PermanentAttributes>k__BackingField.<Speed>k__BackingField
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 8876287744669851448, guid: 911ba4592087b8145a92f246808e82cc, type: 3}
       propertyPath: m_Name
       value: Cat Knight
@@ -12921,6 +12925,10 @@ PrefabInstance:
     - target: {fileID: 7393760778562563843, guid: 911ba4592087b8145a92f246808e82cc, type: 3}
       propertyPath: <Statistics>k__BackingField.Name
       value: Cat Tank
+      objectReference: {fileID: 0}
+    - target: {fileID: 7393760778562563843, guid: 911ba4592087b8145a92f246808e82cc, type: 3}
+      propertyPath: <PermanentAttributes>k__BackingField.<Speed>k__BackingField
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8876287744669851448, guid: 911ba4592087b8145a92f246808e82cc, type: 3}
       propertyPath: m_Name
