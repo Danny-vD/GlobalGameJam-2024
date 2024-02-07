@@ -23,8 +23,11 @@ namespace CharacterScripts
 		private void Awake()
 		{
 			character = GetComponent<Character>();
-			
-			Health    = MaximumHealth;
+		}
+
+		private void Start()
+		{
+			Health = MaximumHealth;
 		}
 
 		public void Damage(int amount)
