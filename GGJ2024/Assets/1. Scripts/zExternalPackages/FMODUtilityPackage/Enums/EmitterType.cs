@@ -5,6 +5,6 @@
 		BackgroundMusic,
         BattleMusic,
         VictoryMusic,
-        BossMusic
+        BossMusic,
 	}
 }

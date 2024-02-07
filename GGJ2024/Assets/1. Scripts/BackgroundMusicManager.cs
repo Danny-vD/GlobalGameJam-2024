@@ -10,17 +10,19 @@ public class BackgroundMusicManager : BetterMonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        AudioPlayer.SetEmitterEvent(EmitterType.BackgroundMusic,AudioEventType.Music_QuirkyCat);
         AudioPlayer.PlayEmitter(EmitterType.BackgroundMusic);
-        
-        AudioPlayer.SetEmitterEvent(EmitterType.VictoryMusic, AudioEventType.Music_BattleVictory);
-        AudioPlayer.SetEmitterEvent(EmitterType.BattleMusic, AudioEventType.Music_Battle);
     }
     
     private void OnEnable()
     {   
         EventManager.AddListener<CombatEndedEvent>(CombatEndMusic);
         EventManager.AddListener<CombatStartedEvent>(CombatMusic);
+    }
+
+    private void OnDisable()
+    {
+        EventManager.RemoveListener<CombatEndedEvent>(CombatEndMusic);
+        EventManager.RemoveListener<CombatStartedEvent>(CombatMusic);
     }
 
     private void CombatMusic(CombatStartedEvent @event)
@@ -30,7 +32,7 @@ public class BackgroundMusicManager : BetterMonoBehaviour
 
     private static void PlayEmitter(EmitterType toPlay)
     {
-        foreach (var emitterType in EmitterType.BackgroundMusic.GetValues())
+        foreach (EmitterType emitterType in default(EmitterType).GetValues())
         {
             if (emitterType == toPlay)
             {

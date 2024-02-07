@@ -6,7 +6,7 @@ using VDFramework.Singleton;
 
 namespace CameraScripts
 {
-	public class CursorHoverManager : Singleton<CursorHoverManager>
+	public class CursorHoverManager : Singleton<CursorHoverManager> // NOTE unused after discovery that HoverOverCharacterHandler.OnMouseEnter() works fine
 	{
 		[SerializeField]
 		private LayerMask layerMask;
