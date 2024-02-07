@@ -292,15 +292,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30edcd5e9c344a17b529c1bcd3f3bdae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Statistics>k__BackingField:
-    Name: Player
-    Speed: 3
-    AttackPower: 0
+  <Name>k__BackingField: Player
+  <PermanentStatistics>k__BackingField:
+    Speed: 4
+    AttackPower: 10
     SpecialAttackPower: 10
     Defense: 10
     SpecialDefense: 10
-    MaxHP: 30
-    MaxMP: 20
+    MaxHP: 100
+    MaxMP: 50
 --- !u!114 &2369066928389871040
 MonoBehaviour:
   m_ObjectHideFlags: 0

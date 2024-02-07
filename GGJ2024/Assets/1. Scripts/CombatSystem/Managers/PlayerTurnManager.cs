@@ -91,7 +91,7 @@ namespace CombatSystem.Managers
 			{
 				if (ReferenceEquals(player, currentlyActivePlayer))
 				{
-					SetNextInQueueActive();
+					SetNextInQueueActive(); // SetNextInQueueActive removes element 0 from the list, which is the active player
 				}
 				else
 				{

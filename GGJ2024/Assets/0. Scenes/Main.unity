@@ -13293,6 +13293,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7393760778562563843, guid: 911ba4592087b8145a92f246808e82cc, type: 3}
+      propertyPath: <Name>k__BackingField
+      value: Cat Knight
+      objectReference: {fileID: 0}
+    - target: {fileID: 7393760778562563843, guid: 911ba4592087b8145a92f246808e82cc, type: 3}
       propertyPath: <Statistics>k__BackingField.Name
       value: Cat Knight
       objectReference: {fileID: 0}
@@ -13846,6 +13850,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7393760778562563843, guid: 911ba4592087b8145a92f246808e82cc, type: 3}
+      propertyPath: <Name>k__BackingField
+      value: Cat Tank
+      objectReference: {fileID: 0}
+    - target: {fileID: 7393760778562563843, guid: 911ba4592087b8145a92f246808e82cc, type: 3}
       propertyPath: <Statistics>k__BackingField.Name
       value: Cat Tank
       objectReference: {fileID: 0}
@@ -13871,8 +13879,12 @@ PrefabInstance:
       value: Magus
       objectReference: {fileID: 0}
     - target: {fileID: 4345623804695421320, guid: 193af9b1a0781cb48a59adaf1b3f2f36, type: 3}
+      propertyPath: <Name>k__BackingField
+      value: Cat Mage
+      objectReference: {fileID: 0}
+    - target: {fileID: 4345623804695421320, guid: 193af9b1a0781cb48a59adaf1b3f2f36, type: 3}
       propertyPath: <Statistics>k__BackingField.Name
-      value: Magus
+      value: Cat Mage
       objectReference: {fileID: 0}
     - target: {fileID: 6574583212893561503, guid: 193af9b1a0781cb48a59adaf1b3f2f36, type: 3}
       propertyPath: m_LocalPosition.x
