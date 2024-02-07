@@ -11,26 +11,27 @@ namespace Dialogue
     {
         [SerializeField] private GameObject button;
         private List<GameObject> buttonsList;
+
         private void Start()
         {
             buttonsList = new List<GameObject>();
-            
-            EventManager.AddListener<OnChoicesParsedEvent>(OnNewChoices);
+
+            EventManager.AddListener<OnNextLineEvent>(OnNewChoices);
             EventManager.AddListener<OnChooseNextDialogueLineEvent>(OnChoiceSelected);
         }
 
         private void OnDestroy()
         {
-            EventManager.RemoveListener<OnChoicesParsedEvent>(OnNewChoices);
+            EventManager.RemoveListener<OnNextLineEvent>(OnNewChoices);
             EventManager.RemoveListener<OnChooseNextDialogueLineEvent>(OnChoiceSelected);
         }
 
-        private void OnNewChoices(OnChoicesParsedEvent @event)
+        private void OnNewChoices(OnNextLineEvent @event)
         {
             for (var i = 0; i < @event.Choices.Count; i++)
             {
                 var instance = Instantiate(button, transform);
-                
+
                 instance.GetComponent<ChoiceTextHandler>().SetValues(@event.Choices[i].text, i);
                 buttonsList.Add(instance);
             }
@@ -42,9 +43,8 @@ namespace Dialogue
             {
                 Destroy(o);
             }
-            
+
             buttonsList.Clear();
-                
         }
     }
 }

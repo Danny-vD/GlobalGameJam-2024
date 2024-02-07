@@ -25,6 +25,10 @@ namespace Dialogue
 
         private Story currentStory;
 
+        private TMP_Text[] choicesTextBoxes;
+        private EventInstance eventInstance;
+
+        
         [SerializeField] public GameObject dialogueCanvas;
         [SerializeField] private GameObject sprite;
         [SerializeField] private SerializableDictionary<string, Sprite> imagesByNames;
@@ -32,16 +36,11 @@ namespace Dialogue
         [SerializeField] public TextMeshProUGUI dialogueText;
         [SerializeField] public GameObject ChoicesPanel;
         [SerializeField] private SerializableDictionary<char, float> characterTimes;
-
-        private TMP_Text[] choicesTextBoxes;
-        private EventInstance eventInstance;
-
+        
         private void Start()
         {
-            dialogueText.Disable();
             printing = false;
             Conversing = false;
-            choicesTextBoxes = ChoicesPanel.GetComponentsInChildren<TMP_Text>(true);
 
             InputControlManager.Instance.playerControls.DialogueInteraction.Start.performed += _ =>
             {
@@ -71,14 +70,10 @@ namespace Dialogue
 
         private void EnterDialogueMode(OnEnterDialogueMode onEnterDialogueMode)
         {
-            Debug.Log("DIALOGUE SHOULD SHOW");
-
             InputControlManager.Instance.ChangeControls(ControlTypes.Dialogue);
-
-            dialogueCanvas.SetActive(true);
+            
             currentStory = new Story(onEnterDialogueMode.inkFile.text);
             Conversing = true;
-            dialogueText.Enable();
 
             DisplayFirstLine();
         }
@@ -122,7 +117,7 @@ namespace Dialogue
                 SkipDialogue();
             }
             else
-            {
+            {   
                 if (currentStory.currentChoices.Count >= @event.ChoiceIndex && currentStory.currentChoices.Count != 0) currentStory.ChooseChoiceIndex(@event.ChoiceIndex);
                 
                 if (currentStory.canContinue)
@@ -231,8 +226,7 @@ namespace Dialogue
             HandleAuthor();
             HandlePortrait();
             dialogueText.text = "";
-
-            DisableAllChoices();
+            
             foreach (char letter in line)
             {
                 eventInstance.start();
@@ -252,7 +246,7 @@ namespace Dialogue
         {
             printing = false;
             nextLine = "";
-            EventManager.RaiseEvent(new OnChoicesParsedEvent(currentStory.currentChoices));
+            EventManager.RaiseEvent(new OnNextLineEvent(currentStory.currentChoices));
         }
     }
 }
