@@ -1,6 +1,7 @@
 using Dialogue.Events;
 using Ink.Runtime;
-using UI;
+using InputScripts;
+using InputScripts.Enums;
 using UnityEngine;
 using VDFramework.EventSystem;
 using VDFramework.Singleton;

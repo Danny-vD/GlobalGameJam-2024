@@ -12832,6 +12832,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6824246331282674382, guid: 911ba4592087b8145a92f246808e82cc, type: 3}
+      propertyPath: deadSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: ea9ebd8e3b121430798ed80a0b74d35e, type: 3}
     - target: {fileID: 7393760778562563843, guid: 911ba4592087b8145a92f246808e82cc, type: 3}
       propertyPath: <Name>k__BackingField
       value: Cat Knight
@@ -12844,6 +12848,26 @@ PrefabInstance:
       propertyPath: <PermanentAttributes>k__BackingField.<Speed>k__BackingField
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 8085225522736638562, guid: 911ba4592087b8145a92f246808e82cc, type: 3}
+      propertyPath: moves.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8085225522736638562, guid: 911ba4592087b8145a92f246808e82cc, type: 3}
+      propertyPath: 'moves.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 2f57341be15d1d44ea96c7d54e0f2802, type: 2}
+    - target: {fileID: 8085225522736638562, guid: 911ba4592087b8145a92f246808e82cc, type: 3}
+      propertyPath: 'moves.Array.data[1]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 2f57341be15d1d44ea96c7d54e0f2802, type: 2}
+    - target: {fileID: 8085225522736638562, guid: 911ba4592087b8145a92f246808e82cc, type: 3}
+      propertyPath: 'moves.Array.data[2]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 2f57341be15d1d44ea96c7d54e0f2802, type: 2}
+    - target: {fileID: 8085225522736638562, guid: 911ba4592087b8145a92f246808e82cc, type: 3}
+      propertyPath: 'moves.Array.data[3]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 2f57341be15d1d44ea96c7d54e0f2802, type: 2}
     - target: {fileID: 8876287744669851448, guid: 911ba4592087b8145a92f246808e82cc, type: 3}
       propertyPath: m_Name
       value: Cat Knight
@@ -13393,6 +13417,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6824246331282674382, guid: 911ba4592087b8145a92f246808e82cc, type: 3}
+      propertyPath: deadSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: ff2685433077d4898a9e0c976d5e7881, type: 3}
     - target: {fileID: 7393760778562563843, guid: 911ba4592087b8145a92f246808e82cc, type: 3}
       propertyPath: <Name>k__BackingField
       value: Cat Tank
@@ -13405,6 +13433,26 @@ PrefabInstance:
       propertyPath: <PermanentAttributes>k__BackingField.<Speed>k__BackingField
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8085225522736638562, guid: 911ba4592087b8145a92f246808e82cc, type: 3}
+      propertyPath: moves.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8085225522736638562, guid: 911ba4592087b8145a92f246808e82cc, type: 3}
+      propertyPath: 'moves.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: a4a686a6cbf3f8e4d81a49eb2f139aba, type: 2}
+    - target: {fileID: 8085225522736638562, guid: 911ba4592087b8145a92f246808e82cc, type: 3}
+      propertyPath: 'moves.Array.data[1]'
+      value: 
+      objectReference: {fileID: 11400000, guid: a4a686a6cbf3f8e4d81a49eb2f139aba, type: 2}
+    - target: {fileID: 8085225522736638562, guid: 911ba4592087b8145a92f246808e82cc, type: 3}
+      propertyPath: 'moves.Array.data[2]'
+      value: 
+      objectReference: {fileID: 11400000, guid: a4a686a6cbf3f8e4d81a49eb2f139aba, type: 2}
+    - target: {fileID: 8085225522736638562, guid: 911ba4592087b8145a92f246808e82cc, type: 3}
+      propertyPath: 'moves.Array.data[3]'
+      value: 
+      objectReference: {fileID: 11400000, guid: a4a686a6cbf3f8e4d81a49eb2f139aba, type: 2}
     - target: {fileID: 8876287744669851448, guid: 911ba4592087b8145a92f246808e82cc, type: 3}
       propertyPath: m_Name
       value: Cat Tank
@@ -13838,6 +13886,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8299817553550421305, guid: 59094b473b04b354d85b07e2602d53c2, type: 3}
+      propertyPath: deadSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: ea9ebd8e3b121430798ed80a0b74d35e, type: 3}
     - target: {fileID: 9119918708184582830, guid: 59094b473b04b354d85b07e2602d53c2, type: 3}
       propertyPath: m_Name
       value: Rufus

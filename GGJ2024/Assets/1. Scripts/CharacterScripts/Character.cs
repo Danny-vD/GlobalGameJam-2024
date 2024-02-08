@@ -13,16 +13,15 @@ namespace CharacterScripts
 		[field: SerializeField]
 		public CharacterAttributes PermanentAttributes { get; private set; }
 
-		public CharacterAttributes TemporaryAttributes { get; private set; }
+		public CharacterAttributes TemporaryAttributes { get; private set; } = new CharacterAttributes();
 
-		public CombinedCharacterAttributes Attributes { get; private set; } // Use the more specific class so users can directly access the GetAttributes function 
+		public CombinedCharacterAttributes Attributes { get; private set; } // Using the more specific class so users can directly access the GetAttributes function 
 
 		public int CurrentMP { get; private set; }
 
 		private void Awake()
 		{
-			TemporaryAttributes = new CharacterAttributes();
-			Attributes          = new CombinedCharacterAttributes(PermanentAttributes, TemporaryAttributes);
+			Attributes = new CombinedCharacterAttributes(PermanentAttributes, TemporaryAttributes);
 		}
 
 		private void OnEnable()

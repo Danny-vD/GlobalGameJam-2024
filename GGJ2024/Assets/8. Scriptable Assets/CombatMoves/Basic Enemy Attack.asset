@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 107b8bfc8f35493ab1a3e273ad63b5dd, type: 3}
   m_Name: Basic Enemy Attack
   m_EditorClassIdentifier: 
-  <AbilityName>k__BackingField: Basic Attack
+  <AbilityName>k__BackingField: Rufus Attack
   <Description>k__BackingField: 
   <Cost>k__BackingField: 0
   <DamageType>k__BackingField: 0
   <Potency>k__BackingField: 10
   <ValidTargets>k__BackingField: 4294967292
   <AnimationTriggerName>k__BackingField: BasicAttack
-  audioType: 18
+  audioType: 13

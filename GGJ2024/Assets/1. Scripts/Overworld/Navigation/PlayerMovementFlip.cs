@@ -1,5 +1,5 @@
 using System.Collections;
-using UI;
+using InputScripts;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UtilityPackage.Utility.MathUtil;

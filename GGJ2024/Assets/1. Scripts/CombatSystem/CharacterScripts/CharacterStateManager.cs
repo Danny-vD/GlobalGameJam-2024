@@ -13,7 +13,7 @@ namespace CombatSystem.CharacterScripts
 {
 	public class CharacterStateManager : BetterMonoBehaviour
 	{
-		public event Action<CharacterCombatStateType> OnStateChanged = delegate { };
+		public event Action<CharacterCombatStateType> OnStateChanged = delegate { }; // TODO animation components that listen to this event and set animation triggers accordingly
 
 		[SerializeField]
 		private SerializableEnumDictionary<CharacterCombatStateType, AbstractCharacterState> statesPerType;

@@ -455,6 +455,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea80a60c5e004688b13bef20ba7849ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  deadSprite: {fileID: 21300000, guid: 586a984c830a64847a360b3babc9717b, type: 3}
 --- !u!114 &1528549069479784013
 MonoBehaviour:
   m_ObjectHideFlags: 0
