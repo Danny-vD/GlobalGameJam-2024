@@ -1,6 +1,7 @@
 using CombatSystem.CharacterScripts;
 using CombatSystem.Events;
-using UI;
+using InputScripts;
+using InputScripts.Enums;
 using UnityEngine;
 using VDFramework.EventSystem;
 using VDFramework.UnityExtensions;

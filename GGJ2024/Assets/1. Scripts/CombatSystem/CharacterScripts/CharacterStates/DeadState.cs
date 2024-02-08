@@ -1,11 +1,14 @@
 ﻿using CharacterScripts;
 using CombatSystem.Enums;
+using UnityEngine;
 
 namespace CombatSystem.CharacterScripts.CharacterStates
 {
 	public class DeadState : AbstractCharacterState
 	{
 		public override CharacterCombatStateType NextState => CharacterCombatStateType.Idle;
+		
+		private Sprite originalSprite;
 		
 		private CharacterHealth characterHealth;
 

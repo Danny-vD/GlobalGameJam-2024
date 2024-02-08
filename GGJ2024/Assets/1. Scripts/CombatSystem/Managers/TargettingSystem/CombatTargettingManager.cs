@@ -3,8 +3,8 @@ using CombatMoves.ScriptableObjects.BaseClasses;
 using CombatSystem.CharacterScripts;
 using CombatSystem.Events;
 using CombatSystem.Events.CharacterSelection;
+using InputScripts;
 using PlayerPartyScripts;
-using UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using VDFramework.EventSystem;
@@ -42,6 +42,12 @@ namespace CombatSystem.Managers.TargettingSystem
 
 		public void ChooseMove(AbstractCombatMove move, GameObject caster)
 		{
+			if (toBeConfirmedMove != null) // NOTE temporary hotfix which prevent selecting a move after we selected one to prevent a SelectMove from being called on someone that's not in the playerTurn queue (see CombatMoveUIManager)
+			{
+				return;
+			}
+			
+			// BUG: left click confirms, but left click also selects a move | we cannot select another move while we're listening
 			StartListeneningToConfirmInput();
 
 			toBeConfirmedMove = move;
@@ -67,6 +73,7 @@ namespace CombatSystem.Managers.TargettingSystem
 			{
 				ConfirmedMoveHolder confirmedMoveHolder = casterToBe.GetComponent<ConfirmedMoveHolder>();
 				confirmedMoveHolder.SelectMove(toBeConfirmedMove, currentSelectedCharacter);
+				toBeConfirmedMove = null;
 
 				StopListeneningToConfirmInput();
 			}

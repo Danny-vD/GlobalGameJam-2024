@@ -222,15 +222,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30edcd5e9c344a17b529c1bcd3f3bdae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Statistics>k__BackingField:
-    Name: Rufus
-    Speed: 1
-    AttackPower: 0
-    SpecialAttackPower: 10
-    Defense: 10
-    SpecialDefense: 10
-    MaxHP: 100
-    MaxMP: 0
+  <Name>k__BackingField: Rufus
+  <PermanentAttributes>k__BackingField:
+    <Speed>k__BackingField: 2
+    <AttackPower>k__BackingField: 10
+    <SpecialAttackPower>k__BackingField: 10
+    <Defense>k__BackingField: 10
+    <SpecialDefense>k__BackingField: 10
+    <MaxHP>k__BackingField: 100
+    <MaxMP>k__BackingField: 50
 --- !u!114 &7164288441423933955
 MonoBehaviour:
   m_ObjectHideFlags: 0

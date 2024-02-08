@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
+using InputScripts.Enums;
 using UnityEngine.InputSystem;
 using VDFramework.Singleton;
 
 //TODO: Listeners should unsubscribe when they are destroyed
-namespace UI
+namespace InputScripts
 {
     public class InputControlManager : Singleton<InputControlManager>
     {

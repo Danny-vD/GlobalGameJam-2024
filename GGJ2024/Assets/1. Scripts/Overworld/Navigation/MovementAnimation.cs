@@ -1,4 +1,4 @@
-using UI;
+using InputScripts;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using VDFramework;

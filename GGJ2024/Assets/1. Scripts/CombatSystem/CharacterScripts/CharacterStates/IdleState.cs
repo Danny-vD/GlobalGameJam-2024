@@ -26,7 +26,7 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 
 		public override void Step()
 		{
-			characterStamina.DecreaseStamina(character.Statistics.Speed * Time.deltaTime);
+			characterStamina.DecreaseStamina(character.Attributes.Speed * Time.deltaTime);
 		}
 
 		public override void Exit()

@@ -75,13 +75,10 @@ namespace CombatSystem.Managers
 
 		private void RemoveFromQueue(CastingState castingState)
 		{
-			if (!combatMoveReadyQueue.Contains(castingState))
+			if (!combatMoveReadyQueue.Remove(castingState))
 			{
 				Debug.LogError("The queue does not contain this character!\n" + castingState.gameObject.name);
-				return;
 			}
-
-			combatMoveReadyQueue.Remove(castingState);
 		}
 
 		private bool TryGetNextInLine(out CastingState castingState)

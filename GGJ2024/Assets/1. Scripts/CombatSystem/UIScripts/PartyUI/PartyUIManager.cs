@@ -1,6 +1,5 @@
 ﻿using CharacterScripts;
 using CombatSystem.CharacterScripts;
-using CombatSystem.Structs;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -35,15 +34,13 @@ namespace CombatSystem.UIScripts.PartyUI
 
 		public void Initialize(GameObject player)
 		{
-			character = player.GetComponentInChildren<Character>();
-
-			CharacterStatistics characterStatistics = character.Statistics;
-			characterHealth = player.GetComponentInChildren<CharacterHealth>();
+			character = player.GetComponent<Character>();
+			characterHealth = player.GetComponent<CharacterHealth>();
 
 			characterHealth.OnHealthChanged += UpdateHealth;
 
-			nameLabel.text = characterStatistics.Name;
-			staminaTimer   = player.GetComponentInChildren<CharacterStaminaTimer>();
+			nameLabel.text = character.Name;
+			staminaTimer   = player.GetComponent<CharacterStaminaTimer>();
 
 			healthLabelWriter = new StringVariableWriter(healthLabel.text);
 			mpLabelWriter     = new StringVariableWriter(mpLabel.text);
@@ -69,7 +66,7 @@ namespace CombatSystem.UIScripts.PartyUI
 
 		private void UpdateMP()
 		{
-			mpLabel.text = mpLabelWriter.UpdateText(character.CurrentMP, character.Statistics.MaxMP); //TODO MP
+			mpLabel.text = mpLabelWriter.UpdateText(character.CurrentMP, character.Attributes.MaxMP); //TODO MP
 		}
 	}
 }

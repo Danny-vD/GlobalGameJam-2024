@@ -1,5 +1,5 @@
 ﻿using System;
-using DefaultNamespace;
+using InterationSystem.Interfaces;
 using UnityEngine;
 using VDFramework;
 using VDFramework.EventSystem;

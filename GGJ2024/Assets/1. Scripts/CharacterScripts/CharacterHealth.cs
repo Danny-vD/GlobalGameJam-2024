@@ -12,7 +12,7 @@ namespace CharacterScripts
 		public event Action OnDied = delegate { };
 		public event Action OnResurrected = delegate { };
 
-		public int MaximumHealth => character.Statistics.MaxHP;
+		public int MaximumHealth => character.Attributes.MaxHP;
 
 		public int Health { get; private set; }
 		
@@ -23,8 +23,11 @@ namespace CharacterScripts
 		private void Awake()
 		{
 			character = GetComponent<Character>();
-			
-			Health    = MaximumHealth;
+		}
+
+		private void Start()
+		{
+			Health = MaximumHealth;
 		}
 
 		public void Damage(int amount)
