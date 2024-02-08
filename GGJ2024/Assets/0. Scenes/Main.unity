@@ -5418,7 +5418,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7528504792484456757, guid: a2b0d2a9445714993a688adc444a4598, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 934036169}
   m_SourcePrefab: {fileID: 100100000, guid: a2b0d2a9445714993a688adc444a4598, type: 3}
 --- !u!1 &934036160 stripped
 GameObject:
@@ -5457,6 +5460,27 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 9010048795985273862, guid: a2b0d2a9445714993a688adc444a4598, type: 3}
   m_PrefabInstance: {fileID: 934036159}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &934036169
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 934036160}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94af4c9cc4074773bd582549e3e845fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogueText: {fileID: 0}
+  authorText: {fileID: 934036162}
+  sprite: {fileID: 0}
+  waitTimer: 0.05
+  sentenceWaitTimer: 0.5
+  imagesByNames:
+    serializedDictionary: []
+  characterTimes:
+    serializedDictionary: []
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -13451,8 +13475,28 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 540233693747009406, guid: 5b448b5ab9ee1b2ccb010013cef2ec81, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8732212653696693167}
   m_SourcePrefab: {fileID: 100100000, guid: 5b448b5ab9ee1b2ccb010013cef2ec81, type: 3}
+--- !u!1 &8732212653696693166 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 540233693747009406, guid: 5b448b5ab9ee1b2ccb010013cef2ec81, type: 3}
+  m_PrefabInstance: {fileID: 8732212653696693165}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8732212653696693167
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8732212653696693166}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e6602b5aa554fa4a688f9596103b63c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

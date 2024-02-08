@@ -6,6 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using VDFramework;
+using VDFramework.EventSystem;
 
 namespace Dialogue
 {
@@ -27,15 +28,21 @@ namespace Dialogue
 
         private void Start()
         {
-            throw new NotImplementedException();
+            EventManager.AddListener<NextLineEvent>(OnLineChosen);
+            EventManager.AddListener<ExitDialogueModeEvent>(OnExitDialogueModeEventHandler);
         }
 
         private void OnDestroy()
         {
-            throw new NotImplementedException();
+            EventManager.RemoveListener<NextLineEvent>(OnLineChosen);
+            EventManager.RemoveListener<ExitDialogueModeEvent>(OnExitDialogueModeEventHandler);
+        }
+        private void OnExitDialogueModeEventHandler(ExitDialogueModeEvent @event)
+        {
+            gameObject.SetActive(false);
         }
 
-        private void OnLineChosen(OnNextLineEvent @event)
+        private void OnLineChosen(NextLineEvent @event)
         {
             StopAllCoroutines();
             StartCoroutine(HandleNextLine(@event.Line, @event.Author));

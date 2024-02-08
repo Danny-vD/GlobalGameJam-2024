@@ -16,17 +16,17 @@ namespace Dialogue
         {
             buttonsList = new List<GameObject>();
 
-            EventManager.AddListener<OnNextLineEvent>(OnNewChoices);
-            EventManager.AddListener<OnChooseNextDialogueLineEvent>(OnChoiceSelected);
+            EventManager.AddListener<NextLineEvent>(OnNewChoices);
+            EventManager.AddListener<ChooseNextDialogueLineEvent>(OnChoiceSelected);
         }
 
         private void OnDestroy()
         {
-            EventManager.RemoveListener<OnNextLineEvent>(OnNewChoices);
-            EventManager.RemoveListener<OnChooseNextDialogueLineEvent>(OnChoiceSelected);
+            EventManager.RemoveListener<NextLineEvent>(OnNewChoices);
+            EventManager.RemoveListener<ChooseNextDialogueLineEvent>(OnChoiceSelected);
         }
 
-        private void OnNewChoices(OnNextLineEvent @event)
+        private void OnNewChoices(NextLineEvent @event)
         {
             for (var i = 0; i < @event.Choices.Count; i++)
             {
@@ -37,7 +37,7 @@ namespace Dialogue
             }
         }
 
-        private void OnChoiceSelected(OnChooseNextDialogueLineEvent @event)
+        private void OnChoiceSelected(ChooseNextDialogueLineEvent @event)
         {
             foreach (var o in buttonsList)
             {

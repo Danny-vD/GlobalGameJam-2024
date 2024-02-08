@@ -54,25 +54,25 @@ namespace Dialogue
             InputControlManager.Instance.playerControls.DialogueInteraction.Option3.performed +=
                 _ => { ContinueDialogue(2); };
 
-            EventManager.AddListener<OnChooseNextDialogueLineEvent>(ContinueDialogue);
+            EventManager.AddListener<ChooseNextDialogueLineEvent>(ContinueDialogue);
            //  eventInstance = AudioPlayer.GetEventInstance(AudioEventType.SFX_UI_Talking);
         }
 
         private void OnEnable()
         {
-            OnEnterDialogueMode.Listeners += EnterDialogueMode;
+            EnterDialogueModeEvent.Listeners += EnterDialogueMode;
         }
 
         private void OnDisable()
         {
-            OnEnterDialogueMode.Listeners -= EnterDialogueMode;
+            EnterDialogueModeEvent.Listeners -= EnterDialogueMode;
         }
 
-        private void EnterDialogueMode(OnEnterDialogueMode onEnterDialogueMode)
+        private void EnterDialogueMode(EnterDialogueModeEvent enterDialogueModeEvent)
         {
             InputControlManager.Instance.ChangeControls(ControlTypes.Dialogue);
             
-            currentStory = new Story(onEnterDialogueMode.inkFile.text);
+            currentStory = new Story(enterDialogueModeEvent.inkFile.text);
             Conversing = true;
 
             DisplayFirstLine();
@@ -107,7 +107,7 @@ namespace Dialogue
         /// Triggers Continue Dialogue Logic through OnChooseNextDialogueLine event
         /// </summary>
         /// <param name="event"></param>
-        private void ContinueDialogue(OnChooseNextDialogueLineEvent @event)
+        private void ContinueDialogue(ChooseNextDialogueLineEvent @event)
         {
 
             if (!Conversing) return;
@@ -246,7 +246,7 @@ namespace Dialogue
         {
             printing = false;
             nextLine = "";
-            EventManager.RaiseEvent(new OnNextLineEvent(currentStory.currentChoices));
+            EventManager.RaiseEvent(new NextLineEvent(currentStory.currentChoices));
         }
     }
 }

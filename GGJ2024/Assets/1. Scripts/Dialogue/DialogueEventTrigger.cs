@@ -12,7 +12,7 @@ namespace Dialogue
 
         private void OnTriggerEnter(Collider collider)
         {
-            EventManager.RaiseEvent(new OnEnterDialogueMode(InkFile));
+            EventManager.RaiseEvent(new EnterDialogueModeEvent(InkFile));
             Debug.Log("EVENT RAISED");
         }
 

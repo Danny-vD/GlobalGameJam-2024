@@ -1,3 +1,4 @@
+using System;
 using Dialogue.Events;
 using Ink.Runtime;
 using UI;
@@ -12,20 +13,27 @@ namespace Dialogue
         private Story currentStory;
         public bool Conversing { get; set; }
 
-        private void OnEnable()
+        [SerializeField] private GameObject canvas;
+
+        private void Start()
         {
-            OnEnterDialogueMode.Listeners += EnterDialogueMode;
+            EnterDialogueModeEvent.Listeners += EnterDialogueMode;
+            EventManager.AddListener<ChoiceSelectedEvent>(OnChoiceSelected);
         }
 
         private void OnDisable()
         {
-            OnEnterDialogueMode.Listeners -= EnterDialogueMode;
+            EnterDialogueModeEvent.Listeners -= EnterDialogueMode;
+            EventManager.RemoveListener<ChoiceSelectedEvent>(OnChoiceSelected);
         }
+        
 
-        private void EnterDialogueMode(OnEnterDialogueMode onEnterDialogueMode)
+        private void EnterDialogueMode(EnterDialogueModeEvent enterDialogueModeEvent)
         {
+            
             InputControlManager.Instance.ChangeControls(ControlTypes.Dialogue);
-            currentStory = new Story(onEnterDialogueMode.inkFile.text);
+            canvas.SetActive(true);
+            currentStory = new Story(enterDialogueModeEvent.inkFile.text);
             ParseLine();
         }
 
@@ -54,7 +62,7 @@ namespace Dialogue
             if (currentStory.canContinue)
             {
                 var CurrentLine = currentStory.Continue();
-                EventManager.RaiseEvent<OnNextLineEvent>(new OnNextLineEvent(currentStory.currentText,
+                EventManager.RaiseEvent<NextLineEvent>(new NextLineEvent(currentStory.currentText,
                     currentStory.currentChoices, GetAuthor(), false));
             }
             else
