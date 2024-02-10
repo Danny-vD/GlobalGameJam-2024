@@ -10,84 +10,99 @@ using VDFramework.EventSystem;
 
 namespace Dialogue
 {
-    public class DialogueTextManager : BetterMonoBehaviour
-    {
-        [SerializeField] private TMP_Text dialogueText;
-        [SerializeField] private TMP_Text authorText;
-        [SerializeField] private Image sprite;
+	public class DialogueTextManager : BetterMonoBehaviour
+	{
+		[SerializeField]
+		private TMP_Text dialogueText;
 
-        [SerializeField] private float waitTimer = 0.05f;
-        [SerializeField] private float sentenceWaitTimer = 0.5f;
+		[SerializeField]
+		private TMP_Text authorText;
 
-        [SerializeField] private SerializableDictionary<string, Sprite> imagesByNames;
-        [SerializeField] private SerializableDictionary<char, float> characterTimes;
+		[SerializeField]
+		private Image sprite;
 
-        private bool printing;
-        private object eventInstance;
-        private string nextLine;
+		[SerializeField]
+		private float waitTimer = 0.05f;
 
-        private void OnEnable()
-        {
-            EventManager.AddListener<NextLineEvent>(OnLineChosen);
-            EventManager.AddListener<ExitDialogueModeEvent>(OnExitDialogueModeEventHandler);
-        }
+		[SerializeField]
+		private float sentenceWaitTimer = 0.5f;
 
-        private void OnDestroy()
-        {
-            EventManager.RemoveListener<NextLineEvent>(OnLineChosen);
-            EventManager.RemoveListener<ExitDialogueModeEvent>(OnExitDialogueModeEventHandler);
-        }
-        private void OnExitDialogueModeEventHandler(ExitDialogueModeEvent @event)
-        {
-            gameObject.SetActive(false);
-        }
+		[SerializeField]
+		private SerializableDictionary<string, Sprite> imagesByNames;
 
-        private void OnLineChosen(NextLineEvent @event)
-        {
-            StopAllCoroutines();
-            StartCoroutine(HandleNextLine(@event.Line, @event.Author));
-        }
+		[SerializeField]
+		private SerializableDictionary<char, float> characterTimes;
 
-        private IEnumerator HandleNextLine(string line, string author)
-        {
-            nextLine = line;
+		private bool printing;
+		private object eventInstance;
+		private string nextLine;
 
-            printing = true;
-            HandlePortrait(author);
-            dialogueText.text = "";
+		private void OnEnable()
+		{
+			EventManager.AddListener<NextLineEvent>(OnLineChosen);
+			EventManager.AddListener<ExitDialogueModeEvent>(OnExitDialogueModeEventHandler);
+		}
 
-            foreach (char letter in line)
-            {
-                // eventInstance.start();
+		private void OnDestroy()
+		{
+			EventManager.RemoveListener<NextLineEvent>(OnLineChosen);
+			EventManager.RemoveListener<ExitDialogueModeEvent>(OnExitDialogueModeEventHandler);
+		}
 
-                dialogueText.text += letter;
-                yield return new WaitForSeconds(waitTimer);
-            }
+		private void OnExitDialogueModeEventHandler(ExitDialogueModeEvent @event)
+		{
+			gameObject.SetActive(false);
+		}
 
-            yield return new WaitForSeconds(sentenceWaitTimer);
+		private void OnLineChosen(NextLineEvent @event)
+		{
+			StopAllCoroutines();
+			StartCoroutine(HandleNextLine(@event.Line, @event.Author));
+		}
 
-            FinishLine();
-            Debug.Log(line);
-        }
+		private IEnumerator HandleNextLine(string line, string author)
+		{
+			nextLine = line;
 
-        private void FinishLine()
-        {
-            printing = false;
-            nextLine = "";
-            EventManager.RaiseEvent(new FinishedLineEvent());
-        }
+			printing = true;
+			HandlePortrait(author);
 
-        private void HandlePortrait(string author)
-        {
-            if (imagesByNames.TryGetValue(author, out var byName))
-            {
-                sprite.GetComponent<Image>().sprite = byName;
-            }
-        }
+			dialogueText.text = "";
 
-        private void HandleAuthor()
-        {
-            throw new NotImplementedException();
-        }
-    }
+			dialogueText.maxVisibleCharacters = 0;
+			dialogueText.text                 = line;
+
+			foreach (char letter in line)
+			{
+				// eventInstance.start();
+
+				dialogueText.maxVisibleCharacters++;
+				yield return new WaitForSeconds(waitTimer);
+			}
+
+			yield return new WaitForSeconds(sentenceWaitTimer);
+
+			FinishLine();
+		}
+
+		private void FinishLine()
+		{
+			printing = false;
+			nextLine = "";
+			EventManager.RaiseEvent(new FinishedLineEvent());
+		}
+
+		private void HandlePortrait(string author)
+		{
+			if (imagesByNames.TryGetValue(author, out var byName))
+			{
+				sprite.GetComponent<Image>().sprite = byName;
+			}
+		}
+
+		private void HandleAuthor()
+		{
+			throw new NotImplementedException();
+		}
+	}
 }
