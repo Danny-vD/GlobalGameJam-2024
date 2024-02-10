@@ -1,4 +1,5 @@
-﻿using CharacterScripts;
+﻿using System.Collections.Generic;
+using CharacterScripts;
 using CombatMoves.ScriptableObjects.BaseClasses;
 using FMODUtilityPackage.Core;
 using FMODUtilityPackage.Enums;
@@ -13,11 +14,14 @@ namespace CombatMoves.ScriptableObjects.Moves
 		[SerializeField]
 		private AudioEventType audioType;
 
-		public override void StartCombatMove(GameObject target, GameObject caster)
+		public override void StartCombatMove(List<GameObject> targets, GameObject caster)
 		{
 			AudioPlayer.PlayOneShot2D(audioType);
 
-			target.GetComponent<CharacterHealth>().Damage((int)Potency);
+			foreach (GameObject target in targets)
+			{
+				target.GetComponent<CharacterHealth>().Damage((int)Potency);
+			}
 
 			TimerManager.StartNewTimer(1, EndCombatMove);
 		}
