@@ -19,7 +19,7 @@ namespace Dialogue
         private void Start()
         {
             EnterDialogueModeEvent.Listeners += EnterDialogueMode;
-            EventManager.AddListener<ChoiceSelectedEvent>(OnChoiceSelected);
+            EventManager.AddListener<ChoiceSelectedEvent>(OnChoiceSelected, -1);
         }
 
         private void OnDisable()
@@ -62,9 +62,9 @@ namespace Dialogue
         {
             if (currentStory.canContinue)
             {
-                var CurrentLine = currentStory.Continue();
-                EventManager.RaiseEvent<NextLineEvent>(new NextLineEvent(currentStory.currentText,
-                    currentStory.currentChoices, GetAuthor(), false));
+                currentStory.Continue();
+                EventManager.RaiseEvent<NextLineEvent>(new NextLineEvent(GetAuthor(),
+                    currentStory.currentChoices, currentStory.currentText, false));
             }
             else
             {

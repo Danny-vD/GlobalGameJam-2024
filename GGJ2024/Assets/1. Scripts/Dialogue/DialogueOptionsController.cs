@@ -12,24 +12,33 @@ namespace Dialogue
         [SerializeField] private GameObject button;
         private List<GameObject> buttonsList;
 
-        private void Start()
+        private void OnEnable()
         {
             buttonsList = new List<GameObject>();
 
             EventManager.AddListener<NextLineEvent>(OnNewChoices);
-            EventManager.AddListener<ChooseNextDialogueLineEvent>(OnChoiceSelected);
+            EventManager.AddListener<FinishedLineEvent>(PerformAnimation);
+            EventManager.AddListener<ChoiceSelectedEvent>(OnChoiceSelected);
+        }
+
+        private void PerformAnimation()
+        {
+            //TODO: ADD ENTER ANIMATION
         }
 
         private void OnDestroy()
         {
             EventManager.RemoveListener<NextLineEvent>(OnNewChoices);
-            EventManager.RemoveListener<ChooseNextDialogueLineEvent>(OnChoiceSelected);
+            EventManager.RemoveListener<ChoiceSelectedEvent>(OnChoiceSelected);
         }
 
         private void OnNewChoices(NextLineEvent @event)
         {
+            
             for (var i = 0; i < @event.Choices.Count; i++)
             {
+                
+                Debug.Log(@event.Choices[i].text);
                 var instance = Instantiate(button, transform);
 
                 instance.GetComponent<ChoiceTextHandler>().SetValues(@event.Choices[i].text, i);
@@ -37,13 +46,14 @@ namespace Dialogue
             }
         }
 
-        private void OnChoiceSelected(ChooseNextDialogueLineEvent @event)
+        private void OnChoiceSelected(ChoiceSelectedEvent @event)
         {
             foreach (var o in buttonsList)
             {
                 Destroy(o);
             }
 
+            Debug.Log("DESTROYED");
             buttonsList.Clear();
         }
     }

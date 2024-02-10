@@ -21,20 +21,10 @@ namespace Dialogue
             button = GetComponent<Button>();
             asset = GetComponentInChildren<TMP_Text>();
         }
-
+    
         public void SetValues(string text, int index)
         {
             asset.text = text;
-            this.index = index;
-        }
-
-        public void SetText(string text)
-        {
-            this.text = text;
-        }
-
-        public void SetIndex(int index)
-        {
             this.index = index;
         }
 

@@ -26,7 +26,7 @@ namespace Dialogue
         private object eventInstance;
         private string nextLine;
 
-        private void Start()
+        private void OnEnable()
         {
             EventManager.AddListener<NextLineEvent>(OnLineChosen);
             EventManager.AddListener<ExitDialogueModeEvent>(OnExitDialogueModeEventHandler);
@@ -74,6 +74,7 @@ namespace Dialogue
         {
             printing = false;
             nextLine = "";
+            EventManager.RaiseEvent(new FinishedLineEvent());
         }
 
         private void HandlePortrait(string author)
