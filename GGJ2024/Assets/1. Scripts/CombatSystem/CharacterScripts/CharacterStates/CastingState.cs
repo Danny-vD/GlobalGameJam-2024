@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using CombatMoves.ScriptableObjects.BaseClasses;
 using CombatSystem.Enums;
 using CombatSystem.Events.Queues;
@@ -47,8 +48,10 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 		{
 			//TODO: Check whether the target is still valid (might be dead)
 			AbstractCombatMove selectedMove = confirmedMoveHolder.SelectedMove;
-			
-			if (confirmedMoveHolder.SelectedTarget.GetComponent<CharacterStateManager>().CurrentStateType == CharacterCombatStateType.Dead) // HACK refactor this
+
+			List<GameObject> validTargets = ValidateTargets();
+
+			if (validTargets.Count == 0)
 			{
 				base.Exit();
 			}
@@ -59,7 +62,7 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 			
 			OnCastingStarted.Invoke(); // invoked before the move starts because otherwise it would be invoked after OnStateEnded if the move immediately finishes
 			
-			selectedMove.StartCombatMove(confirmedMoveHolder.SelectedTarget, CachedGameObject);
+			selectedMove.StartCombatMove(validTargets, CachedGameObject);
 		}
 
 		public void StopCasting()
@@ -68,6 +71,17 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 
 			IsCasting = false;
 			base.Exit();
+		}
+
+		/// <summary>
+		/// Removes all invalid targets (e.g. dead ones)
+		/// </summary>
+		private List<GameObject> ValidateTargets()
+		{
+			List<GameObject> validTargets = new List<GameObject>(confirmedMoveHolder.SelectedTargets);
+			validTargets.RemoveAll(target => target.GetComponent<CharacterStateManager>().CurrentStateType == CharacterCombatStateType.Dead); // HACK refactor this
+
+			return validTargets;
 		}
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using CombatMoves.TargetingLogic.Enums;
 using CombatMoves.TargetingLogic.TargetingValidators.Util;
 using CombatSystem.Enums;
@@ -53,9 +54,9 @@ namespace CombatMoves.ScriptableObjects.BaseClasses
 		/// <summary>
 		/// Start performing this combat move
 		/// </summary>
-		/// <param name="target">The target of the move</param>
+		/// <param name="targets">The targets of the move</param>
 		/// <param name="caster">The gameobject that casts the move</param>
-		public abstract void StartCombatMove(GameObject target, GameObject caster);
+		public abstract void StartCombatMove(List<GameObject> targets, GameObject caster);
 
 		/// <summary>
 		/// Immediately interrupts and stops the combat move
