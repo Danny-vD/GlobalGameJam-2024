@@ -7,7 +7,7 @@ Did you hear the news? # speaker: Guard
  * [Oh] -> Oh
 
 === No ===
- The Cat Knig is sending you, Cat Tank, and Cat Knight to go rescue her child! # speaker: Guard
+ The Cat King is sending you, Cat Tank, and Cat Knight to go rescue her child! # speaker: Guard
  * [Oh] -> Oh
 
 === Oh ===
