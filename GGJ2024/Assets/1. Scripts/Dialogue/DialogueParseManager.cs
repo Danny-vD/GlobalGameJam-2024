@@ -27,11 +27,10 @@ namespace Dialogue
             EnterDialogueModeEvent.Listeners -= EnterDialogueMode;
             EventManager.RemoveListener<ChoiceSelectedEvent>(OnChoiceSelected);
         }
-        
+
 
         private void EnterDialogueMode(EnterDialogueModeEvent enterDialogueModeEvent)
         {
-            
             InputControlManager.Instance.ChangeControls(ControlTypes.Dialogue);
             canvas.SetActive(true);
             currentStory = new Story(enterDialogueModeEvent.inkFile.text);
@@ -39,7 +38,7 @@ namespace Dialogue
         }
 
         private void OnChoiceSelected(ChoiceSelectedEvent @event)
-        {
+        {   
             if (@event.Skip)
             {
                 ParseLine();
@@ -49,6 +48,10 @@ namespace Dialogue
                 if (currentStory.currentChoices.Count >= @event.Index && currentStory.currentChoices.Count != 0)
                 {
                     currentStory.ChooseChoiceIndex(@event.Index);
+                    ParseLine();
+                }
+                else if (@event.Index == -1)
+                {
                     ParseLine();
                 }
                 else
@@ -70,6 +73,8 @@ namespace Dialogue
             {
                 Conversing = false;
                 EventManager.RaiseEvent<ExitDialogueModeEvent>(new ExitDialogueModeEvent());
+                InputControlManager.Instance.ChangeControls(ControlTypes.Overworld);
+                // TODO: CHANGE TO WHATEVER AT END  
             }
         }
 

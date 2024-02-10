@@ -34,15 +34,24 @@ namespace Dialogue
 
         private void OnNewChoices(NextLineEvent @event)
         {
-            
-            for (var i = 0; i < @event.Choices.Count; i++)
+            if (@event.Choices.Count == 0)
             {
-                
-                Debug.Log(@event.Choices[i].text);
                 var instance = Instantiate(button, transform);
-
-                instance.GetComponent<ChoiceTextHandler>().SetValues(@event.Choices[i].text, i);
+                
+                instance.GetComponent<ChoiceTextHandler>().SetValues("...",-1);
                 buttonsList.Add(instance);
+            }
+            else
+            {
+                for (var i = 0; i < @event.Choices.Count; i++)
+                {
+                
+                    Debug.Log(@event.Choices[i].text);
+                    var instance = Instantiate(button, transform);
+
+                    instance.GetComponent<ChoiceTextHandler>().SetValues(@event.Choices[i].text, i);
+                    buttonsList.Add(instance);
+                }
             }
         }
 
