@@ -103,7 +103,6 @@ GameObject:
   - component: {fileID: 1138834847683882942}
   - component: {fileID: 2197662404778350754}
   - component: {fileID: 3597577980982045088}
-  - component: {fileID: 6738744747624424948}
   - component: {fileID: 6137753532886521828}
   - component: {fileID: 4345623804695421320}
   - component: {fileID: 2369066928389871040}
@@ -120,7 +119,7 @@ GameObject:
   - component: {fileID: 1528549069479784013}
   - component: {fileID: 2515380076154181024}
   - component: {fileID: 2094763058432919309}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -254,18 +253,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   persistInPlayMode: 1
   comment: Targeting logic
---- !u!114 &6738744747624424948
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2448765494653014451}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ed1a39ca880f49409832cbc66903b17b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &6137753532886521828
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -455,7 +442,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea80a60c5e004688b13bef20ba7849ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deadSprite: {fileID: 21300000, guid: 586a984c830a64847a360b3babc9717b, type: 3}
 --- !u!114 &1528549069479784013
 MonoBehaviour:
   m_ObjectHideFlags: 0

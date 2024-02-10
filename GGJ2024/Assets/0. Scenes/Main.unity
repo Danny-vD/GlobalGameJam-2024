@@ -1013,20 +1013,12 @@ MonoBehaviour:
     - key: 8
       value:
         Guid:
-          Data1: -665194152
-          Data2: 1079437962
-          Data3: 184073380
-          Data4: 1038940930
-        Path: event:/SFX/UI/Talking
-    - key: 9
-      value:
-        Guid:
           Data1: 548493427
           Data2: 1311476021
           Data3: 1631237292
           Data4: 29430389
         Path: event:/SFX/Battle/MageSpells/Shower
-    - key: 10
+    - key: 9
       value:
         Guid:
           Data1: -196411532
@@ -1034,7 +1026,7 @@ MonoBehaviour:
           Data3: -1147340887
           Data4: -1325991576
         Path: event:/SFX/Battle/MageSpells/Furrball
-    - key: 11
+    - key: 10
       value:
         Guid:
           Data1: 1710655093
@@ -1042,7 +1034,7 @@ MonoBehaviour:
           Data3: -27408496
           Data4: -306871611
         Path: event:/SFX/Battle/SuperStrongPowerDowerSlam
-    - key: 12
+    - key: 11
       value:
         Guid:
           Data1: -220118652
@@ -1050,7 +1042,7 @@ MonoBehaviour:
           Data3: -1100630655
           Data4: 1115729377
         Path: event:/SFX/Battle/MageSpells/Hairdryer
-    - key: 13
+    - key: 12
       value:
         Guid:
           Data1: 1446734994
@@ -1058,23 +1050,7 @@ MonoBehaviour:
           Data3: 1436789948
           Data4: 1956805464
         Path: event:/SFX/Battle/TankBuff
-    - key: 14
-      value:
-        Guid:
-          Data1: -517145440
-          Data2: 1231351942
-          Data3: 1421026948
-          Data4: -922749817
-        Path: event:/SFX/Cutscenes/Scene6
-    - key: 15
-      value:
-        Guid:
-          Data1: -99057750
-          Data2: 1260753202
-          Data3: -585780595
-          Data4: 499407190
-        Path: event:/SFX/Cutscenes/Scene1
-    - key: 16
+    - key: 13
       value:
         Guid:
           Data1: -1488738381
@@ -1082,15 +1058,7 @@ MonoBehaviour:
           Data3: 508354440
           Data4: 1922579165
         Path: event:/SFX/Battle/PlayerHurt
-    - key: 17
-      value:
-        Guid:
-          Data1: -2059410753
-          Data2: 1094164804
-          Data3: -784173413
-          Data4: -1823787148
-        Path: event:/SFX/Cutscenes/Scene8
-    - key: 18
+    - key: 14
       value:
         Guid:
           Data1: -858585150
@@ -1098,7 +1066,7 @@ MonoBehaviour:
           Data3: -1664795463
           Data4: -1038943321
         Path: event:/SFX/Battle/MageSpells/SupersonicMeow
-    - key: 19
+    - key: 15
       value:
         Guid:
           Data1: -1700295986
@@ -1106,7 +1074,7 @@ MonoBehaviour:
           Data3: 1021670051
           Data4: -826018882
         Path: event:/SFX/Battle/MageSpells/MagicSuperSmack
-    - key: 20
+    - key: 16
       value:
         Guid:
           Data1: -1299404327
@@ -1114,7 +1082,7 @@ MonoBehaviour:
           Data3: -448180046
           Data4: -1465747438
         Path: event:/SFX/UI/ButtonClick
-    - key: 21
+    - key: 17
       value:
         Guid:
           Data1: 339470811
@@ -1122,7 +1090,7 @@ MonoBehaviour:
           Data3: 1657465766
           Data4: 2056216108
         Path: event:/SFX/Player/Footsteps
-    - key: 22
+    - key: 18
       value:
         Guid:
           Data1: -505116708
@@ -1130,7 +1098,7 @@ MonoBehaviour:
           Data3: -129354341
           Data4: -2126867703
         Path: event:/SFX/Battle/SwordAttack
-    - key: 23
+    - key: 19
       value:
         Guid:
           Data1: -1937830430
@@ -1138,7 +1106,7 @@ MonoBehaviour:
           Data3: 1427883683
           Data4: 1174092788
         Path: event:/SFX/UI/ButtonHover
-    - key: 24
+    - key: 20
       value:
         Guid:
           Data1: 714086883
@@ -1146,6 +1114,38 @@ MonoBehaviour:
           Data3: -1420750940
           Data4: -1544819916
         Path: event:/SFX/Ambience/HellAmbience
+    - key: 21
+      value:
+        Guid:
+          Data1: -665194152
+          Data2: 1079437962
+          Data3: 184073380
+          Data4: 1038940930
+        Path: event:/SFX/UI/Talking
+    - key: 22
+      value:
+        Guid:
+          Data1: -517145440
+          Data2: 1231351942
+          Data3: 1421026948
+          Data4: -922749817
+        Path: event:/SFX/Cutscenes/Scene6
+    - key: 23
+      value:
+        Guid:
+          Data1: -99057750
+          Data2: 1260753202
+          Data3: -585780595
+          Data4: 499407190
+        Path: event:/SFX/Cutscenes/Scene1
+    - key: 24
+      value:
+        Guid:
+          Data1: -2059410753
+          Data2: 1094164804
+          Data3: -784173413
+          Data4: -1823787148
+        Path: event:/SFX/Cutscenes/Scene8
     - key: 25
       value:
         Guid:
@@ -3501,7 +3501,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 684556419}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.07824551, y: -0.000000017153628, z: 0.0000000013463222, w: 0.9969341}
+  m_LocalRotation: {x: 0.078245535, y: 0.00000001715363, z: -0.0000000013463227, w: 0.9969341}
   m_LocalPosition: {x: -2.4500008, y: 1.71, z: 23.609999}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -5958,6 +5958,7 @@ GameObject:
   m_Component:
   - component: {fileID: 963194228}
   - component: {fileID: 963194227}
+  - component: {fileID: 963194232}
   - component: {fileID: 963194229}
   - component: {fileID: 963194231}
   m_Layer: 0
@@ -6026,7 +6027,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.07824551, y: -0.000000017153628, z: 0.0000000013463222, w: 0.9969341}
+  m_LocalRotation: {x: 0.078245535, y: 0.00000001715363, z: -0.0000000013463227, w: 0.9969341}
   m_LocalPosition: {x: -23.04, y: 5.8599997, z: -13.83}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -6080,6 +6081,22 @@ MonoBehaviour:
   m_CameraActivatedEvent:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &963194232
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a29d431e07f4986ae297d6c803b580e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 64
+  rayCastInterval: 0.05
 --- !u!1 &964851107
 GameObject:
   m_ObjectHideFlags: 0

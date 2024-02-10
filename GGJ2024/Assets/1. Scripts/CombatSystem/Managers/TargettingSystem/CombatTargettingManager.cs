@@ -68,6 +68,8 @@ namespace CombatSystem.Managers.TargettingSystem
 		private void OnTargetSelectConfirm(InputAction.CallbackContext obj)
 		{
 			if (!toBeConfirmedMove) return;
+			
+			//TODO: Check if there is a target selected
 
 			if (toBeConfirmedMove.IsValidTarget(currentSelectedCharacter, casterToBe))
 			{

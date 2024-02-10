@@ -3,18 +3,22 @@ using UnityEngine;
 using UtilityPackage.CursorManagement.CursorUtility;
 using VDFramework.EventSystem;
 using VDFramework.Singleton;
+using VDFramework.Utility.TimerUtil;
+using VDFramework.Utility.TimerUtil.TimerHandles;
 
 namespace CameraScripts
 {
-	public class CursorHoverManager : Singleton<CursorHoverManager> // NOTE unused after discovery that HoverOverCharacterHandler.OnMouseEnter() works fine
+	public class CursorHoverManager : Singleton<CursorHoverManager>
 	{
 		[SerializeField]
 		private LayerMask layerMask;
 
-		[SerializeField]
-		private float raycastDistance = 1000000f;
+		[SerializeField, Tooltip("The interval in seconds between raycasts")]
+		private float raycastInterval = 0.05f;
 
 		private Camera mainCamera;
+
+		private TimerHandle rayCastTimerHandle;
 
 		protected override void Awake()
 		{
@@ -22,17 +26,21 @@ namespace CameraScripts
 			mainCamera = GetComponent<Camera>();
 		}
 
-		private void Update()
+		private void OnEnable()
 		{
-			// TODO: Frames?
-			//CreateRaycast();
+			rayCastTimerHandle = TimerManager.StartNewTimer(raycastInterval, CastRay, true);
 		}
 
-		private void CreateRaycast()
+		private void OnDisable()
 		{
-			if (Physics.Raycast(MouseButtonUtil.GetMouseWorldPosition(mainCamera), transform.forward, out RaycastHit raycastHitInfo, raycastDistance, layerMask))
+			rayCastTimerHandle.Stop();
+		}
+
+		private void CastRay()
+		{
+			if (Physics.Raycast(MouseButtonUtil.GetMouseToWorldRay(mainCamera), out RaycastHit hitInfo, float.MaxValue, layerMask))
 			{
-				EventManager.RaiseEvent(new CharacterHoveredEvent(raycastHitInfo.collider.gameObject));
+				EventManager.RaiseEvent(new CharacterHoveredEvent(hitInfo.collider.gameObject));
 			}
 		}
 	}

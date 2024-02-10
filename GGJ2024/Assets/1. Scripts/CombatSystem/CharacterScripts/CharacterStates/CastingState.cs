@@ -46,7 +46,6 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 
 		public void StartCasting()
 		{
-			//TODO: Check whether the target is still valid (might be dead)
 			AbstractCombatMove selectedMove = confirmedMoveHolder.SelectedMove;
 
 			List<GameObject> validTargets = ValidateTargets();
@@ -79,7 +78,7 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 		private List<GameObject> ValidateTargets()
 		{
 			List<GameObject> validTargets = new List<GameObject>(confirmedMoveHolder.SelectedTargets);
-			validTargets.RemoveAll(target => target.GetComponent<CharacterStateManager>().CurrentStateType == CharacterCombatStateType.Dead); // HACK refactor this
+			validTargets.RemoveAll(target => target == null || target.GetComponent<CharacterStateManager>().CurrentStateType == CharacterCombatStateType.Dead); // HACK refactor this
 
 			return validTargets;
 		}
