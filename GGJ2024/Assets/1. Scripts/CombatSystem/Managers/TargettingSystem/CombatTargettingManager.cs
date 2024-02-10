@@ -42,12 +42,7 @@ namespace CombatSystem.Managers.TargettingSystem
 
 		public void ChooseMove(AbstractCombatMove move, GameObject caster)
 		{
-			if (toBeConfirmedMove != null) // NOTE temporary hotfix which prevent selecting a move after we selected one to prevent a SelectMove from being called on someone that's not in the playerTurn queue (see CombatMoveUIManager)
-			{
-				return;
-			}
-			
-			// BUG: left click confirms, but left click also selects a move | we cannot select another move while we're listening
+			// BUG: left click confirms, but left click also selects a move | trying to select a move after you already selected a move simultaneously confirms the target and then selects the move (which causes you to select a move on someone who is not allowed yet to select a move)
 			StartListeneningToConfirmInput();
 
 			toBeConfirmedMove = move;
