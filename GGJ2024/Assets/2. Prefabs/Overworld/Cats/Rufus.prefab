@@ -111,6 +111,7 @@ GameObject:
   - component: {fileID: 1292101173011907914}
   - component: {fileID: 1739630960171504527}
   - component: {fileID: 5764095300482561346}
+  - component: {fileID: 8020768191351920963}
   - component: {fileID: 6887355918841031393}
   - component: {fileID: 1622860451121336716}
   - component: {fileID: 2062246126843909053}
@@ -365,6 +366,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movesWeightedLootTable: {fileID: 11400000, guid: 64608bc1bc14eb746a8a508d87c1b013, type: 2}
   defaultWeightForNewMove: 5
+--- !u!114 &8020768191351920963
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9119918708184582830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54d643c3fb844d72a76069ab460f9460, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &6887355918841031393
 MonoBehaviour:
   m_ObjectHideFlags: 0
