@@ -3,6 +3,7 @@ using Dialogue.Events;
 using Ink.Runtime;
 using InputScripts;
 using InputScripts.Enums;
+using SerializableDictionaryPackage.SerializableDictionary;
 using UnityEngine;
 using VDFramework.EventSystem;
 using VDFramework.Singleton;
@@ -13,7 +14,7 @@ namespace Dialogue
     {
         private Story currentStory;
         public bool Conversing { get; set; }
-
+ 
         [SerializeField] private GameObject canvas;
 
         private void Start()
@@ -80,7 +81,8 @@ namespace Dialogue
 
         private string GetAuthor()
         {
-            return currentStory.currentTags?[0];
+            return currentStory.currentTags?[0].Split(':', 2)[1].Trim();
+            
         }
     }
 }

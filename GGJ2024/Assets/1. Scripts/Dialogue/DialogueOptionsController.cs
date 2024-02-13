@@ -26,7 +26,7 @@ namespace Dialogue
             //TODO: ADD ENTER ANIMATION
         }
 
-        private void OnDestroy()
+        private void OnDisable()
         {
             EventManager.RemoveListener<NextLineEvent>(OnNewChoices);
             EventManager.RemoveListener<ChoiceSelectedEvent>(OnChoiceSelected);
@@ -34,6 +34,7 @@ namespace Dialogue
 
         private void OnNewChoices(NextLineEvent @event)
         {
+            Debug.Log("NEXT LINE EVENT TRIGGERED");
             if (@event.Choices.Count == 0)
             {
                 var instance = Instantiate(button, transform);
@@ -45,8 +46,6 @@ namespace Dialogue
             {
                 for (var i = 0; i < @event.Choices.Count; i++)
                 {
-                
-                    Debug.Log(@event.Choices[i].text);
                     var instance = Instantiate(button, transform);
 
                     instance.GetComponent<ChoiceTextHandler>().SetValues(@event.Choices[i].text, i);
