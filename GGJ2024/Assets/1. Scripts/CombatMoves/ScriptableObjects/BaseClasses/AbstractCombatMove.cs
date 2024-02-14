@@ -12,7 +12,7 @@ namespace CombatMoves.ScriptableObjects.BaseClasses
 {
 	public abstract class AbstractCombatMove : ScriptableObject
 	{
-		public event Action OnCombatMoveEnded = delegate { }; // TODO: Test whether this delegate is shared between characters
+		public event Action<GameObject> OnCombatMoveEnded = delegate { };
 
 		[Header("General data")]
 		[field: SerializeField]
@@ -64,10 +64,10 @@ namespace CombatMoves.ScriptableObjects.BaseClasses
 		/// <summary>
 		/// Immediately interrupts and stops the combat move
 		/// </summary>
-		public virtual void ForceStopCombatMove()
+		public virtual void ForceStopCombatMove(GameObject caster)
 		{
-			// If we died/got stunned while performing a move, we already allowed the next one to start
-			InvokeOnCombatMoveEnded();
+			// If we died/got stunned while performing a move, we already allowed the next one to start, hence no AllowNextMoveToStart
+			InvokeOnCombatMoveEnded(caster);
 		}
 
 		/// <summary>
@@ -75,18 +75,18 @@ namespace CombatMoves.ScriptableObjects.BaseClasses
 		/// </summary>
 		/// <seealso cref="AllowNextMoveToStart"/>
 		/// <seealso cref="InvokeOnCombatMoveEnded"/>
-		protected void EndCombatMove()
+		protected void EndCombatMove(GameObject caster)
 		{
 			AllowNextMoveToStart();
-			InvokeOnCombatMoveEnded();
+			InvokeOnCombatMoveEnded(caster);
 		}
 
 		/// <summary>
 		/// Invokes <see cref="OnCombatMoveEnded"/>
 		/// </summary>
-		protected void InvokeOnCombatMoveEnded()
+		protected void InvokeOnCombatMoveEnded(GameObject caster)
 		{
-			OnCombatMoveEnded.Invoke();
+			OnCombatMoveEnded.Invoke(caster);
 		}
 
 		private ITargetingValidator GetTargetingValidator()

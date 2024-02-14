@@ -23,7 +23,7 @@ namespace CombatMoves.ScriptableObjects.Moves
 				target.GetComponent<CharacterHealth>().Damage((int)Potency);
 			}
 
-			TimerManager.StartNewTimer(1, EndCombatMove);
+			TimerManager.StartNewTimer(1, EndCombatMove, false, caster);
 		}
 	}
 }
