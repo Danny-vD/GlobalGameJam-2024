@@ -13,8 +13,7 @@ namespace CombatMoves.ScriptableObjects.Moves
 		{
 			AllowNextMoveToStart(); // Allow the next move to start to properly clean up the queue then force exit into choosing state (which also forces this combat move to end)
 			
-			// TODO: this causes an infinite loop for AI when this is the only move because choosing state immediately exists into casting
-			caster.GetComponent<CharacterStateManager>().ForceState(CharacterCombatStateType.Idle); // HACK use state.Choosing instead
+			caster.GetComponent<CharacterStateManager>().ForceState(CharacterCombatStateType.Choosing);
 		}
 	}
 }

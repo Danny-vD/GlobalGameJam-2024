@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using CombatMoves.TargetingLogic.Enums;
+using CombatMoves.TargetingLogic.Interfaces;
 using CombatMoves.TargetingLogic.TargetingValidators.Util;
 using CombatSystem.Enums;
 using CombatSystem.Events.Queues;
@@ -37,6 +38,9 @@ namespace CombatMoves.ScriptableObjects.BaseClasses
 		[field: SerializeField]
 		public string AnimationTriggerName { get; protected set; }
 
+		private ValidTargets oldValidTargets;
+		private ITargetingValidator cachedValidator;
+		
 		/// <summary>
 		/// Allows another combat move to start
 		/// </summary>
@@ -47,8 +51,7 @@ namespace CombatMoves.ScriptableObjects.BaseClasses
 
 		public bool IsValidTarget(GameObject target, GameObject caster)
 		{
-			//TODO: Cache the ITargetingValidator
-			return TargetingValidatorUtil.GetValidators(ValidTargets).IsValidTarget(target, caster);
+			return GetTargetingValidator().IsValidTarget(target, caster);
 		}
 
 		/// <summary>
@@ -84,6 +87,17 @@ namespace CombatMoves.ScriptableObjects.BaseClasses
 		protected void InvokeOnCombatMoveEnded()
 		{
 			OnCombatMoveEnded.Invoke();
+		}
+
+		private ITargetingValidator GetTargetingValidator()
+		{
+			if (cachedValidator == null || oldValidTargets != ValidTargets) // Check if valid targets changed
+			{
+				oldValidTargets = ValidTargets;
+				cachedValidator = TargetingValidatorUtil.GetValidators(ValidTargets);
+			}
+
+			return cachedValidator;
 		}
 	}
 }

@@ -67,7 +67,7 @@ namespace PropertyDrawers.SerializableDictionaryPackage
 				reorderableList.elementHeight = 0;
 			}
 
-			// Drawing the warning messes up the header (2023.2.7)
+			// TODO: Drawing the warning messes up the header (2023.2.7)
 			//if (isFoldOut && !isValid)
 			//{
 			//	DrawDuplicateKeyWarning(position, actualCount);
