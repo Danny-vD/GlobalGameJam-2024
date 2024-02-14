@@ -30,7 +30,7 @@ namespace Dialogue
 		[SerializeField]
 		private SerializableDictionary<string, Sprite> imagesByNames;
 
-		[SerializeField] 
+		[SerializeField]
 		private SerializableDictionary<char, float> specialCharacterTimes;
 
 		private bool printing;
@@ -68,15 +68,13 @@ namespace Dialogue
 			HandlePortrait(author);
 			HandleAuthor(author);
 
-			dialogueText.text = "";
-
 			dialogueText.maxVisibleCharacters = 0;
 			dialogueText.text                 = line;
 
 			foreach (char letter in line)
 			{
 				// eventInstance.start();
-				
+
 				dialogueText.maxVisibleCharacters++;
 
 				if (specialCharacterTimes.TryGetValue(letter, out var specialTime))
