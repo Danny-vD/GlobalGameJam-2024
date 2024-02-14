@@ -3,12 +3,13 @@ using CombatSystem.Events;
 using InputScripts;
 using InputScripts.Enums;
 using UnityEngine;
+using VDFramework;
 using VDFramework.EventSystem;
 using VDFramework.UnityExtensions;
 
 namespace CombatSystem.Managers
 {
-	public class CombatManager : MonoBehaviour
+	public class CombatManager : BetterMonoBehaviour
 	{
 		// Start is called before the first frame update
 
@@ -37,8 +38,6 @@ namespace CombatSystem.Managers
 		private void OnCombatEnd(CombatEndedEvent @event)
 		{
 			InputControlManager.Instance.ChangeControls(ControlTypes.Overworld);
-
-			//TODO: Combat End Function?
 		}
 	}
 }

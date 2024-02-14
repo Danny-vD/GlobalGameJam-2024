@@ -34,12 +34,10 @@ namespace CombatSystem.UIScripts.CombatMoves
 
 			confirmedMoveHolder = character.GetComponent<ConfirmedMoveHolder>();
 
-			//TODO: logic in between with events for Successful selection and failed selection
 			if (character.GetComponent<Character>().CurrentMP >= move.Cost)
 			{
 				selectMoveButton.onClick.AddListener(SelectMove);
 			}
-			
 
 			nameLabel.text = combatMove.AbilityName;
 

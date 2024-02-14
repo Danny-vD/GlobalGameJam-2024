@@ -17,7 +17,7 @@ namespace CharacterScripts
 
 		public CombinedCharacterAttributes Attributes { get; private set; } // Using the more specific class so users can directly access the GetAttributes function 
 
-		public int CurrentMP { get; private set; }
+		public int CurrentMP { get; private set; } // TODO: Move MP to a seperate component
 
 		private void Awake()
 		{

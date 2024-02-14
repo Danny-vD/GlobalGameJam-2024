@@ -16,14 +16,14 @@ namespace CameraScripts
 		[SerializeField, Tooltip("The interval in seconds between raycasts")]
 		private float raycastInterval = 0.05f;
 
-		private Camera mainCamera;
+		private Camera cameraComponent;
 
 		private TimerHandle rayCastTimerHandle;
 
 		protected override void Awake()
 		{
 			base.Awake();
-			mainCamera = GetComponent<Camera>();
+			cameraComponent = GetComponent<Camera>();
 		}
 
 		private void OnEnable()
@@ -38,7 +38,7 @@ namespace CameraScripts
 
 		private void CastRay()
 		{
-			if (Physics.Raycast(MouseButtonUtil.GetMouseToWorldRay(mainCamera), out RaycastHit hitInfo, float.MaxValue, layerMask))
+			if (Physics.Raycast(MouseButtonUtil.GetMouseToWorldRay(cameraComponent), out RaycastHit hitInfo, float.MaxValue, layerMask))
 			{
 				EventManager.RaiseEvent(new CharacterHoveredEvent(hitInfo.collider.gameObject));
 			}

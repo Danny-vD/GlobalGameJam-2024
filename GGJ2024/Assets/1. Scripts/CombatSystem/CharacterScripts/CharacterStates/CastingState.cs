@@ -85,9 +85,14 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 		private List<GameObject> ValidateTargets()
 		{
 			List<GameObject> validTargets = new List<GameObject>(confirmedMoveHolder.SelectedTargets);
-			validTargets.RemoveAll(target => target == null || target.GetComponent<CharacterStateManager>().CurrentStateType == CharacterCombatStateType.Dead); // HACK refactor this
+			validTargets.RemoveAll(NullOrDead);
 
 			return validTargets;
+		}
+
+		private bool NullOrDead(GameObject obj)
+		{
+			return obj == null || obj.GetComponent<CharacterStateManager>().CurrentStateType == CharacterCombatStateType.Dead;
 		}
 	}
 }
