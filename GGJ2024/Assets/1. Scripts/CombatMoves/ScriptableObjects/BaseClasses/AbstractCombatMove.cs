@@ -34,6 +34,9 @@ namespace CombatMoves.ScriptableObjects.BaseClasses
 		[field: SerializeField]
 		public ValidTargets ValidTargets { get; protected set; } = ValidTargets.OpposingTeam;
 
+		[field: SerializeField]
+		public TargetingMode TargetingMode { get; protected set; } = TargetingMode.MultipleTargets;
+
 		[Header("Animation")]
 		[field: SerializeField]
 		public string AnimationTriggerName { get; protected set; }
