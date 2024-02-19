@@ -81,7 +81,7 @@ namespace Dialogue
 
         private string GetAuthor()
         {
-            return currentStory.currentTags?[0].Split(':', 2)[1].Trim();
+            return currentStory.currentTags?[0]?.Split(':', 2)?[1]?.Trim();
             
         }
     }

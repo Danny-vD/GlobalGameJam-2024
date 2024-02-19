@@ -31,7 +31,7 @@ namespace Dialogue
 		private SerializableDictionary<string, Sprite> imagesByNames;
 
 		[SerializeField] 
-		private SerializableDictionary<char, float> specialCharacterTimes;
+		private SerializableDictionary<string, float> specialCharacterTimes;
 
 		private bool printing;
 		private object eventInstance;
@@ -79,7 +79,7 @@ namespace Dialogue
 				
 				dialogueText.maxVisibleCharacters++;
 
-				if (specialCharacterTimes.TryGetValue(letter, out var specialTime))
+				if (specialCharacterTimes.TryGetValue(letter.ToString(), out var specialTime))
 				{
 					yield return new WaitForSeconds(specialTime);
 				}
