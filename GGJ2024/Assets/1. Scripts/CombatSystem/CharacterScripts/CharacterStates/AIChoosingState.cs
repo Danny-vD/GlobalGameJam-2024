@@ -29,7 +29,6 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 			confirmedMoveHolder.OnMoveSelected += Exit;
 		}
 
-		// TODO: Override target selection when taunted
 		public override void Enter()
 		{
 		}
@@ -39,6 +38,7 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 			// NOTE: We can add a small time before this to mimic the AI 'thinking'
 			AbstractCombatMove combatMove = aiMoveset.ChooseAIMove();
 
+			// TODO: Override target selection when taunted
 			List<GameObject> targets = aiTargetingLogic.GetTargets(combatMove);
 
 			if (targets.Count == 0)

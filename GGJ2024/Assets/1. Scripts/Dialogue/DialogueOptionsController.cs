@@ -29,6 +29,7 @@ namespace Dialogue
         private void OnDisable()
         {
             EventManager.RemoveListener<NextLineEvent>(OnNewChoices);
+            EventManager.RemoveListener<FinishedLineEvent>(PerformAnimation);
             EventManager.RemoveListener<ChoiceSelectedEvent>(OnChoiceSelected);
         }
 

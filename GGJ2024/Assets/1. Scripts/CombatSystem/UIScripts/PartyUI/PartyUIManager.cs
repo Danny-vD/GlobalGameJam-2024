@@ -27,6 +27,8 @@ namespace CombatSystem.UIScripts.PartyUI
 
 		private Character character;
 		private CharacterHealth characterHealth;
+		private CharacterMP characterMP;
+
 		private CharacterStaminaTimer staminaTimer;
 
 		private StringVariableWriter healthLabelWriter;
@@ -34,10 +36,12 @@ namespace CombatSystem.UIScripts.PartyUI
 
 		public void Initialize(GameObject player)
 		{
-			character = player.GetComponent<Character>();
+			character       = player.GetComponent<Character>();
 			characterHealth = player.GetComponent<CharacterHealth>();
+			characterMP     = player.GetComponent<CharacterMP>();
 
 			characterHealth.OnHealthChanged += UpdateHealth;
+			characterMP.OnMPChanged         += UpdateMP;
 
 			nameLabel.text = character.Name;
 			staminaTimer   = player.GetComponent<CharacterStaminaTimer>();
@@ -52,6 +56,7 @@ namespace CombatSystem.UIScripts.PartyUI
 		private void OnDisable()
 		{
 			characterHealth.OnHealthChanged -= UpdateHealth;
+			characterMP.OnMPChanged         -= UpdateMP;
 		}
 
 		private void LateUpdate()
@@ -66,7 +71,7 @@ namespace CombatSystem.UIScripts.PartyUI
 
 		private void UpdateMP()
 		{
-			mpLabel.text = mpLabelWriter.UpdateText(character.CurrentMP, character.Attributes.MaxMP); //TODO MP
+			mpLabel.text = mpLabelWriter.UpdateText(characterMP.MP, character.Attributes.MaxMP);
 		}
 	}
 }

@@ -67,13 +67,13 @@ namespace Dialogue
             if (currentStory.canContinue)
             {
                 currentStory.Continue();
-                EventManager.RaiseEvent<NextLineEvent>(new NextLineEvent(GetAuthor(),
+                EventManager.RaiseEvent(new NextLineEvent(GetAuthor(),
                     currentStory.currentChoices, currentStory.currentText, false));
             }
             else
             {
                 Conversing = false;
-                EventManager.RaiseEvent<ExitDialogueModeEvent>(new ExitDialogueModeEvent());
+                EventManager.RaiseEvent(new ExitDialogueModeEvent());
                 InputControlManager.Instance.ChangeControls(ControlTypes.Overworld);
                 // TODO: CHANGE TO WHATEVER AT END  
             }

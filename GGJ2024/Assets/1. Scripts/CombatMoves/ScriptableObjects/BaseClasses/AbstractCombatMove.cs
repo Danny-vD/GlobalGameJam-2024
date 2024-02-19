@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using CombatMoves.TargetingLogic.Enums;
+using CombatMoves.TargetingLogic.Interfaces;
 using CombatMoves.TargetingLogic.TargetingValidators.Util;
 using CombatSystem.Enums;
 using CombatSystem.Events.Queues;
@@ -11,7 +12,7 @@ namespace CombatMoves.ScriptableObjects.BaseClasses
 {
 	public abstract class AbstractCombatMove : ScriptableObject
 	{
-		public event Action OnCombatMoveEnded = delegate { }; // TODO: Test whether this delegate is shared between characters
+		public event Action<GameObject> OnCombatMoveEnded = delegate { };
 
 		[Header("General data")]
 		[field: SerializeField]
@@ -37,6 +38,9 @@ namespace CombatMoves.ScriptableObjects.BaseClasses
 		[field: SerializeField]
 		public string AnimationTriggerName { get; protected set; }
 
+		private ValidTargets oldValidTargets;
+		private ITargetingValidator cachedValidator;
+		
 		/// <summary>
 		/// Allows another combat move to start
 		/// </summary>
@@ -47,8 +51,7 @@ namespace CombatMoves.ScriptableObjects.BaseClasses
 
 		public bool IsValidTarget(GameObject target, GameObject caster)
 		{
-			//TODO: Cache the ITargetingValidator
-			return TargetingValidatorUtil.GetValidators(ValidTargets).IsValidTarget(target, caster);
+			return GetTargetingValidator().IsValidTarget(target, caster);
 		}
 
 		/// <summary>
@@ -61,10 +64,10 @@ namespace CombatMoves.ScriptableObjects.BaseClasses
 		/// <summary>
 		/// Immediately interrupts and stops the combat move
 		/// </summary>
-		public virtual void ForceStopCombatMove()
+		public virtual void ForceStopCombatMove(GameObject caster)
 		{
-			// If we died/got stunned while performing a move, we already allowed the next one to start
-			InvokeOnCombatMoveEnded();
+			// If we died/got stunned while performing a move, we already allowed the next one to start, hence no AllowNextMoveToStart
+			InvokeOnCombatMoveEnded(caster);
 		}
 
 		/// <summary>
@@ -72,18 +75,29 @@ namespace CombatMoves.ScriptableObjects.BaseClasses
 		/// </summary>
 		/// <seealso cref="AllowNextMoveToStart"/>
 		/// <seealso cref="InvokeOnCombatMoveEnded"/>
-		protected void EndCombatMove()
+		protected void EndCombatMove(GameObject caster)
 		{
 			AllowNextMoveToStart();
-			InvokeOnCombatMoveEnded();
+			InvokeOnCombatMoveEnded(caster);
 		}
 
 		/// <summary>
 		/// Invokes <see cref="OnCombatMoveEnded"/>
 		/// </summary>
-		protected void InvokeOnCombatMoveEnded()
+		protected void InvokeOnCombatMoveEnded(GameObject caster)
 		{
-			OnCombatMoveEnded.Invoke();
+			OnCombatMoveEnded.Invoke(caster);
+		}
+
+		private ITargetingValidator GetTargetingValidator()
+		{
+			if (cachedValidator == null || oldValidTargets != ValidTargets) // Check if valid targets changed
+			{
+				oldValidTargets = ValidTargets;
+				cachedValidator = TargetingValidatorUtil.GetValidators(ValidTargets);
+			}
+
+			return cachedValidator;
 		}
 	}
 }

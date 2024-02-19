@@ -17,8 +17,6 @@ namespace CharacterScripts
 
 		public CombinedCharacterAttributes Attributes { get; private set; } // Using the more specific class so users can directly access the GetAttributes function 
 
-		public int CurrentMP { get; private set; }
-
 		private void Awake()
 		{
 			Attributes = new CombinedCharacterAttributes(PermanentAttributes, TemporaryAttributes);

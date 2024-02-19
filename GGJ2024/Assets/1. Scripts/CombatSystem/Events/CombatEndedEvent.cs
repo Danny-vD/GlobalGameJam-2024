@@ -2,7 +2,7 @@
 
 namespace CombatSystem.Events
 {
-	public class CombatEndedEvent : VDEvent<CombatEndedEvent>
+	public class CombatEndedEvent : VDEvent<CombatEndedEvent> // TODO: End combat
 	{
 	}
 }

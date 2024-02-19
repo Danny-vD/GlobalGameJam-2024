@@ -2,7 +2,6 @@
 using CombatSystem.Events;
 using CombatSystem.Events.CharacterStateEvents;
 using CombatSystem.Events.Queues;
-using UnityEditor;
 using UnityEngine;
 using VDFramework;
 using VDFramework.EventSystem;
@@ -30,18 +29,6 @@ namespace CombatSystem.Managers
 			PlayerExitedChoosingStateEvent.Listeners  -= RemoveFromQueue;
 			CombatStartedEvent.ParameterlessListeners -= ResetQueue;
 			CombatEndedEvent.ParameterlessListeners   -= ResetQueue;
-		}
-
-		[MenuItem("Combat/Start Combat &g")] //TODO: remove
-		private static void DebugStartCombat()
-		{
-			EventManager.RaiseEvent(new CombatStartedEvent(null));
-		}
-
-		[MenuItem("Combat/Stop Combat")] //TODO: remove
-		private static void DebugEndCombat()
-		{
-			EventManager.RaiseEvent(new CombatEndedEvent());
 		}
 
 		public bool TryGetActivePlayer(out GameObject activePlayer)

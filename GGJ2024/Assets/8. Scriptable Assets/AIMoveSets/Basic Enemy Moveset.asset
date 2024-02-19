@@ -15,6 +15,8 @@ MonoBehaviour:
   weightedLootTable:
     serializedDictionary:
     - key: {fileID: 11400000, guid: c4a9b9f611b122c4b9d272c745bb499d, type: 2}
-      value: 20
+      value: 4
+    - key: {fileID: 11400000, guid: 9cf43e3be8440864eb5f7b357e4ccae3, type: 2}
+      value: 1
   nestedLootTables:
     serializedDictionary: []

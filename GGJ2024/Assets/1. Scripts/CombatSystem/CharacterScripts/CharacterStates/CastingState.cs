@@ -35,7 +35,7 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 				// This prevents other moves from starting if this was called before the selected move called AllowNextMoveToStart (should never happen)
 				
 				// no call to base because StopCasting already calls it
-				confirmedMoveHolder.SelectedMove.ForceStopCombatMove();
+				confirmedMoveHolder.SelectedMove.ForceStopCombatMove(gameObject);
 			}
 			else
 			{
@@ -55,7 +55,7 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 				base.Exit();
 			}
 
-			selectedMove.OnCombatMoveEnded += StopCasting;
+			selectedMove.OnCombatMoveEnded += OnCombatMoveEnded;
 
 			IsCasting = true;
 			
@@ -64,11 +64,18 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 			selectedMove.StartCombatMove(validTargets, CachedGameObject);
 		}
 
-		public void StopCasting()
+		private void OnCombatMoveEnded(GameObject caster)
 		{
-			confirmedMoveHolder.SelectedMove.OnCombatMoveEnded -= StopCasting;
-
-			IsCasting = false;
+			if (ReferenceEquals(caster, gameObject)) // Because the event is shared between all instances, it might be another combat move that ended
+			{
+				StopCasting();
+			}
+		}
+		
+		private void StopCasting()
+		{
+			confirmedMoveHolder.SelectedMove.OnCombatMoveEnded -= OnCombatMoveEnded;
+			IsCasting                                          =  false;
 			base.Exit();
 		}
 
@@ -78,9 +85,14 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 		private List<GameObject> ValidateTargets()
 		{
 			List<GameObject> validTargets = new List<GameObject>(confirmedMoveHolder.SelectedTargets);
-			validTargets.RemoveAll(target => target == null || target.GetComponent<CharacterStateManager>().CurrentStateType == CharacterCombatStateType.Dead); // HACK refactor this
+			validTargets.RemoveAll(NullOrDead);
 
 			return validTargets;
+		}
+
+		private bool NullOrDead(GameObject obj)
+		{
+			return obj == null || obj.GetComponent<CharacterStateManager>().CurrentStateType == CharacterCombatStateType.Dead;
 		}
 	}
 }
