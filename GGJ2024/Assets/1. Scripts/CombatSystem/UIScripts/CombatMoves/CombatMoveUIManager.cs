@@ -24,7 +24,6 @@ namespace CombatSystem.UIScripts.CombatMoves
 		private TMP_Text costLabel;
 
 		private AbstractCombatMove combatMove;
-		private ConfirmedMoveHolder confirmedMoveHolder;
 		private GameObject characterCaster;
 
 		public void Initialize(AbstractCombatMove move, GameObject character)
@@ -32,9 +31,7 @@ namespace CombatSystem.UIScripts.CombatMoves
 			combatMove      = move;
 			characterCaster = character;
 
-			confirmedMoveHolder = character.GetComponent<ConfirmedMoveHolder>();
-
-			if (character.GetComponent<Character>().CurrentMP >= move.Cost)
+			if (character.GetComponent<CharacterMP>().MP >= move.Cost)
 			{
 				selectMoveButton.onClick.AddListener(SelectMove);
 			}
