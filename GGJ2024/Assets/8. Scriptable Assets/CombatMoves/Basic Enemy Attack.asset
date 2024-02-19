@@ -20,4 +20,4 @@ MonoBehaviour:
   <ValidTargets>k__BackingField: 4294967292
   <TargetingMode>k__BackingField: 1
   <AnimationTriggerName>k__BackingField: BasicAttack
-  audioType: 13
+  audioType: 0
