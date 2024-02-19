@@ -2,6 +2,7 @@
 {
 	public enum TargetingMode
 	{
+		TargetAll,
 		SingleTargetOnly,
 		MultipleTargets,
 		MultipleTargetsOnly,

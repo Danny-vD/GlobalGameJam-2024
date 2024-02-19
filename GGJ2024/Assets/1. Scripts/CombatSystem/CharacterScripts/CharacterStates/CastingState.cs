@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using CombatMoves.ScriptableObjects.BaseClasses;
+using CombatMoves.TargetingLogic.Enums;
 using CombatSystem.Enums;
 using CombatSystem.Events.Queues;
 using UnityEngine;
@@ -33,7 +34,7 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 			if (IsCasting)
 			{
 				// This prevents other moves from starting if this was called before the selected move called AllowNextMoveToStart (should never happen)
-				
+
 				// no call to base because StopCasting already calls it
 				confirmedMoveHolder.SelectedMove.ForceStopCombatMove(gameObject);
 			}
@@ -48,19 +49,24 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 		{
 			AbstractCombatMove selectedMove = confirmedMoveHolder.SelectedMove;
 
-			List<GameObject> validTargets = ValidateTargets();
-
-			if (validTargets.Count == 0)
+			List<GameObject> validTargets = new List<GameObject>();
+			
+			if (selectedMove.TargetingMode != TargetingMode.None)
 			{
-				base.Exit();
+				validTargets = ValidateTargets();
+
+				if (validTargets.Count == 0)
+				{
+					base.Exit();
+				}
 			}
 
 			selectedMove.OnCombatMoveEnded += OnCombatMoveEnded;
 
 			IsCasting = true;
-			
+
 			OnCastingStarted.Invoke(); // invoked before the move starts because otherwise it would be invoked after OnStateEnded if the move immediately finishes
-			
+
 			selectedMove.StartCombatMove(validTargets, CachedGameObject);
 		}
 
@@ -71,7 +77,7 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 				StopCasting();
 			}
 		}
-		
+
 		private void StopCasting()
 		{
 			confirmedMoveHolder.SelectedMove.OnCombatMoveEnded -= OnCombatMoveEnded;
