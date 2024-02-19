@@ -42,7 +42,7 @@ namespace CombatSystem.UIScripts.CombatMoves
 			OnShowMoves.Invoke();
 		}
 
-		private void HideMoves()
+		public static void HideMoves()
 		{
 			OnHideMoves.Invoke();
 		}

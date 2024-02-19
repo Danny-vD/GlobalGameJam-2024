@@ -27,6 +27,8 @@ namespace CombatSystem.Managers.TargettingSystem
 
 		private GameObject casterToBe;
 
+		private bool targetsChoosen;
+
 		protected override void Awake()
 		{
 			base.Awake();
@@ -47,13 +49,18 @@ namespace CombatSystem.Managers.TargettingSystem
 
 			toBeConfirmedMove = move;
 			casterToBe        = caster;
+			
+			
 		}
 
 
 		private void OnCharacterHovered(CharacterHoveredEvent @event)
 		{
+			
+			if (!@event.Character) currentSelectedCharacterIndicator.transform.position = Vector3.zero;
+			
 			if (!characterList.Contains(@event.Character)) return;
-
+			
 			currentSelectedCharacter = @event.Character.gameObject;
 
 			currentSelectedCharacterIndicator.transform.position = currentSelectedCharacter.transform.position;
@@ -66,14 +73,22 @@ namespace CombatSystem.Managers.TargettingSystem
 			
 			//TODO: Check if there is a target selected
 
-			if (toBeConfirmedMove.IsValidTarget(currentSelectedCharacter, casterToBe))
+			if (targetsChoosen)
 			{
-				ConfirmedMoveHolder confirmedMoveHolder = casterToBe.GetComponent<ConfirmedMoveHolder>();
-				confirmedMoveHolder.SelectMove(toBeConfirmedMove, currentSelectedCharacter);
-				toBeConfirmedMove = null;
-
-				StopListeneningToConfirmInput();
+				if (toBeConfirmedMove.IsValidTarget(currentSelectedCharacter, casterToBe))
+				{
+					var confirmedMoveHolder = casterToBe.GetComponent<ConfirmedMoveHolder>();
+					confirmedMoveHolder.SelectMove(toBeConfirmedMove, currentSelectedCharacter);
+					toBeConfirmedMove = null;
+					targetsChoosen = false;
+					StopListeneningToConfirmInput();
+				}
 			}
+			else
+			{
+				targetsChoosen = true;
+			}
+			
 		}
 
 		private void OnCombatStart(CombatStartedEvent @event)

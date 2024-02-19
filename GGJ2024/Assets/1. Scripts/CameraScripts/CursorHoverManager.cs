@@ -20,10 +20,13 @@ namespace CameraScripts
 
 		private TimerHandle rayCastTimerHandle;
 
+		private GameObject currentlyHoveredObject;
+
 		protected override void Awake()
 		{
 			base.Awake();
 			cameraComponent = GetComponent<Camera>();
+			currentlyHoveredObject = null;
 		}
 
 		private void OnEnable()
@@ -40,7 +43,19 @@ namespace CameraScripts
 		{
 			if (Physics.Raycast(MouseButtonUtil.GetMouseToWorldRay(cameraComponent), out RaycastHit hitInfo, float.MaxValue, layerMask))
 			{
-				EventManager.RaiseEvent(new CharacterHoveredEvent(hitInfo.collider.gameObject));
+				if (hitInfo.collider.gameObject != currentlyHoveredObject)
+				{
+					currentlyHoveredObject = hitInfo.collider.gameObject;
+					EventManager.RaiseEvent(new CharacterHoveredEvent(currentlyHoveredObject));
+				} 
+			}
+			else
+			{
+				if (currentlyHoveredObject)
+				{
+					currentlyHoveredObject = null;
+					EventManager.RaiseEvent(new CharacterHoveredEvent(currentlyHoveredObject));
+				}
 			}
 		}
 	}

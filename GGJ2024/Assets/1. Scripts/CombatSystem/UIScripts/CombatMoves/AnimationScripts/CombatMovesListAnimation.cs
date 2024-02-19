@@ -15,6 +15,7 @@ namespace CombatSystem.UIScripts.CombatMoves.AnimationScripts
 
 			CombatMoveUISpawner.OnShowMoves += PlayShowAnimation;
 			CombatMoveUISpawner.OnHideMoves += PlayHideAnimation;
+			
 		}
 
 		private void OnDestroy()
