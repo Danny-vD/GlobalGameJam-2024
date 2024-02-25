@@ -5,29 +5,27 @@ using VDFramework.UnityExtensions;
 
 namespace CombatSystem.UIScripts.PartyUI
 {
-	public class PartyUISpawner : BetterMonoBehaviour
-	{
-		[SerializeField]
-		private Transform partyUIParent; 
-		
-		[SerializeField]
-		private GameObject partyUIPrefab;
+    public class PartyUISpawner : BetterMonoBehaviour
+    {
+        [SerializeField] private Transform partyUIParent;
 
-		private void Start()
-		{
-			InstantiatePartyFields();
-		}
+        [SerializeField] private GameObject partyUIPrefab;
 
-		private void InstantiatePartyFields()
-		{
-			partyUIParent.DestroyChildren();
-			
-			foreach (GameObject player in PlayerPartySingleton.Instance.Party)
-			{
-				GameObject instance = Instantiate(partyUIPrefab, partyUIParent);
+        private void Start()
+        {
+            InstantiatePartyFields();
+        }
 
-				instance.GetComponent<PartyUIManager>().Initialize(player);
-			}
-		}
-	}
+        private void InstantiatePartyFields()
+        {
+            partyUIParent.DestroyChildren();
+
+            foreach (var player in PlayerPartySingleton.Instance.Party)
+            {
+                var instance = Instantiate(partyUIPrefab, partyUIParent);
+
+                instance.GetComponent<PartyUIManager>().Initialize(player);
+            }
+        }
+    }
 }

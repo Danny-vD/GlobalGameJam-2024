@@ -3,8 +3,8 @@ using CombatMoves.ScriptableObjects.BaseClasses;
 
 namespace CombatSystem.Interfaces
 {
-	public interface IMoveset
-	{
-		public List<AbstractCombatMove> GetMoves();
-	}
+    public interface IMoveset
+    {
+        public List<AbstractCombatMove> GetMoves();
+    }
 }

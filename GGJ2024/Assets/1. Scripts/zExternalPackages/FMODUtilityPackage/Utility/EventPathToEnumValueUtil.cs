@@ -1,68 +1,62 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using FMODUtilityPackage.Enums;
 
 namespace FMODUtilityPackage.Utility
 {
-	public static class EventPathToEnumValueUtil
-	{
-		public static AudioEventType[] ConvertEventPathToEnumValues(string[] eventPaths)
-		{
-			return ConvertEventPathToEnumValuesString(eventPaths).Select(Enum.Parse<AudioEventType>).ToArray();
-		}
-		
-		public static string[] ConvertEventPathToEnumValuesString(string[] eventPaths)
-		{
-			return ValidateArray(eventPaths, '/'); // everything starts with 'event:/'
-		}
+    public static class EventPathToEnumValueUtil
+    {
+        public static AudioEventType[] ConvertEventPathToEnumValues(string[] eventPaths)
+        {
+            return ConvertEventPathToEnumValuesString(eventPaths).Select(Enum.Parse<AudioEventType>).ToArray();
+        }
 
-		public static string GetValidEnumName(string stringValue)
-		{
-			string enumValue = stringValue;
+        public static string[] ConvertEventPathToEnumValuesString(string[] eventPaths)
+        {
+            return ValidateArray(eventPaths, '/'); // everything starts with 'event:/'
+        }
 
-			for (int j = stringValue.Length - 1; j >= 0; j--)
-			{
-				char character = stringValue[j];
+        public static string GetValidEnumName(string stringValue)
+        {
+            var enumValue = stringValue;
 
-				// Replace any special characters with an underscore (specials characters are not allowed in an enum name, but an underscore is)
-				if (!char.IsLetterOrDigit(character) && !character.Equals('_'))
-				{
-					enumValue = enumValue.Replace(character, '_');
-				}
-			}
+            for (var j = stringValue.Length - 1; j >= 0; j--)
+            {
+                var character = stringValue[j];
 
-			// Starting an enum value with a digit (or underscore) is not allowed, prefix it with 'E' if that is the case
-			if (stringValue[0].Equals('_'))
-			{
-				enumValue = "E" + stringValue;
-			}
+                // Replace any special characters with an underscore (specials characters are not allowed in an enum name, but an underscore is)
+                if (!char.IsLetterOrDigit(character) && !character.Equals('_'))
+                    enumValue = enumValue.Replace(character, '_');
+            }
 
-			return enumValue;
-		}
-		
-		private static string[] ValidateArray(string[] array, char startCharacter)
-		{
-			List<string> list = array.Distinct().ToList(); // Prevent duplicates
+            // Starting an enum value with a digit (or underscore) is not allowed, prefix it with 'E' if that is the case
+            if (stringValue[0].Equals('_')) enumValue = "E" + stringValue;
 
-			for (int i = list.Count - 1; i >= 0; i--)
-			{
-				string value = list[i];
+            return enumValue;
+        }
 
-				// Trim everything after our starting character
-				value = value.Substring(value.IndexOf(startCharacter) + 1);
+        private static string[] ValidateArray(string[] array, char startCharacter)
+        {
+            var list = array.Distinct().ToList(); // Prevent duplicates
 
-				if (value == string.Empty) // If that removed the entire string, skip it
-				{
-					list.RemoveAt(i);
-					continue;
-				}
+            for (var i = list.Count - 1; i >= 0; i--)
+            {
+                var value = list[i];
 
-				// Convert the string into a valid enum name and store it in the list
-				list[i] = GetValidEnumName(value);
-			}
+                // Trim everything after our starting character
+                value = value.Substring(value.IndexOf(startCharacter) + 1);
 
-			return list.ToArray();
-		}
-	}
+                if (value == string.Empty) // If that removed the entire string, skip it
+                {
+                    list.RemoveAt(i);
+                    continue;
+                }
+
+                // Convert the string into a valid enum name and store it in the list
+                list[i] = GetValidEnumName(value);
+            }
+
+            return list.ToArray();
+        }
+    }
 }

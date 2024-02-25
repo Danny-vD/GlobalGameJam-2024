@@ -2,13 +2,13 @@
 
 namespace Ink.Parsed
 {
-	public class Stitch : FlowBase
-	{
-        public override FlowLevel flowLevel { get { return FlowLevel.Stitch; } }
+    public class Stitch : FlowBase
+    {
+        public Stitch(Identifier name, List<Object> topLevelObjects, List<Argument> arguments, bool isFunction) : base(
+            name, topLevelObjects, arguments, isFunction)
+        {
+        }
 
-        public Stitch (Identifier name, List<Parsed.Object> topLevelObjects, List<Argument> arguments, bool isFunction) : base(name, topLevelObjects, arguments, isFunction)
-		{
-		}
-	}
+        public override FlowLevel flowLevel => FlowLevel.Stitch;
+    }
 }
-

@@ -1,11 +1,8 @@
-using System;
-using System.Threading;
 using Dialogue.Events;
-using Ink.Parsed;
 using TMPro;
+using UnityEngine.UI;
 using VDFramework;
 using VDFramework.EventSystem;
-using Button = UnityEngine.UI.Button;
 
 namespace Dialogue
 {
@@ -13,19 +10,13 @@ namespace Dialogue
     {
         public int index;
         public string text;
-        private Button button;
         private TMP_Text asset;
+        private Button button;
 
         private void Awake()
         {
             button = GetComponent<Button>();
             asset = GetComponentInChildren<TMP_Text>();
-        }
-    
-        public void SetValues(string text, int index)
-        {
-            asset.text = text;
-            this.index = index;
         }
 
         private void OnEnable()
@@ -39,9 +30,15 @@ namespace Dialogue
             button.onClick.RemoveListener(OnClicked);
         }
 
+        public void SetValues(string text, int index)
+        {
+            asset.text = text;
+            this.index = index;
+        }
+
         private void OnClicked()
         {
-            EventManager.RaiseEvent<ChoiceSelectedEvent>(new ChoiceSelectedEvent(index, false));
+            EventManager.RaiseEvent(new ChoiceSelectedEvent(index, false));
         }
     }
 }

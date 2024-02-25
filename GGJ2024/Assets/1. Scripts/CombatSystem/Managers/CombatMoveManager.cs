@@ -7,104 +7,98 @@ using VDFramework;
 
 namespace CombatSystem.Managers
 {
-	public class CombatMoveManager : BetterMonoBehaviour
-	{
-		private readonly List<CastingState> combatMoveReadyQueue = new List<CastingState>();
+    public class CombatMoveManager : BetterMonoBehaviour
+    {
+        private readonly List<CastingState> combatMoveReadyQueue = new();
 
-		private bool isSomeoneCasting = false;
+        private bool isSomeoneCasting;
 
-		private void OnEnable()
-		{
-			NewCharacterReadyToCastEvent.Listeners             += OnNewCharacterReadyToCast;
-			NextCombatMoveCanStartEvent.ParameterlessListeners += StartNextInQueue;
+        private void OnEnable()
+        {
+            NewCharacterReadyToCastEvent.Listeners += OnNewCharacterReadyToCast;
+            NextCombatMoveCanStartEvent.ParameterlessListeners += StartNextInQueue;
 
-			CastingPreventedEvent.Listeners           += OnCastingPrevented;
-			CombatStartedEvent.ParameterlessListeners += ResetState;
-			CombatEndedEvent.ParameterlessListeners   += ResetState;
-		}
+            CastingPreventedEvent.Listeners += OnCastingPrevented;
+            CombatStartedEvent.ParameterlessListeners += ResetState;
+            CombatEndedEvent.ParameterlessListeners += ResetState;
+        }
 
-		private void OnDisable()
-		{
-			NewCharacterReadyToCastEvent.Listeners             -= OnNewCharacterReadyToCast;
-			NextCombatMoveCanStartEvent.ParameterlessListeners -= StartNextInQueue;
-			CastingPreventedEvent.Listeners                    -= OnCastingPrevented;
+        private void OnDisable()
+        {
+            NewCharacterReadyToCastEvent.Listeners -= OnNewCharacterReadyToCast;
+            NextCombatMoveCanStartEvent.ParameterlessListeners -= StartNextInQueue;
+            CastingPreventedEvent.Listeners -= OnCastingPrevented;
 
-			CombatStartedEvent.ParameterlessListeners -= ResetState;
-			CombatEndedEvent.ParameterlessListeners   -= ResetState;
-		}
+            CombatStartedEvent.ParameterlessListeners -= ResetState;
+            CombatEndedEvent.ParameterlessListeners -= ResetState;
+        }
 
-		private void ResetState()
-		{
-			combatMoveReadyQueue.Clear();
-			isSomeoneCasting = false;
-		}
+        private void ResetState()
+        {
+            combatMoveReadyQueue.Clear();
+            isSomeoneCasting = false;
+        }
 
-		private void OnNewCharacterReadyToCast(NewCharacterReadyToCastEvent newCharacterReadyToCastEvent)
-		{
-			HandleNewCharacterReadyToCast(newCharacterReadyToCastEvent.CastingState);
-		}
+        private void OnNewCharacterReadyToCast(NewCharacterReadyToCastEvent newCharacterReadyToCastEvent)
+        {
+            HandleNewCharacterReadyToCast(newCharacterReadyToCastEvent.CastingState);
+        }
 
-		private void OnCastingPrevented(CastingPreventedEvent castingPreventedEvent)
-		{
-			RemoveFromQueue(castingPreventedEvent.CastingState);
-		}
+        private void OnCastingPrevented(CastingPreventedEvent castingPreventedEvent)
+        {
+            RemoveFromQueue(castingPreventedEvent.CastingState);
+        }
 
-		private void HandleNewCharacterReadyToCast(CastingState castingState)
-		{
-			if (!isSomeoneCasting)
-			{
-				isSomeoneCasting = true;
-				castingState.StartCasting();
-			}
-			else
-			{
-				AddToQueue(castingState);
-			}
-		}
+        private void HandleNewCharacterReadyToCast(CastingState castingState)
+        {
+            if (!isSomeoneCasting)
+            {
+                isSomeoneCasting = true;
+                castingState.StartCasting();
+            }
+            else
+            {
+                AddToQueue(castingState);
+            }
+        }
 
-		private void AddToQueue(CastingState castingState)
-		{
-			if (combatMoveReadyQueue.Contains(castingState))
-			{
-				Debug.LogError("The queue already contains this character!\n" + castingState.gameObject.name);
-				return;
-			}
+        private void AddToQueue(CastingState castingState)
+        {
+            if (combatMoveReadyQueue.Contains(castingState))
+            {
+                Debug.LogError("The queue already contains this character!\n" + castingState.gameObject.name);
+                return;
+            }
 
-			combatMoveReadyQueue.Add(castingState);
-		}
+            combatMoveReadyQueue.Add(castingState);
+        }
 
-		private void RemoveFromQueue(CastingState castingState)
-		{
-			if (!combatMoveReadyQueue.Remove(castingState))
-			{
-				Debug.LogError("The queue does not contain this character!\n" + castingState.gameObject.name);
-			}
-		}
+        private void RemoveFromQueue(CastingState castingState)
+        {
+            if (!combatMoveReadyQueue.Remove(castingState))
+                Debug.LogError("The queue does not contain this character!\n" + castingState.gameObject.name);
+        }
 
-		private bool TryGetNextInLine(out CastingState castingState)
-		{
-			if (combatMoveReadyQueue.Count > 0)
-			{
-				castingState = combatMoveReadyQueue[0];
-				
-				combatMoveReadyQueue.RemoveAt(0);
-				return true;
-			}
+        private bool TryGetNextInLine(out CastingState castingState)
+        {
+            if (combatMoveReadyQueue.Count > 0)
+            {
+                castingState = combatMoveReadyQueue[0];
 
-			castingState = null;
-			return false;
-		}
+                combatMoveReadyQueue.RemoveAt(0);
+                return true;
+            }
 
-		private void StartNextInQueue() // Called when a character enters CastingState
-		{
-			if (TryGetNextInLine(out CastingState castingState)) // Will succeed so long as at least 1 object is in the queue
-			{
-				castingState.StartCasting();
-			}
-			else
-			{
-				isSomeoneCasting = false;
-			}
-		}
-	}
+            castingState = null;
+            return false;
+        }
+
+        private void StartNextInQueue() // Called when a character enters CastingState
+        {
+            if (TryGetNextInLine(out var castingState)) // Will succeed so long as at least 1 object is in the queue
+                castingState.StartCasting();
+            else
+                isSomeoneCasting = false;
+        }
+    }
 }

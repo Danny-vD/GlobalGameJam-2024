@@ -6,79 +6,79 @@ using VDFramework;
 
 namespace Overworld.Navigation
 {
-	public class PlayerMovementController : SafeEnableBehaviour
-	{
-		[SerializeField, Tooltip("The speed of the player in m/s")]
-		private float speed = 10;
+    public class PlayerMovementController : SafeEnableBehaviour
+    {
+        [SerializeField] [Tooltip("The speed of the player in m/s")]
+        private float speed = 10;
 
-		private bool isMoving;
-		private Vector3 deltaMovement;
+        private CharacterController controller;
+        private Vector3 deltaMovement;
 
-		private CharacterController controller;
+        private bool isMoving;
 
-		protected void Awake()
-		{
-			controller = GetComponent<CharacterController>();
-		}
+        protected void Awake()
+        {
+            controller = GetComponent<CharacterController>();
+        }
 
-		protected override void OnEnabled()
-		{
-			InputControlManager.Instance.playerControls.Overworld.Movement.performed += MovementOnPerformed;
-			InputControlManager.Instance.playerControls.Overworld.Movement.canceled  += MovementOnCanceled;
+        // Update is called once per frame
+        private void Update()
+        {
+            if (isMoving)
+            {
+                var delta = speed * deltaMovement;
+                controller.SimpleMove(delta);
+            }
+        }
 
-			InputControlManager.Instance.playerControls.Overworld.Interact.performed += OnInteract;
-			InputControlManager.Instance.playerControls.Overworld.Select.performed   += OnSelect;
-			InputControlManager.Instance.playerControls.Overworld.Start.performed    += OnStart;
-		}
+        private void OnDisable()
+        {
+            if (!InputControlManager.IsInitialized) return;
 
-		private void OnDisable()
-		{
-			if (!InputControlManager.IsInitialized) return;
+            InputControlManager.Instance.playerControls.Overworld.Movement.performed -= MovementOnPerformed;
+            InputControlManager.Instance.playerControls.Overworld.Movement.canceled -= MovementOnCanceled;
 
-			InputControlManager.Instance.playerControls.Overworld.Movement.performed -= MovementOnPerformed;
-			InputControlManager.Instance.playerControls.Overworld.Movement.canceled  -= MovementOnCanceled;
-			
-			InputControlManager.Instance.playerControls.Overworld.Interact.performed -= OnInteract;
-			InputControlManager.Instance.playerControls.Overworld.Select.performed   -= OnSelect;
-			InputControlManager.Instance.playerControls.Overworld.Start.performed    -= OnStart;
-		}
+            InputControlManager.Instance.playerControls.Overworld.Interact.performed -= OnInteract;
+            InputControlManager.Instance.playerControls.Overworld.Select.performed -= OnSelect;
+            InputControlManager.Instance.playerControls.Overworld.Start.performed -= OnStart;
+        }
 
-		private void MovementOnCanceled(InputAction.CallbackContext obj)
-		{
-			isMoving = false;
-		}
+        protected override void OnEnabled()
+        {
+            InputControlManager.Instance.playerControls.Overworld.Movement.performed += MovementOnPerformed;
+            InputControlManager.Instance.playerControls.Overworld.Movement.canceled += MovementOnCanceled;
 
-		private void MovementOnPerformed(InputAction.CallbackContext obj)
-		{
-			isMoving = true;
+            InputControlManager.Instance.playerControls.Overworld.Interact.performed += OnInteract;
+            InputControlManager.Instance.playerControls.Overworld.Select.performed += OnSelect;
+            InputControlManager.Instance.playerControls.Overworld.Start.performed += OnStart;
+        }
 
-			Vector2 vector = obj.ReadValue<Vector2>();
+        private void MovementOnCanceled(InputAction.CallbackContext obj)
+        {
+            isMoving = false;
+        }
 
-			deltaMovement = new Vector3(vector.x, 0, vector.y);
-		}
+        private void MovementOnPerformed(InputAction.CallbackContext obj)
+        {
+            isMoving = true;
 
-		private void OnSelect(InputAction.CallbackContext obj)
-		{
-		}
+            var vector = obj.ReadValue<Vector2>();
 
-		private void OnInteract(InputAction.CallbackContext obj)
-		{
-		}
+            deltaMovement = new Vector3(vector.x, 0, vector.y);
+        }
 
-		private void OnStart(InputAction.CallbackContext obj)
-		{
-			Debug.Log("START PRESSED");
-			InputControlManager.Instance.ChangeControls(ControlTypes.Menus);
-		}
+        private void OnSelect(InputAction.CallbackContext obj)
+        {
+        }
 
-		// Update is called once per frame
-		private void Update()
-		{
-			if (isMoving)
-			{
-				Vector3 delta = speed * deltaMovement;
-				controller.SimpleMove(delta);
-			}
-		}
-	}
+        private void OnInteract(InputAction.CallbackContext obj)
+        {
+        }
+
+        private void OnStart(InputAction.CallbackContext obj)
+        {
+            Debug.Log("START PRESSED");
+            InputControlManager.Instance.ChangeControls(ControlTypes.Menus);
+        }
+    }
 }

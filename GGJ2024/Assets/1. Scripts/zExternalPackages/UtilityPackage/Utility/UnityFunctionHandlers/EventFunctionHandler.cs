@@ -5,17 +5,13 @@ using UtilityPackage.Utility.UnityFunctionHandlers.Enums;
 
 namespace UtilityPackage.Utility.UnityFunctionHandlers
 {
-	public class EventFunctionHandler : AbstractFunctionHandler
-	{
-		[SerializeField]
-		private SerializableDictionary<UnityFunction, UnityEvent> eventPerFunction;
+    public class EventFunctionHandler : AbstractFunctionHandler
+    {
+        [SerializeField] private SerializableDictionary<UnityFunction, UnityEvent> eventPerFunction;
 
-		protected override void ReactToEvent(UnityFunction unityFunction)
-		{
-			if (eventPerFunction.TryGetValue(unityFunction, out UnityEvent unityEvent))
-			{
-				unityEvent.Invoke();
-			}
-		}
-	}
+        protected override void ReactToEvent(UnityFunction unityFunction)
+        {
+            if (eventPerFunction.TryGetValue(unityFunction, out var unityEvent)) unityEvent.Invoke();
+        }
+    }
 }

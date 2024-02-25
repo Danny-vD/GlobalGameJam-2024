@@ -4,27 +4,26 @@ using UtilityPackage.CursorManagement.Structs;
 
 namespace UtilityPackage.CursorManagement.CursorComponents
 {
-	public class IdleCursorComponent : AbstractCursorComponent
-	{
-		[SerializeField]
-		private CursorData idleDatum;
-		
-		public override bool IsAdditiveEffect => false;
+    public class IdleCursorComponent : AbstractCursorComponent
+    {
+        [SerializeField] private CursorData idleDatum;
 
-		protected override void OnActivate()
-		{
-			ShouldUpdateCursor = true;
-		}
+        public override bool IsAdditiveEffect => false;
 
-		public override bool AreConditionsMet()
-		{
-			return !MouseButtonUtil.IsAnyMouseButtonDown;
-		}
+        protected override void OnActivate()
+        {
+            ShouldUpdateCursor = true;
+        }
 
-		public override CursorData GetCursorData()
-		{
-			ShouldUpdateCursor = false;
-			return idleDatum;
-		}
-	}
+        public override bool AreConditionsMet()
+        {
+            return !MouseButtonUtil.IsAnyMouseButtonDown;
+        }
+
+        public override CursorData GetCursorData()
+        {
+            ShouldUpdateCursor = false;
+            return idleDatum;
+        }
+    }
 }

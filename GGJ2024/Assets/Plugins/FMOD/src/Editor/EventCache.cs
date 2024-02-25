@@ -6,26 +6,19 @@ namespace FMODUnity
 {
     public class EventCache : ScriptableObject
     {
-        [SerializeField]
-        public List<EditorBankRef> EditorBanks;
-        [SerializeField]
-        public List<EditorEventRef> EditorEvents;
-        [SerializeField]
-        public List<EditorParamRef> EditorParameters;
-        [SerializeField]
-        public List<EditorBankRef> MasterBanks;
-        [SerializeField]
-        public List<EditorBankRef> StringsBanks;
-        [SerializeField]
-        private Int64 cacheTime;
-        [SerializeField]
-        public int cacheVersion;
+        [SerializeField] public List<EditorBankRef> EditorBanks;
 
-        public DateTime CacheTime
-        {
-            get { return new DateTime(cacheTime); }
-            set { cacheTime = value.Ticks; }
-        }
+        [SerializeField] public List<EditorEventRef> EditorEvents;
+
+        [SerializeField] public List<EditorParamRef> EditorParameters;
+
+        [SerializeField] public List<EditorBankRef> MasterBanks;
+
+        [SerializeField] public List<EditorBankRef> StringsBanks;
+
+        [SerializeField] private long cacheTime;
+
+        [SerializeField] public int cacheVersion;
 
         public EventCache()
         {
@@ -35,6 +28,12 @@ namespace FMODUnity
             MasterBanks = new List<EditorBankRef>();
             StringsBanks = new List<EditorBankRef>();
             cacheTime = 0;
+        }
+
+        public DateTime CacheTime
+        {
+            get => new(cacheTime);
+            set => cacheTime = value.Ticks;
         }
     }
 }

@@ -9,21 +9,17 @@ namespace InputScripts
 {
     public class InputControlManager : Singleton<InputControlManager>
     {
-        public PlayerControls playerControls;
-
-        public event Action OnMenuOpened = delegate { };
-        public event Action OnMenuClosed = delegate { };
-
         private Dictionary<ControlTypes, InputActionMap> actionMapsByType;
 
 
         private ControlTypes beforeMenu;
         private ControlTypes currentType;
+        public PlayerControls playerControls;
 
         protected override void Awake()
         {
             playerControls = new PlayerControls();
-        
+
             // playerControls.UIMenus.Enable();
 
             actionMapsByType = new Dictionary<ControlTypes, InputActionMap>
@@ -34,7 +30,7 @@ namespace InputScripts
                 { ControlTypes.Dialogue, playerControls.DialogueInteraction.Get() }
             };
 
-            beforeMenu  = ControlTypes.Overworld;
+            beforeMenu = ControlTypes.Overworld;
             currentType = ControlTypes.Overworld;
 
             playerControls.UIMenus.Disable();
@@ -42,6 +38,9 @@ namespace InputScripts
 
             base.Awake();
         }
+
+        public event Action OnMenuOpened = delegate { };
+        public event Action OnMenuClosed = delegate { };
 
         public void ChangeControls(ControlTypes type)
         {

@@ -1,27 +1,25 @@
+using Ink.Runtime;
 
 namespace Ink.Parsed
 {
-    public class Tag : Parsed.Object
+    public class Tag : Object
     {
+        public bool inChoice;
 
         public bool isStart;
-        public bool inChoice;
-        
-        public override Runtime.Object GenerateRuntimeObject ()
+
+        public override Runtime.Object GenerateRuntimeObject()
         {
-            if( isStart )
-                return Runtime.ControlCommand.BeginTag();
-            else
-                return Runtime.ControlCommand.EndTag();
+            if (isStart)
+                return ControlCommand.BeginTag();
+            return ControlCommand.EndTag();
         }
 
-        public override string ToString ()
+        public override string ToString()
         {
-            if( isStart )
+            if (isStart)
                 return "#StartTag";
-            else
-                return "#EndTag";
+            return "#EndTag";
         }
     }
 }
-

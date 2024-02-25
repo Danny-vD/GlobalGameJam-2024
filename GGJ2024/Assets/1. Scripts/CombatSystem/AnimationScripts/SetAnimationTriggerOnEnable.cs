@@ -1,36 +1,31 @@
-﻿using System;
-using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 using VDFramework;
 
 namespace CombatSystem.AnimationScripts
 {
-	public class SetAnimationBooleanOnEnable : BetterMonoBehaviour
-	{
-		[SerializeField]
-		private Animator animator;
-		
-		[SerializeField]
-		private string parameterName;
+    public class SetAnimationBooleanOnEnable : BetterMonoBehaviour
+    {
+        [SerializeField] private Animator animator;
 
-		[SerializeField]
-		private bool value;
-		
-		private int parameterID;
+        [SerializeField] private string parameterName;
 
-		private void Reset()
-		{
-			animator = GetComponent<Animator>();
-		}
+        [SerializeField] private bool value;
 
-		private void Awake()
-		{
-			parameterID = Animator.StringToHash(parameterName);
-		}
+        private int parameterID;
 
-		private void OnEnable()
-		{
-			animator.SetBool(parameterID, value);
-		}
-	}
+        private void Awake()
+        {
+            parameterID = Animator.StringToHash(parameterName);
+        }
+
+        private void Reset()
+        {
+            animator = GetComponent<Animator>();
+        }
+
+        private void OnEnable()
+        {
+            animator.SetBool(parameterID, value);
+        }
+    }
 }

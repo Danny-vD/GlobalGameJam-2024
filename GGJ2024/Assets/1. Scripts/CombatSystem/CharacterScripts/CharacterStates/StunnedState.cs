@@ -4,35 +4,34 @@ using UnityEngine;
 
 namespace CombatSystem.CharacterScripts.CharacterStates
 {
-	public class StunnedState : AbstractCharacterState
-	{
-		public override CharacterCombatStateType NextState => CharacterCombatStateType.Choosing;
+    public class StunnedState : AbstractCharacterState
+    {
+        private Character character;
+        private CharacterStaminaTimer characterStamina;
+        public override CharacterCombatStateType NextState => CharacterCombatStateType.Choosing;
 
-		private Character character;
-		private CharacterStaminaTimer characterStamina;
+        private void Awake()
+        {
+            character = GetComponent<Character>();
+            characterStamina = GetComponent<CharacterStaminaTimer>();
 
-		private void Awake()
-		{
-			character        = GetComponent<Character>();
-			characterStamina = GetComponent<CharacterStaminaTimer>();
+            characterStamina.OnStaminaTimerExpired += Exit;
+        }
 
-			characterStamina.OnStaminaTimerExpired += Exit;
-		}
+        private void OnDestroy()
+        {
+            characterStamina.OnStaminaTimerExpired -= Exit;
+        }
 
-		public override void Enter()
-		{
-			characterStamina.ResetStamina();
-		}
+        public override void Enter()
+        {
+            characterStamina.ResetStamina();
+        }
 
-		public override void Step()
-		{
-			// Stun is basically a slower idle
-			characterStamina.DecreaseStamina(character.Attributes.Speed / 2 * Time.deltaTime);
-		}
-
-		private void OnDestroy()
-		{
-			characterStamina.OnStaminaTimerExpired -= Exit;
-		}
-	}
+        public override void Step()
+        {
+            // Stun is basically a slower idle
+            characterStamina.DecreaseStamina(character.Attributes.Speed / 2 * Time.deltaTime);
+        }
+    }
 }

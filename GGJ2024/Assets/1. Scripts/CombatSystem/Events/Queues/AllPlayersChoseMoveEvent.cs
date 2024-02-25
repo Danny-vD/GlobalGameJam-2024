@@ -2,7 +2,7 @@
 
 namespace CombatSystem.Events.Queues
 {
-	public class AllPlayersChoseMoveEvent : VDEvent<AllPlayersChoseMoveEvent>
-	{
-	}
+    public class AllPlayersChoseMoveEvent : VDEvent<AllPlayersChoseMoveEvent>
+    {
+    }
 }

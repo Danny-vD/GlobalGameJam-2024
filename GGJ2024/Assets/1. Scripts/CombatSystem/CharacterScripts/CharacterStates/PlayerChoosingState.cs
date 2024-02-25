@@ -5,34 +5,33 @@ using VDFramework.EventSystem;
 
 namespace CombatSystem.CharacterScripts.CharacterStates
 {
-	[RequireComponent(typeof(ConfirmedMoveHolder))]
-	public class PlayerChoosingState : AbstractCharacterState
-	{
-		public override CharacterCombatStateType NextState => CharacterCombatStateType.Casting;
+    [RequireComponent(typeof(ConfirmedMoveHolder))]
+    public class PlayerChoosingState : AbstractCharacterState
+    {
+        private ConfirmedMoveHolder confirmedMoveHolder;
+        public override CharacterCombatStateType NextState => CharacterCombatStateType.Casting;
 
-		private ConfirmedMoveHolder confirmedMoveHolder;
+        private void Awake()
+        {
+            confirmedMoveHolder = GetComponent<ConfirmedMoveHolder>();
 
-		private void Awake()
-		{
-			confirmedMoveHolder = GetComponent<ConfirmedMoveHolder>();
+            confirmedMoveHolder.OnMoveSelected += Exit;
+        }
 
-			confirmedMoveHolder.OnMoveSelected += Exit;
-		}
-		
-		public override void Enter()
-		{
-			EventManager.RaiseEvent(new PlayerEnteredChoosingStateEvent(gameObject));
-		}
+        private void OnDestroy()
+        {
+            confirmedMoveHolder.OnMoveSelected -= Exit;
+        }
 
-		public override void Exit()
-		{
-			EventManager.RaiseEvent(new PlayerExitedChoosingStateEvent(gameObject));
-			base.Exit();
-		}
+        public override void Enter()
+        {
+            EventManager.RaiseEvent(new PlayerEnteredChoosingStateEvent(gameObject));
+        }
 
-		private void OnDestroy()
-		{
-			confirmedMoveHolder.OnMoveSelected -= Exit;
-		}
-	}
+        public override void Exit()
+        {
+            EventManager.RaiseEvent(new PlayerExitedChoosingStateEvent(gameObject));
+            base.Exit();
+        }
+    }
 }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 
 namespace FMODUnity
@@ -10,19 +6,17 @@ namespace FMODUnity
     [CustomEditor(typeof(StudioGlobalParameterTrigger))]
     public class StudioGlobalParameterTriggerEditor : Editor
     {
-        private SerializedProperty param;
-        private SerializedProperty trigger;
-        private SerializedProperty tag;
-        private SerializedProperty value;
-
-        private SerializedProperty data1, data2;
-
         private static GUIContent NotFoundWarning;
+
+        [SerializeField] private EditorParamRef editorParamRef;
 
         private string currentPath;
 
-        [SerializeField]
-        private EditorParamRef editorParamRef;
+        private SerializedProperty data1, data2;
+        private SerializedProperty param;
+        private SerializedProperty tag;
+        private SerializedProperty trigger;
+        private SerializedProperty value;
 
         private void OnEnable()
         {
@@ -41,10 +35,9 @@ namespace FMODUnity
             }
 
             EditorGUILayout.PropertyField(trigger, new GUIContent("Trigger"));
-            if (trigger.enumValueIndex >= (int)EmitterGameEvent.TriggerEnter && trigger.enumValueIndex <= (int)EmitterGameEvent.TriggerExit2D)
-            {
+            if (trigger.enumValueIndex >= (int)EmitterGameEvent.TriggerEnter &&
+                trigger.enumValueIndex <= (int)EmitterGameEvent.TriggerExit2D)
                 tag.stringValue = EditorGUILayout.TagField("Collision Tag", tag.stringValue);
-            }
 
             EditorGUILayout.PropertyField(param, new GUIContent("Parameter"));
 
@@ -73,7 +66,7 @@ namespace FMODUnity
             }
             else
             {
-                Rect rect = EditorGUILayout.GetControlRect();
+                var rect = EditorGUILayout.GetControlRect();
                 rect.xMin += EditorGUIUtility.labelWidth;
 
                 GUI.Label(rect, NotFoundWarning);

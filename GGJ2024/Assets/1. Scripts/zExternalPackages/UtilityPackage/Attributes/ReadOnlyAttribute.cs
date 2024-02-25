@@ -4,10 +4,10 @@ using UnityEngine;
 namespace UtilityPackage.Attributes
 {
 	/// <summary>
-	///   <para>Prevent this field from being edited in the inspector.</para>
+	///     <para>Prevent this field from being edited in the inspector.</para>
 	/// </summary>
-	[AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
-	public class ReadOnlyAttribute : PropertyAttribute
-	{
-	}
+	[AttributeUsage(AttributeTargets.Field)]
+    public class ReadOnlyAttribute : PropertyAttribute
+    {
+    }
 }

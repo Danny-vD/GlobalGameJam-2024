@@ -4,34 +4,32 @@ using VDFramework;
 
 namespace CombatSystem.CharacterScripts
 {
-	public class CharacterStaminaTimer : BetterMonoBehaviour
-	{
-		public event Action OnStaminaTimerExpired = delegate { };
-		public event Action OnStaminaTimerReset = delegate { };
+    public class CharacterStaminaTimer : BetterMonoBehaviour
+    {
+        [field: SerializeField] public float MaximumStaminaTimer { get; private set; } = 10;
 
-		[field: SerializeField]
-		public float MaximumStaminaTimer { get; private set; } = 10;
+        public float NormalizedStaminaTimer => StaminaTmer / MaximumStaminaTimer;
 
-		public float NormalizedStaminaTimer => StaminaTmer / MaximumStaminaTimer;
+        public float StaminaTmer { get; private set; }
+        public event Action OnStaminaTimerExpired = delegate { };
+        public event Action OnStaminaTimerReset = delegate { };
 
-		public float StaminaTmer { get; private set; }
+        public void ResetStamina()
+        {
+            StaminaTmer = MaximumStaminaTimer;
 
-		public void ResetStamina()
-		{
-			StaminaTmer = MaximumStaminaTimer;
-			
-			OnStaminaTimerReset.Invoke();
-		}
+            OnStaminaTimerReset.Invoke();
+        }
 
-		public void DecreaseStamina(float value)
-		{
-			StaminaTmer -= value;
+        public void DecreaseStamina(float value)
+        {
+            StaminaTmer -= value;
 
-			if (StaminaTmer <= 0)
-			{
-				StaminaTmer = 0;
-				OnStaminaTimerExpired.Invoke();
-			}
-		}
-	}
+            if (StaminaTmer <= 0)
+            {
+                StaminaTmer = 0;
+                OnStaminaTimerExpired.Invoke();
+            }
+        }
+    }
 }

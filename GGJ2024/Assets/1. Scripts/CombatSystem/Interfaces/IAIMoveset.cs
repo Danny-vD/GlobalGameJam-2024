@@ -2,8 +2,8 @@
 
 namespace CombatSystem.Interfaces
 {
-	public interface IAIMoveset : IMoveset
-	{
-		public AbstractCombatMove ChooseAIMove();
-	}
+    public interface IAIMoveset : IMoveset
+    {
+        public AbstractCombatMove ChooseAIMove();
+    }
 }

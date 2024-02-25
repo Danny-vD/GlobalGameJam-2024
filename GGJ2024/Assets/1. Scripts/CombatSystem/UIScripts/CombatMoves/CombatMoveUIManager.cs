@@ -1,6 +1,5 @@
 ﻿using CharacterScripts;
 using CombatMoves.ScriptableObjects.BaseClasses;
-using CombatSystem.CharacterScripts;
 using CombatSystem.Managers.TargettingSystem;
 using TMPro;
 using UnityEngine;
@@ -9,46 +8,40 @@ using VDFramework;
 
 namespace CombatSystem.UIScripts.CombatMoves
 {
-	public class CombatMoveUIManager : BetterMonoBehaviour
-	{
-		[SerializeField]
-		private Button selectMoveButton;
+    public class CombatMoveUIManager : BetterMonoBehaviour
+    {
+        [SerializeField] private Button selectMoveButton;
 
-		[SerializeField]
-		private TMP_Text nameLabel;
+        [SerializeField] private TMP_Text nameLabel;
 
-		[SerializeField]
-		private TMP_Text descriptionLabel;
+        [SerializeField] private TMP_Text descriptionLabel;
 
-		[SerializeField]
-		private TMP_Text costLabel;
+        [SerializeField] private TMP_Text costLabel;
 
-		private AbstractCombatMove combatMove;
-		private GameObject characterCaster;
+        private GameObject characterCaster;
 
-		public void Initialize(AbstractCombatMove move, GameObject character)
-		{
-			combatMove      = move;
-			characterCaster = character;
+        private AbstractCombatMove combatMove;
 
-			if (character.GetComponent<CharacterMP>().MP >= move.Cost)
-			{
-				selectMoveButton.onClick.AddListener(SelectMove);
-			}
+        public void Initialize(AbstractCombatMove move, GameObject character)
+        {
+            combatMove = move;
+            characterCaster = character;
 
-			nameLabel.text = combatMove.AbilityName;
+            if (character.GetComponent<CharacterMP>().MP >= move.Cost) selectMoveButton.onClick.AddListener(SelectMove);
 
-			//descriptionLabel.text = combatMove.Description;
-			//costLabel.text        = combatMove.Cost.ToString();
-		}
+            nameLabel.text = combatMove.AbilityName;
 
-		private void SelectMove()
-		{
-			// TODO make a targeting UI that hides the moves buttons, or change the way targetting works so another move can be selected without confirming
-			// at the moment clicking on another move after you selected one will both select that move and confirm the target at once, which causes the next confirm input to confim the move from the previous turn
-			CombatTargettingManager.Instance.ChooseMove(combatMove, characterCaster);
-			
-			CombatMoveUISpawner.HideMoves();
-		}
-	}
+            //descriptionLabel.text = combatMove.Description;
+            //costLabel.text        = combatMove.Cost.ToString();
+        }
+
+        private void SelectMove()
+        {
+            // TODO make a targeting UI that hides the moves buttons, or change the way targetting works so another move can be selected without confirming
+            // at the moment clicking on another move after you selected one will both select that move and confirm the target at once, which causes the next confirm input to confim the move from the previous turn
+            CombatTargettingManager.Instance.ChooseMove(combatMove, characterCaster);
+
+            CombatMoveUISpawner.HideMoves();
+        }
+    }
 }

@@ -3,13 +3,13 @@ using VDFramework.EventSystem;
 
 namespace CombatSystem.Events.Queues
 {
-	public class CastingPreventedEvent : VDEvent<CastingPreventedEvent>
-	{
-		public readonly CastingState CastingState;
+    public class CastingPreventedEvent : VDEvent<CastingPreventedEvent>
+    {
+        public readonly CastingState CastingState;
 
-		public CastingPreventedEvent(CastingState castingState)
-		{
-			CastingState = castingState;
-		}
-	}
+        public CastingPreventedEvent(CastingState castingState)
+        {
+            CastingState = castingState;
+        }
+    }
 }

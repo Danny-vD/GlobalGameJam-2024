@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using FMOD;
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -35,7 +35,8 @@ namespace FMODUnity
             Settings.AddPlatformTemplate<PlatformAppleTV>("e7a046c753c3c3d4aacc91f6597f310d");
         }
 
-        internal override string DisplayName { get { return "Apple TV"; } }
+        internal override string DisplayName => "Apple TV";
+
         internal override void DeclareRuntimePlatforms(Settings settings)
         {
             settings.DeclareRuntimePlatform(RuntimePlatform.tvOS, this);
@@ -47,24 +48,21 @@ namespace FMODUnity
             yield return BuildTarget.tvOS;
         }
 
-        internal override Legacy.Platform LegacyIdentifier { get { return Legacy.Platform.AppleTV; } }
+        internal override Legacy.Platform LegacyIdentifier => Legacy.Platform.AppleTV;
 
         protected override BinaryAssetFolderInfo GetBinaryAssetFolder(BuildTarget buildTarget)
         {
             return new BinaryAssetFolderInfo("tvos", "Plugins/tvOS");
         }
 
-        protected override IEnumerable<FileRecord> GetBinaryFiles(BuildTarget buildTarget, bool allVariants, string suffix)
+        protected override IEnumerable<FileRecord> GetBinaryFiles(BuildTarget buildTarget, bool allVariants,
+            string suffix)
         {
             if (allVariants || PlayerSettings.tvOS.sdkVersion == tvOSSdkVersion.Device)
-            {
                 yield return new FileRecord(string.Format("libfmodstudiounityplugin{0}.a", suffix));
-            }
 
             if (allVariants || PlayerSettings.tvOS.sdkVersion == tvOSSdkVersion.Simulator)
-            {
                 yield return new FileRecord(string.Format("libfmodstudiounitypluginsimulator{0}.a", suffix));
-            }
         }
 
         internal override bool SupportsAdditionalCPP(BuildTarget target)
@@ -81,16 +79,11 @@ namespace FMODUnity
 #endif
 
 #if UNITY_EDITOR
-        internal override OutputType[] ValidOutputTypes
-        {
-            get
-            {
-                return sValidOutputTypes;
-            }
-        }
+        internal override OutputType[] ValidOutputTypes => sValidOutputTypes;
 
-        private static OutputType[] sValidOutputTypes = {
-           new OutputType() { displayName = "Core Audio", outputType = FMOD.OUTPUTTYPE.COREAUDIO },
+        private static readonly OutputType[] sValidOutputTypes =
+        {
+            new() { displayName = "Core Audio", outputType = OUTPUTTYPE.COREAUDIO }
         };
 #endif
     }

@@ -14,9 +14,9 @@ namespace Audio
         {
             AudioPlayer.PlayEmitter(EmitterType.BackgroundMusic);
         }
-    
+
         private void OnEnable()
-        {   
+        {
             EventManager.AddListener<CombatEndedEvent>(CombatEndMusic);
             EventManager.AddListener<CombatStartedEvent>(CombatMusic);
         }
@@ -34,17 +34,11 @@ namespace Audio
 
         private static void PlayEmitter(EmitterType toPlay)
         {
-            foreach (EmitterType emitterType in default(EmitterType).GetValues())
-            {
+            foreach (var emitterType in default(EmitterType).GetValues())
                 if (emitterType == toPlay)
-                {
                     AudioPlayer.PlayEmitter(toPlay);
-                }
                 else
-                {
                     AudioPlayer.StopEmitter(emitterType);
-                }
-            }
         }
 
         private void BossMusic()
@@ -59,7 +53,7 @@ namespace Audio
 
         private static void CombatEndMusic(CombatEndedEvent @event)
         {
-            PlayEmitter(EmitterType.BackgroundMusic);   
+            PlayEmitter(EmitterType.BackgroundMusic);
         }
     }
 }

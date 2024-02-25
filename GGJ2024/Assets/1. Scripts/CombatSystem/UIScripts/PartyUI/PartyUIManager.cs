@@ -8,70 +8,65 @@ using VDFramework.Utility;
 
 namespace CombatSystem.UIScripts.PartyUI
 {
-	public class PartyUIManager : BetterMonoBehaviour
-	{
-		[SerializeField]
-		private TMP_Text nameLabel;
+    public class PartyUIManager : BetterMonoBehaviour
+    {
+        [SerializeField] private TMP_Text nameLabel;
 
-		[SerializeField]
-		private Slider timerSlider;
+        [SerializeField] private Slider timerSlider;
 
-		[SerializeField]
-		private Slider specialAttackSlider;
+        [SerializeField] private Slider specialAttackSlider;
 
-		[SerializeField]
-		private TMP_Text healthLabel;
+        [SerializeField] private TMP_Text healthLabel;
 
-		[SerializeField]
-		private TMP_Text mpLabel;
+        [SerializeField] private TMP_Text mpLabel;
 
-		private Character character;
-		private CharacterHealth characterHealth;
-		private CharacterMP characterMP;
+        private Character character;
+        private CharacterHealth characterHealth;
+        private CharacterMP characterMP;
 
-		private CharacterStaminaTimer staminaTimer;
+        private StringVariableWriter healthLabelWriter;
+        private StringVariableWriter mpLabelWriter;
 
-		private StringVariableWriter healthLabelWriter;
-		private StringVariableWriter mpLabelWriter;
+        private CharacterStaminaTimer staminaTimer;
 
-		public void Initialize(GameObject player)
-		{
-			character       = player.GetComponent<Character>();
-			characterHealth = player.GetComponent<CharacterHealth>();
-			characterMP     = player.GetComponent<CharacterMP>();
+        private void LateUpdate()
+        {
+            timerSlider.value = 1 - staminaTimer.NormalizedStaminaTimer;
+        }
 
-			characterHealth.OnHealthChanged += UpdateHealth;
-			characterMP.OnMPChanged         += UpdateMP;
+        private void OnDisable()
+        {
+            characterHealth.OnHealthChanged -= UpdateHealth;
+            characterMP.OnMPChanged -= UpdateMP;
+        }
 
-			nameLabel.text = character.Name;
-			staminaTimer   = player.GetComponent<CharacterStaminaTimer>();
+        public void Initialize(GameObject player)
+        {
+            character = player.GetComponent<Character>();
+            characterHealth = player.GetComponent<CharacterHealth>();
+            characterMP = player.GetComponent<CharacterMP>();
 
-			healthLabelWriter = new StringVariableWriter(healthLabel.text);
-			mpLabelWriter     = new StringVariableWriter(mpLabel.text);
+            characterHealth.OnHealthChanged += UpdateHealth;
+            characterMP.OnMPChanged += UpdateMP;
 
-			UpdateHealth();
-			UpdateMP();
-		}
+            nameLabel.text = character.Name;
+            staminaTimer = player.GetComponent<CharacterStaminaTimer>();
 
-		private void OnDisable()
-		{
-			characterHealth.OnHealthChanged -= UpdateHealth;
-			characterMP.OnMPChanged         -= UpdateMP;
-		}
+            healthLabelWriter = new StringVariableWriter(healthLabel.text);
+            mpLabelWriter = new StringVariableWriter(mpLabel.text);
 
-		private void LateUpdate()
-		{
-			timerSlider.value = 1 - staminaTimer.NormalizedStaminaTimer;
-		}
+            UpdateHealth();
+            UpdateMP();
+        }
 
-		private void UpdateHealth()
-		{
-			healthLabel.text = healthLabelWriter.UpdateText(characterHealth.Health, characterHealth.MaximumHealth);
-		}
+        private void UpdateHealth()
+        {
+            healthLabel.text = healthLabelWriter.UpdateText(characterHealth.Health, characterHealth.MaximumHealth);
+        }
 
-		private void UpdateMP()
-		{
-			mpLabel.text = mpLabelWriter.UpdateText(characterMP.MP, character.Attributes.MaxMP);
-		}
-	}
+        private void UpdateMP()
+        {
+            mpLabel.text = mpLabelWriter.UpdateText(characterMP.MP, character.Attributes.MaxMP);
+        }
+    }
 }

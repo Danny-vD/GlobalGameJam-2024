@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using CombatSystem.Events;
 using UnityEngine;
 using VDFramework;
@@ -8,19 +7,17 @@ using VDFramework.UnityExtensions;
 
 namespace CombatSystem.Triggers
 {
-	public class CombatTrigger : BetterMonoBehaviour
-	{
-		[SerializeField]
-		private Collider combatCollider;
-		
-		[SerializeField]
-		private List<GameObject> Enemies;
+    public class CombatTrigger : BetterMonoBehaviour
+    {
+        [SerializeField] private Collider combatCollider;
 
-		private void OnTriggerEnter(Collider other)
-		{
-			EventManager.RaiseEvent(new CombatStartedEvent(Enemies));
-			combatCollider.Disable();
-			this.Disable();
-		}
-	}
+        [SerializeField] private List<GameObject> Enemies;
+
+        private void OnTriggerEnter(Collider other)
+        {
+            EventManager.RaiseEvent(new CombatStartedEvent(Enemies));
+            combatCollider.Disable();
+            this.Disable();
+        }
+    }
 }

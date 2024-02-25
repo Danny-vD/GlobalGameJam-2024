@@ -6,76 +6,71 @@ using VDFramework.LootTables.Variations;
 
 namespace LootTables.ScriptableObjects
 {
-	public abstract class PercentageLootTableObject<TLootType> : LootTableObject<TLootType>
-	{
-		[SerializeField]
-		private SerializableDictionary<TLootType, float> percentageLootTable;
+    public abstract class PercentageLootTableObject<TLootType> : LootTableObject<TLootType>
+    {
+        [SerializeField] private SerializableDictionary<TLootType, float> percentageLootTable;
 
-		[SerializeField, Tooltip("This is part of the lootTable, use this for putting a lootTable inside a lootTable")]
-		private SerializableDictionary<LootTableObject<TLootType>, float> nestedLootTables;
+        [SerializeField] [Tooltip("This is part of the lootTable, use this for putting a lootTable inside a lootTable")]
+        private SerializableDictionary<LootTableObject<TLootType>, float> nestedLootTables;
 
-		protected override WeightedLootTable<TLootType> GetNewLootTable()
-		{
-			PercentageLootTable<TLootType> weightedLootTable = new PercentageLootTable<TLootType>(percentageLootTable);
+        protected override WeightedLootTable<TLootType> GetNewLootTable()
+        {
+            var weightedLootTable = new PercentageLootTable<TLootType>(percentageLootTable);
 
-			foreach (KeyValuePair<LootTableObject<TLootType>, float> pair in nestedLootTables)
-			{
-				weightedLootTable.TryAdd(pair.Key, pair.Value);
-			}
+            foreach (var pair in nestedLootTables) weightedLootTable.TryAdd(pair.Key, pair.Value);
 
-			return weightedLootTable;
-		}
-		
-		public bool TryAdd(KeyValuePair<LootTableObject<TLootType>, float> pair)
-		{
-			if (!nestedLootTables.Contains(pair))
-			{
-				nestedLootTables.Add(pair);
+            return weightedLootTable;
+        }
 
-				lootTable = null; // Reset the cached loot table
-				return true;
-			}
+        public bool TryAdd(KeyValuePair<LootTableObject<TLootType>, float> pair)
+        {
+            if (!nestedLootTables.Contains(pair))
+            {
+                nestedLootTables.Add(pair);
 
-			return false;
-		}
-		
-		public bool TryAdd(LootTableObject<TLootType> loot, float percentage)
-		{
-			return TryAdd(new KeyValuePair<LootTableObject<TLootType>, float>(loot, percentage));
-		}
+                lootTable = null; // Reset the cached loot table
+                return true;
+            }
 
-		public bool TryAdd(KeyValuePair<TLootType, float> pair)
-		{
-			if (!percentageLootTable.Contains(pair))
-			{
-				percentageLootTable.Add(pair);
+            return false;
+        }
 
-				lootTable = null; // Reset the cached loot table
-				return true;
-			}
+        public bool TryAdd(LootTableObject<TLootType> loot, float percentage)
+        {
+            return TryAdd(new KeyValuePair<LootTableObject<TLootType>, float>(loot, percentage));
+        }
 
-			return false;
-		} 
-		
-		public bool TryAdd(TLootType loot, float percentage)
-		{
-			return TryAdd(new KeyValuePair<TLootType, float>(loot, percentage));
-		}
+        public bool TryAdd(KeyValuePair<TLootType, float> pair)
+        {
+            if (!percentageLootTable.Contains(pair))
+            {
+                percentageLootTable.Add(pair);
 
-		public bool TryRemove(KeyValuePair<TLootType, float> pair)
-		{
-			if (!percentageLootTable.Contains(pair))
-			{
-				return false;
-			}
+                lootTable = null; // Reset the cached loot table
+                return true;
+            }
 
-			percentageLootTable.Remove(pair);
-			return true;
-		}
-		
-		public bool TryRemove(TLootType loot)
-		{
-			return TryRemove(new KeyValuePair<TLootType, float>(loot, 0)); // percentage does not matter, SerializableKeyValuePairs are equal by their Key only
-		}
-	}
+            return false;
+        }
+
+        public bool TryAdd(TLootType loot, float percentage)
+        {
+            return TryAdd(new KeyValuePair<TLootType, float>(loot, percentage));
+        }
+
+        public bool TryRemove(KeyValuePair<TLootType, float> pair)
+        {
+            if (!percentageLootTable.Contains(pair)) return false;
+
+            percentageLootTable.Remove(pair);
+            return true;
+        }
+
+        public bool TryRemove(TLootType loot)
+        {
+            return
+                TryRemove(new KeyValuePair<TLootType, float>(loot,
+                    0)); // percentage does not matter, SerializableKeyValuePairs are equal by their Key only
+        }
+    }
 }

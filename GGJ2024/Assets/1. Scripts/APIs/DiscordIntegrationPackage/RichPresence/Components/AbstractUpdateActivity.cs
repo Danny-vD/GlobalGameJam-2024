@@ -7,108 +7,86 @@ using VDFramework;
 
 namespace APIs.DiscordIntegrationPackage.RichPresence.Components
 {
-	public abstract class AbstractUpdateActivity : BetterMonoBehaviour
-	{
-		[Header("Details")]
-		[SerializeField]
-		private bool showDetails;
+    public abstract class AbstractUpdateActivity : BetterMonoBehaviour
+    {
+        [Header("Details")] [SerializeField] private bool showDetails;
 
-		[SerializeField]
-		private string details;
+        [SerializeField] private string details;
 
-		[Header("Status")]
-		[SerializeField]
-		private bool showState;
+        [Header("Status")] [SerializeField] private bool showState;
 
-		[SerializeField]
-		private string state;
+        [SerializeField] private string state;
 
-		[Header("Timer")]
-		[SerializeField]
-		private TimerShown timerShown;
+        [Header("Timer")] [SerializeField] private TimerShown timerShown;
 
-		[SerializeField]
-		private long secondsRemaining;
+        [SerializeField] private long secondsRemaining;
 
-		[Header("Images")]
-		[SerializeField]
-		private ImageShown imageShown;
+        [Header("Images")] [SerializeField] private ImageShown imageShown;
 
-		[SerializeField]
-		private DiscordImage largeImage;
-		
-		[SerializeField]
-		private DiscordImage smallImage;
-		
-		protected void UpdatePresence()
-		{
-			if (!DiscordManager.IsDiscordConnected)
-			{
-				return;
-			}
-			
-			Activity activity = new Activity();
+        [SerializeField] private DiscordImage largeImage;
 
-			if (showDetails)
-			{
-				activity.Details = details;
-			}
+        [SerializeField] private DiscordImage smallImage;
 
-			if (showState)
-			{
-				activity.State = state;
-			}
+        protected void UpdatePresence()
+        {
+            if (!DiscordManager.IsDiscordConnected) return;
 
-			switch (timerShown)
-			{
-				default:
-				case TimerShown.None:
-					break;
-				case TimerShown.TimeElapsed:
-					activity.Timestamps = new ActivityTimestamps
-					{
-						Start = DateTimeOffset.Now.ToUnixTimeSeconds(),
-					};
-					break;
-				case TimerShown.TimeRemaining:
-					activity.Timestamps = new ActivityTimestamps
-					{
-						End = DateTimeOffset.Now.ToUnixTimeSeconds() + secondsRemaining,
-					};
-					break;
-			}
-			
-			ImageData largeImageData = default;
+            var activity = new Activity();
 
-			switch (imageShown)
-			{
-				default:
-				case ImageShown.None:
-					break;
-				case ImageShown.LargeOnly:
-					largeImageData = DiscordImageManager.Instance.GetImageID(largeImage);
-					
-					activity.Assets = new ActivityAssets
-					{
-						LargeImage = largeImageData.ImageID,
-						LargeText  = largeImageData.ImageText,
-					};
-					break;
-				case ImageShown.LargeAndSmall:
-					largeImageData = DiscordImageManager.Instance.GetImageID(largeImage);
-					ImageData smallImageData = DiscordImageManager.Instance.GetImageID(smallImage);
-					
-					activity.Assets = new ActivityAssets
-					{
-						LargeImage = largeImageData.ImageID,
-						LargeText  = largeImageData.ImageText,
-						SmallImage = smallImageData.ImageID,
-						SmallText  = smallImageData.ImageText,
-					};
-					break;
-			}
-			
-			DiscordPresenceManager.UpdatePresence(activity);
-		}
-	}
+            if (showDetails) activity.Details = details;
+
+            if (showState) activity.State = state;
+
+            switch (timerShown)
+            {
+                default:
+                case TimerShown.None:
+                    break;
+                case TimerShown.TimeElapsed:
+                    activity.Timestamps = new ActivityTimestamps
+                    {
+                        Start = DateTimeOffset.Now.ToUnixTimeSeconds()
+                    };
+                    break;
+                case TimerShown.TimeRemaining:
+                    activity.Timestamps = new ActivityTimestamps
+                    {
+                        End = DateTimeOffset.Now.ToUnixTimeSeconds() + secondsRemaining
+                    };
+                    break;
+            }
+
+            ImageData largeImageData = default;
+
+            switch (imageShown)
+            {
+                default:
+                case ImageShown.None:
+                    break;
+                case ImageShown.LargeOnly:
+                    largeImageData = DiscordImageManager.Instance.GetImageID(largeImage);
+
+                    activity.Assets = new ActivityAssets
+                    {
+                        LargeImage = largeImageData.ImageID,
+                        LargeText = largeImageData.ImageText
+                    };
+                    break;
+                case ImageShown.LargeAndSmall:
+                    largeImageData = DiscordImageManager.Instance.GetImageID(largeImage);
+                    var smallImageData = DiscordImageManager.Instance.GetImageID(smallImage);
+
+                    activity.Assets = new ActivityAssets
+                    {
+                        LargeImage = largeImageData.ImageID,
+                        LargeText = largeImageData.ImageText,
+                        SmallImage = smallImageData.ImageID,
+                        SmallText = smallImageData.ImageText
+                    };
+                    break;
+            }
+
+            DiscordPresenceManager.UpdatePresence(activity);
+        }
+    }
 }

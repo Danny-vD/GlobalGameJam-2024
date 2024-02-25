@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Dialogue.Events;
 using UnityEngine;
@@ -21,16 +20,16 @@ namespace Dialogue
             EventManager.AddListener<ChoiceSelectedEvent>(OnChoiceSelected);
         }
 
-        private void PerformAnimation()
-        {
-            //TODO: ADD ENTER ANIMATION
-        }
-
         private void OnDisable()
         {
             EventManager.RemoveListener<NextLineEvent>(OnNewChoices);
             EventManager.RemoveListener<FinishedLineEvent>(PerformAnimation);
             EventManager.RemoveListener<ChoiceSelectedEvent>(OnChoiceSelected);
+        }
+
+        private void PerformAnimation()
+        {
+            //TODO: ADD ENTER ANIMATION
         }
 
         private void OnNewChoices(NextLineEvent @event)
@@ -39,8 +38,8 @@ namespace Dialogue
             if (@event.Choices.Count == 0)
             {
                 var instance = Instantiate(button, transform);
-                
-                instance.GetComponent<ChoiceTextHandler>().SetValues("...",-1);
+
+                instance.GetComponent<ChoiceTextHandler>().SetValues("...", -1);
                 buttonsList.Add(instance);
             }
             else
@@ -57,10 +56,7 @@ namespace Dialogue
 
         private void OnChoiceSelected(ChoiceSelectedEvent @event)
         {
-            foreach (var o in buttonsList)
-            {
-                Destroy(o);
-            }
+            foreach (var o in buttonsList) Destroy(o);
 
             Debug.Log("DESTROYED");
             buttonsList.Clear();

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -13,85 +12,82 @@ using Utility.EditorPackage;
 namespace Utility.FMODUtilityPackage.EnumWriter
 {
 	/// <summary>
-	/// Used to write all the event paths to a file in the resources folder to be able to retrieve the eventpaths without having to put an instantiated AudioManager in the scene
+	///     Used to write all the event paths to a file in the resources folder to be able to retrieve the eventpaths without
+	///     having to put an instantiated AudioManager in the scene
 	/// </summary>
 	public static class AudioEnumWriter
-	{
-		private const string scriptsFolder = "1. Scripts";
-		private const string subFolder = "/zExternalPackages";
+    {
+        private const string scriptsFolder = "1. Scripts";
+        private const string subFolder = "/zExternalPackages";
 
-		private static readonly string typePath = @$"{Application.dataPath}/{scriptsFolder}{subFolder}/FMODUtilityPackage/Enums/";
+        private static readonly string typePath =
+            @$"{Application.dataPath}/{scriptsFolder}{subFolder}/FMODUtilityPackage/Enums/";
 
-		public static void WriteFmodEventsToEnum()
-		{
-			List<EditorEventRef> editorEventRefs = EventManager.Events;
-			string[] enumValues = editorEventRefs.Select(eventref => eventref.Path).ToArray();
+        public static void WriteFmodEventsToEnum()
+        {
+            var editorEventRefs = EventManager.Events;
+            var enumValues = editorEventRefs.Select(eventref => eventref.Path).ToArray();
 
-			string[] eventPaths = new string[enumValues.Length];
-			Array.Copy(enumValues, eventPaths, enumValues.Length);
+            var eventPaths = new string[enumValues.Length];
+            Array.Copy(enumValues, eventPaths, enumValues.Length);
 
-			WriteToResourcesUtil.WriteToResources(eventPaths, "EventPaths.txt", "FMODUtilityPackage/");
-			
-			enumValues = EventPathToEnumValueUtil.ConvertEventPathToEnumValuesString(enumValues);
+            WriteToResourcesUtil.WriteToResources(eventPaths, "EventPaths.txt", "FMODUtilityPackage/");
 
-			WriteToFile(typePath, nameof(AudioEventType), enumValues, eventPaths);
-		}
+            enumValues = EventPathToEnumValueUtil.ConvertEventPathToEnumValuesString(enumValues);
 
-		public static void WriteToFile(string path, string typeName, string[] values, string[] documentation)
-		{
-			WriteEnumValues(values, documentation, path, typeName);
+            WriteToFile(typePath, nameof(AudioEventType), enumValues, eventPaths);
+        }
 
-			CompilationPipeline.RequestScriptCompilation();
-		}
+        public static void WriteToFile(string path, string typeName, string[] values, string[] documentation)
+        {
+            WriteEnumValues(values, documentation, path, typeName);
 
-		private static void WriteEnumValues(string[] values, string[] documentation, string path, string typeName)
-		{
-			string fullPath = $"{path}{typeName}.cs";
+            CompilationPipeline.RequestScriptCompilation();
+        }
 
-			string content = File.ReadAllText(fullPath);
+        private static void WriteEnumValues(string[] values, string[] documentation, string path, string typeName)
+        {
+            var fullPath = $"{path}{typeName}.cs";
 
-			string enumDeclaration = $"enum {typeName}";
+            var content = File.ReadAllText(fullPath);
 
-			int startIndex = content.IndexOf(enumDeclaration, StringComparison.Ordinal); // Find the enum declaration
+            var enumDeclaration = $"enum {typeName}";
 
-			if (startIndex == -1)
-			{
-				Debug.LogError("No valid enum declaration found in file");
-				return;
-			}
+            var startIndex = content.IndexOf(enumDeclaration, StringComparison.Ordinal); // Find the enum declaration
 
-			startIndex = content.IndexOf('{', startIndex);     // Find the opening brace of the enum
-			int closeIndex = content.IndexOf('}', startIndex); // Find the closing brace of the enum
+            if (startIndex == -1)
+            {
+                Debug.LogError("No valid enum declaration found in file");
+                return;
+            }
 
-			string afterEnum = string.Empty;
+            startIndex = content.IndexOf('{', startIndex); // Find the opening brace of the enum
+            var closeIndex = content.IndexOf('}', startIndex); // Find the closing brace of the enum
 
-			if (closeIndex != -1)
-			{
-				afterEnum = content.Substring(closeIndex);
-			}
+            var afterEnum = string.Empty;
 
-			string beforeEnum = content.Substring(0, startIndex);
-			StringBuilder builder = new StringBuilder(beforeEnum);
-			builder.AppendLine("{");
+            if (closeIndex != -1) afterEnum = content.Substring(closeIndex);
 
-			for (int i = 0; i < values.Length; i++)
-			{
-				builder.AppendLine("\t\t/// <FMODEventPath>");
-				builder.AppendLine($"\t\t/// {documentation[i].Replace("&", "&amp;").Replace("'", "&apos;")}"); // XML does not allow special characters directly
-				builder.AppendLine("\t\t/// </FMODEventPath>");
-				builder.AppendLine($"\t\t{values[i]},");
+            var beforeEnum = content.Substring(0, startIndex);
+            var builder = new StringBuilder(beforeEnum);
+            builder.AppendLine("{");
 
-				if (i != values.Length - 1)
-				{
-					builder.AppendLine();
-				}
-			}
+            for (var i = 0; i < values.Length; i++)
+            {
+                builder.AppendLine("\t\t/// <FMODEventPath>");
+                builder.AppendLine(
+                    $"\t\t/// {documentation[i].Replace("&", "&amp;").Replace("'", "&apos;")}"); // XML does not allow special characters directly
+                builder.AppendLine("\t\t/// </FMODEventPath>");
+                builder.AppendLine($"\t\t{values[i]},");
 
-			builder.Append("\t");
+                if (i != values.Length - 1) builder.AppendLine();
+            }
 
-			builder.Append(afterEnum);
+            builder.Append("\t");
 
-			File.WriteAllText(fullPath, builder.ToString());
-		}
-	}
+            builder.Append(afterEnum);
+
+            File.WriteAllText(fullPath, builder.ToString());
+        }
+    }
 }

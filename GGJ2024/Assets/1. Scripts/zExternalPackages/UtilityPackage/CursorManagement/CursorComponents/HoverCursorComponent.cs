@@ -7,80 +7,73 @@ using UtilityPackage.CursorManagement.Structs;
 
 namespace UtilityPackage.CursorManagement.CursorComponents
 {
-	public class HoverCursorComponent : AbstractCursorComponent
-	{
-		[SerializeField, Tooltip("The CursorData to use if no other data is specified")]
-		private CursorData defaultHoverDatum;
+    public class HoverCursorComponent : AbstractCursorComponent
+    {
+        [SerializeField] [Tooltip("The CursorData to use if no other data is specified")]
+        private CursorData defaultHoverDatum;
 
-		[SerializeField, Tooltip("Specify a CursorData for a specific tag")]
-		private SerializableDictionary<string, CursorData> tagData;
+        [SerializeField] [Tooltip("Specify a CursorData for a specific tag")]
+        private SerializableDictionary<string, CursorData> tagData;
 
-		public override bool IsAdditiveEffect => false;
+        private CursorData? cursorDataToSet;
 
-		private bool pointerIsHoveringOverSelectable = false;
+        private bool pointerIsHoveringOverSelectable;
 
-		private CursorData? cursorDataToSet;
+        public override bool IsAdditiveEffect => false;
 
-		protected override void OnDeactivate()
-		{
-			cursorDataToSet = null;
-		}
+        private void LateUpdate()
+        {
+            if (IsPointerOverSelectable(out var hoveredSelectableObject))
+            {
+                var newCursorData = GetCursorData(hoveredSelectableObject);
 
-		private void LateUpdate()
-		{
-			if (IsPointerOverSelectable(out GameObject hoveredSelectableObject))
-			{
-				CursorData newCursorData = GetCursorData(hoveredSelectableObject);
+                if (!newCursorData.Equals(cursorDataToSet)) // Prevent updating to the cursorData that is already set
+                {
+                    cursorDataToSet = newCursorData;
+                    ShouldUpdateCursor = true;
+                }
+            }
+        }
 
-				if (!newCursorData.Equals(cursorDataToSet)) // Prevent updating to the cursorData that is already set
-				{
-					cursorDataToSet     = newCursorData;
-					ShouldUpdateCursor = true;
-				}
-			}
-		}
+        protected override void OnDeactivate()
+        {
+            cursorDataToSet = null;
+        }
 
-		public override bool AreConditionsMet()
-		{
-			return pointerIsHoveringOverSelectable;
-		}
+        public override bool AreConditionsMet()
+        {
+            return pointerIsHoveringOverSelectable;
+        }
 
-		public override CursorData GetCursorData()
-		{
-			ShouldUpdateCursor = false;
-			return cursorDataToSet!.Value;
-		}
+        public override CursorData GetCursorData()
+        {
+            ShouldUpdateCursor = false;
+            return cursorDataToSet!.Value;
+        }
 
-		private bool IsPointerOverSelectable(out GameObject hoveredSelectableObject)
-		{
-			pointerIsHoveringOverSelectable = false;
-			hoveredSelectableObject         = null;
-			
-			if (CursorUtil.Instance.TryGetHoveredGameObject(out GameObject hoveredGameObject))
-			{
-				if (hoveredGameObject.GetComponent<Selectable>() != null)
-				{
-					pointerIsHoveringOverSelectable = true;
-					hoveredSelectableObject         = hoveredGameObject;
-				}
-			}
+        private bool IsPointerOverSelectable(out GameObject hoveredSelectableObject)
+        {
+            pointerIsHoveringOverSelectable = false;
+            hoveredSelectableObject = null;
 
-			return pointerIsHoveringOverSelectable;
-		}
+            if (CursorUtil.Instance.TryGetHoveredGameObject(out var hoveredGameObject))
+                if (hoveredGameObject.GetComponent<Selectable>() != null)
+                {
+                    pointerIsHoveringOverSelectable = true;
+                    hoveredSelectableObject = hoveredGameObject;
+                }
 
-		private CursorData GetCursorData(GameObject hoveredObject)
-		{
-			if (hoveredObject.TryGetComponent(out CursorTextureComponent cursorTexture))
-			{
-				return cursorTexture.CursorData;
-			}
+            return pointerIsHoveringOverSelectable;
+        }
 
-			if (tagData.TryGetValue(hoveredObject.tag, out CursorData cursorData))
-			{
-				return cursorData;
-			}
+        private CursorData GetCursorData(GameObject hoveredObject)
+        {
+            if (hoveredObject.TryGetComponent(out CursorTextureComponent cursorTexture))
+                return cursorTexture.CursorData;
 
-			return defaultHoverDatum;
-		}
-	}
+            if (tagData.TryGetValue(hoveredObject.tag, out var cursorData)) return cursorData;
+
+            return defaultHoverDatum;
+        }
+    }
 }

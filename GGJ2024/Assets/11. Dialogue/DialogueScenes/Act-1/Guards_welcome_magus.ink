@@ -3,7 +3,7 @@ The King is expecting you. #speaker:Guard
     -> Questions
     
 == Questions == 
-    * What is it that is troubling him? # speaker: Magus
+    * What is it that is <wave>troubling</wave> him? # speaker: Magus
         -> Response_1
     * I'll be on my way then. #speaker: Magus
         -> END

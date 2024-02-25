@@ -8,194 +8,193 @@ using VDFramework.Utility.TimerUtil.TimerHandles;
 
 namespace APIs.DiscordIntegrationPackage
 {
-	public class DiscordManager : Singleton<DiscordManager>
-	{
-		public static event Action<Discord.Discord> OnDiscordConnected = delegate { };
-		public static event Action OnDiscordDisconnected = delegate { };
+    public class DiscordManager : Singleton<DiscordManager>
+    {
+        [Header("Platform settings")]
+        [SerializeField]
+        [Tooltip(
+            "If discord is not open when the game starts, discord will:\n1. close the game\n2. attempt to open discord\n3. attempt to reopen the game")]
+        private bool discordIsRequiredForGameToWork;
 
-		/// <summary>
-		/// Will be called if a connection attempt fails
-		/// </summary>
-		/// <seealso cref="Result"/>
-		public static event Action OnDiscordConnectionFailed = delegate { };
+        [Header("Connection paramaters")]
+        [SerializeField]
+        [Tooltip("If Discord is disconnected, try to reconnect every x seconds")]
+        private float reconnectTimer = 2.0f;
 
-		/// <summary>
-		/// Will be called if Discord did not (re)connect and we reached the maximum connection attemps
-		/// </summary>
-		public static event Action OnDiscordUnableToConnect = delegate { };
+        [SerializeField]
+        [Tooltip(
+            "How many times we attempt to connect with discord before giving up, <=0 will be considered infinite attempts")]
+        private int maximumConnectionAttempts = 6;
 
-		/// <summary>
-		/// Will be called if the initial connection returns a <see cref="Result.NotInstalled"/>
-		/// </summary>
-		public static event Action OnDiscordNotInstalled = delegate { };
+        private int currentConnectionAttempt;
 
-		public static bool IsDiscordConnected { get; private set; }
+        private TimerHandle tryReconnectTimer;
 
-		public static Discord.Discord Discord { get; private set; }
+        public static bool IsDiscordConnected { get; private set; }
 
-		[Header("Platform settings")]
-		[SerializeField, Tooltip("If discord is not open when the game starts, discord will:\n1. close the game\n2. attempt to open discord\n3. attempt to reopen the game")]
-		private bool discordIsRequiredForGameToWork = false;
+        public static Discord.Discord Discord { get; private set; }
 
-		[Header("Connection paramaters")]
-		[SerializeField, Tooltip("If Discord is disconnected, try to reconnect every x seconds")]
-		private float reconnectTimer = 2.0f;
+        private void Start()
+        {
+            if (!transform.parent) DontDestroyOnLoad(true);
 
-		[SerializeField, Tooltip("How many times we attempt to connect with discord before giving up, <=0 will be considered infinite attempts")]
-		private int maximumConnectionAttempts = 6;
+            TryConnectingWithDiscord();
+        }
 
-		private TimerHandle tryReconnectTimer;
-		private int currentConnectionAttempt = 0;
+        private void Update()
+        {
+            if (IsDiscordConnected)
+                try
+                {
+                    Discord.RunCallbacks();
+                }
+                catch (ResultException)
+                {
+                    // Any result exception is bad and means something is wrong with the connection
+                    DiscordDisconnected();
+                }
+        }
 
-		private void Start()
-		{
-			if (!transform.parent)
-			{
-				DontDestroyOnLoad(true);
-			}
+        private void OnDisable()
+        {
+            Cleanup();
+        }
 
-			TryConnectingWithDiscord();
-		}
+        protected override void OnDestroy()
+        {
+            Cleanup();
 
-		private void OnDisable()
-		{
-			Cleanup();
-		}
-		
-		/// <summary>
-		/// Will reset the current connection count and attempt to connect with discord
-		/// </summary>
-		public static void ResetConnection()
-		{
-			DiscordManager discordManager = Instance;
-			
-			discordManager.Cleanup();
-			discordManager.currentConnectionAttempt = 0;
-			
-			discordManager.TryConnectingWithDiscord();
-		}
+            base.OnDestroy();
+        }
 
-		private ulong GetDiscordFlag()
-		{
-			return (ulong)(discordIsRequiredForGameToWork ? CreateFlags.Default : CreateFlags.NoRequireDiscord);
-		}
+        public static event Action<Discord.Discord> OnDiscordConnected = delegate { };
+        public static event Action OnDiscordDisconnected = delegate { };
 
-		private void TryConnectingWithDiscord()
-		{
-			try
-			{
-				Discord = new Discord.Discord(ApplicationData.DISCORD_APPLICATION_ID, GetDiscordFlag());
+        /// <summary>
+        ///     Will be called if a connection attempt fails
+        /// </summary>
+        /// <seealso cref="Result" />
+        public static event Action OnDiscordConnectionFailed = delegate { };
 
-				DiscordConnected();
-			}
-			catch (ResultException resultException)
-			{
-				// Any result exception is bad and means the connection did not go through
+        /// <summary>
+        ///     Will be called if Discord did not (re)connect and we reached the maximum connection attemps
+        /// </summary>
+        public static event Action OnDiscordUnableToConnect = delegate { };
 
-				if (resultException.Result is Result.NotInstalled)
-				{
-					OnDiscordNotInstalled.Invoke();
-					Cleanup();
-				}
-				else
-				{
-					DiscordConnectionFailed();
-				}
-			}
-		}
-		
-		private static void InitializeManagers()
-		{
+        /// <summary>
+        ///     Will be called if the initial connection returns a <see cref="Result.NotInstalled" />
+        /// </summary>
+        public static event Action OnDiscordNotInstalled = delegate { };
+
+        /// <summary>
+        ///     Will reset the current connection count and attempt to connect with discord
+        /// </summary>
+        public static void ResetConnection()
+        {
+            var discordManager = Instance;
+
+            discordManager.Cleanup();
+            discordManager.currentConnectionAttempt = 0;
+
+            discordManager.TryConnectingWithDiscord();
+        }
+
+        private ulong GetDiscordFlag()
+        {
+            return (ulong)(discordIsRequiredForGameToWork ? CreateFlags.Default : CreateFlags.NoRequireDiscord);
+        }
+
+        private void TryConnectingWithDiscord()
+        {
+            try
+            {
+                Discord = new Discord.Discord(ApplicationData.DISCORD_APPLICATION_ID, GetDiscordFlag());
+
+                DiscordConnected();
+            }
+            catch (ResultException resultException)
+            {
+                // Any result exception is bad and means the connection did not go through
+
+                if (resultException.Result is Result.NotInstalled)
+                {
+                    OnDiscordNotInstalled.Invoke();
+                    Cleanup();
+                }
+                else
+                {
+                    DiscordConnectionFailed();
+                }
+            }
+        }
+
+        private static void InitializeManagers()
+        {
 #if UNITY_EDITOR
-			DiscordDebugLogger.Initialize(Discord);
+            DiscordDebugLogger.Initialize(Discord);
 #endif
 
-			DiscordPresenceManager.Initialize(Discord);
-		}
+            DiscordPresenceManager.Initialize(Discord);
+        }
 
-		private void DiscordConnected()
-		{
-			tryReconnectTimer?.Stop(); // Stop trying to reconnect if we connected
-			currentConnectionAttempt = 0;
+        private void DiscordConnected()
+        {
+            tryReconnectTimer?.Stop(); // Stop trying to reconnect if we connected
+            currentConnectionAttempt = 0;
 
-			IsDiscordConnected = true;
+            IsDiscordConnected = true;
 
-			InitializeManagers();
+            InitializeManagers();
 
-			OnDiscordConnected.Invoke(Discord);
-		}
+            OnDiscordConnected.Invoke(Discord);
+        }
 
-		private void DiscordDisconnected()
-		{
-			IsDiscordConnected = false;
+        private void DiscordDisconnected()
+        {
+            IsDiscordConnected = false;
 
-			Discord.Dispose();
-			OnDiscordDisconnected.Invoke();
+            Discord.Dispose();
+            OnDiscordDisconnected.Invoke();
 
-			tryReconnectTimer?.Stop();
-			tryReconnectTimer = null;
+            tryReconnectTimer?.Stop();
+            tryReconnectTimer = null;
 
-			tryReconnectTimer = TimerManager.StartNewTimer(reconnectTimer, TryConnectingWithDiscord, true);
-		}
+            tryReconnectTimer = TimerManager.StartNewTimer(reconnectTimer, TryConnectingWithDiscord, true);
+        }
 
-		private void DiscordConnectionFailed()
-		{
-			OnDiscordConnectionFailed.Invoke();
-			++currentConnectionAttempt;
+        private void DiscordConnectionFailed()
+        {
+            OnDiscordConnectionFailed.Invoke();
+            ++currentConnectionAttempt;
 
-			if (currentConnectionAttempt == maximumConnectionAttempts)
-			{
-				tryReconnectTimer?.Stop();
-				tryReconnectTimer = null;
+            if (currentConnectionAttempt == maximumConnectionAttempts)
+            {
+                tryReconnectTimer?.Stop();
+                tryReconnectTimer = null;
 
-				OnDiscordUnableToConnect.Invoke();
-			}
-			else
-			{
-				if (tryReconnectTimer == null)
-				{
-					tryReconnectTimer = TimerManager.StartNewTimer(reconnectTimer, TryConnectingWithDiscord, true);
-				}
-			}
-		}
+                OnDiscordUnableToConnect.Invoke();
+            }
+            else
+            {
+                if (tryReconnectTimer == null)
+                    tryReconnectTimer = TimerManager.StartNewTimer(reconnectTimer, TryConnectingWithDiscord, true);
+            }
+        }
 
-		private void Update()
-		{
-			if (IsDiscordConnected)
-			{
-				try
-				{
-					Discord.RunCallbacks();
-				}
-				catch (ResultException)
-				{
-					// Any result exception is bad and means something is wrong with the connection
-					DiscordDisconnected();
-				}
-			}
-		}
+        private void Cleanup()
+        {
+            if (IsDiscordConnected)
+            {
+                IsDiscordConnected = false;
 
-		private void Cleanup()
-		{
-			if (IsDiscordConnected)
-			{
-				IsDiscordConnected = false;
-
-				Discord.Dispose();
-				OnDiscordDisconnected.Invoke();
-			}
-			else
-			{
-				tryReconnectTimer?.Stop();
-				tryReconnectTimer = null;
-			}
-		}
-
-		protected override void OnDestroy()
-		{
-			Cleanup();
-
-			base.OnDestroy();
-		}
-	}
+                Discord.Dispose();
+                OnDiscordDisconnected.Invoke();
+            }
+            else
+            {
+                tryReconnectTimer?.Stop();
+                tryReconnectTimer = null;
+            }
+        }
+    }
 }

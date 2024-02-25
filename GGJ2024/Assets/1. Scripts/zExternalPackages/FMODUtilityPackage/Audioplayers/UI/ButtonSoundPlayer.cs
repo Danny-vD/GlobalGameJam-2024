@@ -10,87 +10,76 @@ using VDFramework;
 
 namespace FMODUtilityPackage.Audioplayers.UI
 {
-	[RequireComponent(typeof(Button))]
-	public class ButtonSoundPlayer : BetterMonoBehaviour, IAudioplayer
-	{
-		[SerializeField, Tooltip("If true, clicking the button again will start the event from the beginning")]
-		private bool clickRestartsSound = true;
+    [RequireComponent(typeof(Button))]
+    public class ButtonSoundPlayer : BetterMonoBehaviour, IAudioplayer
+    {
+        [SerializeField] [Tooltip("If true, clicking the button again will start the event from the beginning")]
+        private bool clickRestartsSound = true;
 
-		[SerializeField]
-		private AudioEventType audioEventToPlayOnClick;
+        [SerializeField] private AudioEventType audioEventToPlayOnClick;
 
-		[SerializeField]
-		private EventParameters parameters;
+        [SerializeField] private EventParameters parameters;
 
-		private Button button;
+        private Button button;
 
-		private EventInstance clickSound;
-		private bool isInitialized;
+        private EventInstance clickSound;
+        private bool isInitialized;
 
-		private void Awake()
-		{
-			button = GetComponent<Button>();
-			button.onClick.AddListener(clickRestartsSound ? Play : PlayIfNotPlaying);
-		}
+        private void Awake()
+        {
+            button = GetComponent<Button>();
+            button.onClick.AddListener(clickRestartsSound ? Play : PlayIfNotPlaying);
+        }
 
-		private void Initialize()
-		{
-			clickSound = AudioPlayer.GetEventInstance(audioEventToPlayOnClick);
-			clickSound.SetParameters(parameters);
+        private void OnDisable()
+        {
+            clickSound.release();
+            isInitialized = false;
+        }
 
-			isInitialized = true;
-		}
+        private void OnDestroy()
+        {
+            Stop();
+        }
 
-		private void OnDisable()
-		{
-			clickSound.release();
-			isInitialized = false;
-		}
+        public void Play()
+        {
+            if (!isInitialized) Initialize();
 
-		private void OnDestroy()
-		{
-			Stop();
-		}
+            clickSound.start();
+        }
 
-		public void Play()
-		{
-			if (!isInitialized)
-			{
-				Initialize();
-			}
+        public void PlayIfNotPlaying()
+        {
+            if (!isInitialized) Initialize();
 
-			clickSound.start();
-		}
+            clickSound.getPlaybackState(out var state);
 
-		public void PlayIfNotPlaying()
-		{
-			if (!isInitialized)
-			{
-				Initialize();
-			}
+            if (state is PLAYBACK_STATE.STOPPED or PLAYBACK_STATE.STOPPING) clickSound.start();
+        }
 
-			clickSound.getPlaybackState(out PLAYBACK_STATE state);
+        public void Stop()
+        {
+            clickSound.stop(STOP_MODE.ALLOWFADEOUT);
+        }
 
-			if (state is PLAYBACK_STATE.STOPPED or PLAYBACK_STATE.STOPPING)
-			{
-				clickSound.start();
-			}
-		}
+        public void SetPause(bool paused)
+        {
+            clickSound.setPaused(paused);
+        }
 
-		public void Stop()
-		{
-			clickSound.stop(STOP_MODE.ALLOWFADEOUT);
-		}
+        private void Initialize()
+        {
+            clickSound = AudioPlayer.GetEventInstance(audioEventToPlayOnClick);
+            clickSound.SetParameters(parameters);
 
-		public void SetPause(bool paused)
-		{
-			clickSound.setPaused(paused);
-		}
+            isInitialized = true;
+        }
 
-		public void SetParameters(EventParameters eventParameters)
-		{
-			parameters = eventParameters;
-			clickSound.SetParameters(parameters);
-		}
-	}
+        public void SetParameters(EventParameters eventParameters)
+        {
+            parameters = eventParameters;
+            clickSound.SetParameters(parameters);
+        }
+    }
 }

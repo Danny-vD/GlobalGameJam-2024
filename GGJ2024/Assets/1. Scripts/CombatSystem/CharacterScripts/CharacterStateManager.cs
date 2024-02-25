@@ -11,104 +11,100 @@ using VDFramework.UnityExtensions;
 
 namespace CombatSystem.CharacterScripts
 {
-	public class CharacterStateManager : BetterMonoBehaviour
-	{
-		public event Action<CharacterCombatStateType> OnStateChanged = delegate { }; // TODO animation components that listen to this event and set animation triggers accordingly
+    public class CharacterStateManager : BetterMonoBehaviour
+    {
+        [SerializeField]
+        private SerializableEnumDictionary<CharacterCombatStateType, AbstractCharacterState> statesPerType;
 
-		[SerializeField]
-		private SerializableEnumDictionary<CharacterCombatStateType, AbstractCharacterState> statesPerType;
+        private CharacterHealth characterHealth;
 
-		public CharacterCombatStateType CurrentStateType { get; private set; }
+        private AbstractCharacterState currentState;
 
-		private List<AbstractCharacterState> states;
+        private List<AbstractCharacterState> states;
 
-		private AbstractCharacterState currentState;
-		private CharacterHealth characterHealth;
+        public CharacterCombatStateType CurrentStateType { get; private set; }
 
-		private void Awake()
-		{
-			if (!statesPerType.ContainsKey(CharacterCombatStateType.Idle))
-			{
-				Debug.LogError("No idle state present!");
-			}
+        private void Awake()
+        {
+            if (!statesPerType.ContainsKey(CharacterCombatStateType.Idle)) Debug.LogError("No idle state present!");
 
-			CombatStartedEvent.ParameterlessListeners += this.Enable;
-			CombatEndedEvent.ParameterlessListeners   += this.Disable;
+            CombatStartedEvent.ParameterlessListeners += this.Enable;
+            CombatEndedEvent.ParameterlessListeners += this.Disable;
 
-			characterHealth = GetComponent<CharacterHealth>();
+            characterHealth = GetComponent<CharacterHealth>();
 
-			this.Disable();
-		}
+            this.Disable();
+        }
 
-		private void OnEnable()
-		{
-			SetState(CharacterCombatStateType.Idle);
+        private void Update()
+        {
+            currentState.Step();
+        }
 
-			characterHealth.OnDied += ForceDeadState;
-		}
+        private void OnEnable()
+        {
+            SetState(CharacterCombatStateType.Idle);
 
-		private void OnDisable()
-		{
-			characterHealth.OnDied -= ForceDeadState;
-		}
+            characterHealth.OnDied += ForceDeadState;
+        }
 
-		private void Update()
-		{
-			currentState.Step();
-		}
+        private void OnDisable()
+        {
+            characterHealth.OnDied -= ForceDeadState;
+        }
 
-		public void RestartCurrentState()
-		{
-			ForceState(CurrentStateType);
-		}
-		
-		/// <summary>
-		/// Forcibly exits the current state and starts a new one
-		/// </summary>
-		public void ForceState(CharacterCombatStateType stateType)
-		{
-			currentState.OnStateEnded -= SetState; // Stop reacting to the current state ending so that we do not set up the state that would've come after
-			currentState.Exit();
-			
-			SetState(stateType);
-		}
+        private void OnDestroy()
+        {
+            if (currentState != null) currentState.OnStateEnded -= SetState;
 
-		private void SetState(CharacterCombatStateType stateType)
-		{
-			if (currentState != null)
-			{
-				currentState.OnStateEnded -= SetState;
-			}
+            CombatStartedEvent.ParameterlessListeners -= this.Enable;
+            CombatEndedEvent.ParameterlessListeners -= this.Disable;
+        }
 
-			CurrentStateType = stateType;
+        public event Action<CharacterCombatStateType>
+            OnStateChanged = delegate
+            {
+            }; // TODO animation components that listen to this event and set animation triggers accordingly
 
-			currentState = statesPerType[CurrentStateType];
-			OnStateChanged.Invoke(stateType);
+        public void RestartCurrentState()
+        {
+            ForceState(CurrentStateType);
+        }
 
-			currentState.OnStateEnded += SetState;
+        /// <summary>
+        ///     Forcibly exits the current state and starts a new one
+        /// </summary>
+        public void ForceState(CharacterCombatStateType stateType)
+        {
+            currentState.OnStateEnded -=
+                SetState; // Stop reacting to the current state ending so that we do not set up the state that would've come after
+            currentState.Exit();
 
-			currentState.Enter();
-		}
+            SetState(stateType);
+        }
 
-		private void ForceDeadState()
-		{
-			ForceState(CharacterCombatStateType.Dead);
-		}
+        private void SetState(CharacterCombatStateType stateType)
+        {
+            if (currentState != null) currentState.OnStateEnded -= SetState;
 
-		private void ForceStunnedState()
-		{
-			ForceState(CharacterCombatStateType.Stunned);
-		}
+            CurrentStateType = stateType;
 
-		private void OnDestroy()
-		{
-			if (currentState != null)
-			{
-				currentState.OnStateEnded -= SetState;
-			}
+            currentState = statesPerType[CurrentStateType];
+            OnStateChanged.Invoke(stateType);
 
-			CombatStartedEvent.ParameterlessListeners -= this.Enable;
-			CombatEndedEvent.ParameterlessListeners   -= this.Disable;
-		}
-	}
+            currentState.OnStateEnded += SetState;
+
+            currentState.Enter();
+        }
+
+        private void ForceDeadState()
+        {
+            ForceState(CharacterCombatStateType.Dead);
+        }
+
+        private void ForceStunnedState()
+        {
+            ForceState(CharacterCombatStateType.Stunned);
+        }
+    }
 }

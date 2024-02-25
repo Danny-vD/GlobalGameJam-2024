@@ -5,12 +5,12 @@ using VDFramework.Extensions;
 
 namespace AI
 {
-	public class RandomTargetLogic : AbstractAITargetingLogic
-	{
-		public override List<GameObject> GetTargets(AbstractCombatMove combatMove)
-		{
-			List<GameObject> targets = new List<GameObject> { GetAllValidTargets(combatMove).GetRandomElement() };
-			return targets;
-		}
-	}
+    public class RandomTargetLogic : AbstractAITargetingLogic
+    {
+        public override List<GameObject> GetTargets(AbstractCombatMove combatMove)
+        {
+            var targets = new List<GameObject> { GetAllValidTargets(combatMove).GetRandomElement() };
+            return targets;
+        }
+    }
 }

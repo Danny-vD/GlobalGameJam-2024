@@ -4,9 +4,8 @@ using VDFramework.Singleton;
 
 namespace PlayerPartyScripts
 {
-	public class PlayerPartySingleton : Singleton<PlayerPartySingleton>
-	{
-		[SerializeField]
-		public List<GameObject> Party;
-	}
+    public class PlayerPartySingleton : Singleton<PlayerPartySingleton>
+    {
+        [SerializeField] public List<GameObject> Party;
+    }
 }

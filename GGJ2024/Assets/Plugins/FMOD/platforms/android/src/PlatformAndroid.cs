@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System;
+using FMOD;
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -35,10 +35,33 @@ namespace FMODUnity
             Settings.AddPlatformTemplate<PlatformAndroid>("2fea114e74ecf3c4f920e1d5cc1c4c40");
         }
 
-        internal override string DisplayName { get { return "Android"; } }
+        internal override string DisplayName => "Android";
+
         internal override void DeclareRuntimePlatforms(Settings settings)
         {
             settings.DeclareRuntimePlatform(RuntimePlatform.Android, this);
+        }
+
+        internal override string GetBankFolder()
+        {
+            return StaticGetBankFolder();
+        }
+
+        internal static string StaticGetBankFolder()
+        {
+            return Settings.Instance.AndroidUseOBB || Settings.Instance.AndroidPatchBuild
+                ? Application.streamingAssetsPath
+                : "file:///android_asset";
+        }
+
+        internal override string GetPluginPath(string pluginName)
+        {
+            return StaticGetPluginPath(pluginName);
+        }
+
+        internal static string StaticGetPluginPath(string pluginName)
+        {
+            return string.Format("lib{0}.so", pluginName);
         }
 
 #if UNITY_EDITOR
@@ -47,7 +70,7 @@ namespace FMODUnity
             yield return BuildTarget.Android;
         }
 
-        internal override Legacy.Platform LegacyIdentifier { get { return Legacy.Platform.Android; } }
+        internal override Legacy.Platform LegacyIdentifier => Legacy.Platform.Android;
 
         protected override BinaryAssetFolderInfo GetBinaryAssetFolder(BuildTarget buildTarget)
         {
@@ -56,12 +79,13 @@ namespace FMODUnity
 
         private static readonly string[] Architectures = { "arm64-v8a", "armeabi-v7a", "x86", "x86_64" };
 
-        protected override IEnumerable<FileRecord> GetBinaryFiles(BuildTarget buildTarget, bool allVariants, string suffix)
+        protected override IEnumerable<FileRecord> GetBinaryFiles(BuildTarget buildTarget, bool allVariants,
+            string suffix)
         {
             yield return new FileRecord("fmod.jar")
                 .WithAbsoluteVersion(FileLayout.Release_1_10, "Plugins/Android/fmod.jar");
 
-            foreach (string architecture in Architectures)
+            foreach (var architecture in Architectures)
             {
                 yield return new FileRecord(string.Format("{0}/libfmod{1}.so", architecture, suffix));
                 yield return new FileRecord(string.Format("{0}/libfmodstudio{1}.so", architecture, suffix));
@@ -70,7 +94,7 @@ namespace FMODUnity
 
         protected override IEnumerable<FileRecord> GetOptionalBinaryFiles(BuildTarget buildTarget, bool allVariants)
         {
-            foreach (string architecture in Architectures)
+            foreach (var architecture in Architectures)
             {
                 yield return new FileRecord(string.Format("{0}/libgvraudio.so", architecture));
                 yield return new FileRecord(string.Format("{0}/libresonanceaudio.so", architecture));
@@ -85,43 +109,17 @@ namespace FMODUnity
             return false;
         }
 #endif
-
-        internal override string GetBankFolder()
-        {
-            return StaticGetBankFolder();
-        }
-
-        internal static string StaticGetBankFolder()
-        {
-            return (Settings.Instance.AndroidUseOBB || Settings.Instance.AndroidPatchBuild)
-                ? Application.streamingAssetsPath : "file:///android_asset";
-        }
-
-        internal override string GetPluginPath(string pluginName)
-        {
-            return StaticGetPluginPath(pluginName);
-        }
-
-        internal static string StaticGetPluginPath(string pluginName)
-        {
-            return string.Format("lib{0}.so", pluginName);
-        }
 #if UNITY_EDITOR
-        internal override OutputType[] ValidOutputTypes
-        {
-            get
-            {
-                return sValidOutputTypes;
-            }
-        }
+        internal override OutputType[] ValidOutputTypes => sValidOutputTypes;
 
-        private static OutputType[] sValidOutputTypes = {
-           new OutputType() { displayName = "Java Audio Track", outputType = FMOD.OUTPUTTYPE.AUDIOTRACK },
-           new OutputType() { displayName = "OpenSL ES", outputType = FMOD.OUTPUTTYPE.OPENSL },
-           new OutputType() { displayName = "AAudio", outputType = FMOD.OUTPUTTYPE.AAUDIO },
+        private static readonly OutputType[] sValidOutputTypes =
+        {
+            new() { displayName = "Java Audio Track", outputType = OUTPUTTYPE.AUDIOTRACK },
+            new() { displayName = "OpenSL ES", outputType = OUTPUTTYPE.OPENSL },
+            new() { displayName = "AAudio", outputType = OUTPUTTYPE.AAUDIO }
         };
 
-        internal override int CoreCount { get { return MaximumCoreCount; } }
+        internal override int CoreCount => MaximumCoreCount;
 #endif
     }
 }

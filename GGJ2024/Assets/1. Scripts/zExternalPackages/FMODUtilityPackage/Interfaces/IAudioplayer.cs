@@ -1,13 +1,13 @@
 ﻿namespace FMODUtilityPackage.Interfaces
 {
-	public interface IAudioplayer
-	{
-		void Play();
+    public interface IAudioplayer
+    {
+        void Play();
 
-		void PlayIfNotPlaying();
+        void PlayIfNotPlaying();
 
-		void Stop();
+        void Stop();
 
-		void SetPause(bool paused);
-	}
+        void SetPause(bool paused);
+    }
 }

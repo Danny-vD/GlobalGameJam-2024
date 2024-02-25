@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace CombatSystem.ScriptableObjects
 {
-	[CreateAssetMenu(fileName = "AIMoveset", menuName = "AIMoveset")]
-	public class AIMovesetLootTableObject : WeightedLootTableObject<AbstractCombatMove>
-	{
-	}
+    [CreateAssetMenu(fileName = "AIMoveset", menuName = "AIMoveset")]
+    public class AIMovesetLootTableObject : WeightedLootTableObject<AbstractCombatMove>
+    {
+    }
 }

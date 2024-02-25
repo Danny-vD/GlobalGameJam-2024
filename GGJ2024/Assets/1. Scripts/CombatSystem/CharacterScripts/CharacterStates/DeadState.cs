@@ -4,28 +4,27 @@ using UnityEngine;
 
 namespace CombatSystem.CharacterScripts.CharacterStates
 {
-	public class DeadState : AbstractCharacterState
-	{
-		public override CharacterCombatStateType NextState => CharacterCombatStateType.Idle;
-		
-		private Sprite originalSprite;
-		
-		private CharacterHealth characterHealth;
+    public class DeadState : AbstractCharacterState
+    {
+        private CharacterHealth characterHealth;
 
-		private void Awake()
-		{
-			characterHealth = GetComponent<CharacterHealth>();
+        private Sprite originalSprite;
+        public override CharacterCombatStateType NextState => CharacterCombatStateType.Idle;
 
-			characterHealth.OnResurrected += Exit;
-		}
+        private void Awake()
+        {
+            characterHealth = GetComponent<CharacterHealth>();
 
-		private void OnDestroy()
-		{
-			characterHealth.OnResurrected -= Exit;
-		}
+            characterHealth.OnResurrected += Exit;
+        }
 
-		public override void Enter()
-		{
-		}
-	}
+        private void OnDestroy()
+        {
+            characterHealth.OnResurrected -= Exit;
+        }
+
+        public override void Enter()
+        {
+        }
+    }
 }

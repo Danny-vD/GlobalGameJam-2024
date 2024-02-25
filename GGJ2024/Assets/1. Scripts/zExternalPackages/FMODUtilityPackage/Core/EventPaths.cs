@@ -12,111 +12,105 @@ using VDFramework.Utility;
 
 namespace FMODUtilityPackage.Core
 {
-	[Serializable]
-	public class EventPaths : ISerializationCallbackReceiver
-	{
-		public const string MASTER_BUS_PATH = @"bus:/";
+    [Serializable]
+    public class EventPaths : ISerializationCallbackReceiver
+    {
+        public const string MASTER_BUS_PATH = @"bus:/";
 
-		[SerializeField]
-		private List<EventReferencePerEvent> events = new List<EventReferencePerEvent>();
+        [SerializeField] private List<EventReferencePerEvent> events = new();
 
-		[SerializeField]
-		private List<BusPathPerBus> buses = new List<BusPathPerBus>();
+        [SerializeField] private List<BusPathPerBus> buses = new();
 
-		[SerializeField]
-		private List<EventsPerEmitter> emitterEvents = new List<EventsPerEmitter>();
+        [SerializeField] private List<EventsPerEmitter> emitterEvents = new();
 
-		private readonly Dictionary<EmitterType, StudioEventEmitter> emitters = new Dictionary<EmitterType, StudioEventEmitter>();
+        private readonly Dictionary<EmitterType, StudioEventEmitter> emitters = new();
 
-		public EventPaths()
-		{
-			buses.Add(new BusPathPerBus { Key = default, Value = MASTER_BUS_PATH });
-		}
+        public EventPaths()
+        {
+            buses.Add(new BusPathPerBus { Key = default, Value = MASTER_BUS_PATH });
+        }
 
-		/// <summary>
-		/// Will also initialize all the Dictionaries and set the Event and Bus paths
-		/// </summary>
-		public EventPaths(bool setAllEventPaths) : this()
-		{
-			if (setAllEventPaths)
-			{
-				UpdateDictionaries();
+        /// <summary>
+        ///     Will also initialize all the Dictionaries and set the Event and Bus paths
+        /// </summary>
+        public EventPaths(bool setAllEventPaths) : this()
+        {
+            if (setAllEventPaths)
+            {
+                UpdateDictionaries();
 
-				SetEventPaths();
-				SetBusPaths();
-			}
-		}
+                SetEventPaths();
+                SetBusPaths();
+            }
+        }
 
-		public void AddEmitters(GameObject gameObject)
-		{
-			foreach (EmitterType emitterType in default(EmitterType).GetValues())
-			{
-				StudioEventEmitter emitter = gameObject.AddComponent<StudioEventEmitter>();
-				emitter.EventReference = GetEventReferenceForEmitter(emitterType);
+        public void AddEmitters(GameObject gameObject)
+        {
+            foreach (var emitterType in default(EmitterType).GetValues())
+            {
+                var emitter = gameObject.AddComponent<StudioEventEmitter>();
+                emitter.EventReference = GetEventReferenceForEmitter(emitterType);
 
-				emitters.Add(emitterType, emitter);
-			}
-		}
+                emitters.Add(emitterType, emitter);
+            }
+        }
 
-		public EventReference GetEventReference(AudioEventType audioEventType)
-		{
-			return events.First(item => item.Key.Equals(audioEventType)).Value;
-		}
+        public EventReference GetEventReference(AudioEventType audioEventType)
+        {
+            return events.First(item => item.Key.Equals(audioEventType)).Value;
+        }
 
-		public string GetPath(BusType busType)
-		{
-			return buses.First(item => item.Key.Equals(busType)).Value;
-		}
+        public string GetPath(BusType busType)
+        {
+            return buses.First(item => item.Key.Equals(busType)).Value;
+        }
 
-		public StudioEventEmitter GetEmitter(EmitterType emitterType)
-		{
-			return emitters[emitterType];
-		}
+        public StudioEventEmitter GetEmitter(EmitterType emitterType)
+        {
+            return emitters[emitterType];
+        }
 
-		private EventReference GetEventReferenceForEmitter(EmitterType emitterType)
-		{
-			AudioEventType audioEventType = emitterEvents.First(item => item.Key == emitterType).Value;
-			return GetEventReference(audioEventType);
-		}
+        private EventReference GetEventReferenceForEmitter(EmitterType emitterType)
+        {
+            var audioEventType = emitterEvents.First(item => item.Key == emitterType).Value;
+            return GetEventReference(audioEventType);
+        }
 
 #if UNITY_EDITOR
-		private void SetEventPaths()
-		{
-			try
-			{
-				List<EditorEventRef> eventRefs = EventManager.Events;
-				string[] eventPaths = eventRefs.Select(eventref => eventref.Path).ToArray();
+        private void SetEventPaths()
+        {
+            try
+            {
+                var eventRefs = EventManager.Events;
+                var eventPaths = eventRefs.Select(eventref => eventref.Path).ToArray();
 
-				AudioEventType[] enumValues = EventPathToEnumValueUtil.ConvertEventPathToEnumValues(eventPaths);
+                var enumValues = EventPathToEnumValueUtil.ConvertEventPathToEnumValues(eventPaths);
 
-				for (int i = 0; i < enumValues.Length; i++)
-				{
-					EventReferencePerEvent pair = default;
-					pair.Key = enumValues[i];
+                for (var i = 0; i < enumValues.Length; i++)
+                {
+                    EventReferencePerEvent pair = default;
+                    pair.Key = enumValues[i];
 
-					int index = events.FindIndex(referencePerEvent => referencePerEvent.Key.Equals(enumValues[i]));
+                    var index = events.FindIndex(referencePerEvent => referencePerEvent.Key.Equals(enumValues[i]));
 
-					if (index == -1)
-					{
-						// Technically should never happen since UpdateDictionaries was called before this | If it does, there is a problem in FindIndex above
-						Debug.LogError($"Event paths do not contain a pair for {enumValues[i].ToString()}");
-						continue;
-					}
+                    if (index == -1)
+                    {
+                        // Technically should never happen since UpdateDictionaries was called before this | If it does, there is a problem in FindIndex above
+                        Debug.LogError($"Event paths do not contain a pair for {enumValues[i].ToString()}");
+                        continue;
+                    }
 
-					pair.Value    = EventReference.Find(eventRefs[i].Path);
-					events[index] = pair;
-				}
-			}
-			catch (Exception e)
-			{
-				if (EditorApplication.isPlaying)
-				{
-					Debug.LogException(e);
-				}
+                    pair.Value = EventReference.Find(eventRefs[i].Path);
+                    events[index] = pair;
+                }
+            }
+            catch (Exception e)
+            {
+                if (EditorApplication.isPlaying) Debug.LogException(e);
 
-				// ignore all exceptions outside of playmode
-			}
-		}
+                // ignore all exceptions outside of playmode
+            }
+        }
 #else
 		private void SetEventPaths()
 		{
@@ -145,50 +139,48 @@ namespace FMODUtilityPackage.Core
 		}
 #endif
 
-		private void SetBusPaths()
-		{
-			int busCount = buses.Count;
+        private void SetBusPaths()
+        {
+            var busCount = buses.Count;
 
-			if (busCount <= 1) // The master bus is already taken care of in the constructor
-			{
-				return;
-			}
+            if (busCount <= 1) // The master bus is already taken care of in the constructor
+                return;
 
-			string[] busNames = default(BusType).GetNames().ToArray();
+            var busNames = default(BusType).GetNames().ToArray();
 
-			// Start at 1 because 0 is always the master bus
-			for (int i = 1; i < busCount; i++)
-			{
-				BusPathPerBus pathPerBus = buses[i];
+            // Start at 1 because 0 is always the master bus
+            for (var i = 1; i < busCount; i++)
+            {
+                var pathPerBus = buses[i];
 
-				// Bus paths always start with bus:/ which is the Master Bus Path 
-				pathPerBus.Value = MASTER_BUS_PATH + busNames[i];
+                // Bus paths always start with bus:/ which is the Master Bus Path 
+                pathPerBus.Value = MASTER_BUS_PATH + busNames[i];
 
-				buses[i] = pathPerBus;
-			}
-		}
+                buses[i] = pathPerBus;
+            }
+        }
 
-		private void UpdateDictionaries()
-		{
-			EnumDictionaryUtil.PopulateEnumDictionary<EventReferencePerEvent, AudioEventType, EventReference>(events);
+        private void UpdateDictionaries()
+        {
+            EnumDictionaryUtil.PopulateEnumDictionary<EventReferencePerEvent, AudioEventType, EventReference>(events);
 
-			EnumDictionaryUtil.PopulateEnumDictionary<BusPathPerBus, BusType, string>(buses);
+            EnumDictionaryUtil.PopulateEnumDictionary<BusPathPerBus, BusType, string>(buses);
 
-			EnumDictionaryUtil.PopulateEnumDictionary<EventsPerEmitter, EmitterType, AudioEventType>(emitterEvents);
-		}
+            EnumDictionaryUtil.PopulateEnumDictionary<EventsPerEmitter, EmitterType, AudioEventType>(emitterEvents);
+        }
 
-		public void OnBeforeSerialize()
-		{
-			UpdateDictionaries();
+        public void OnBeforeSerialize()
+        {
+            UpdateDictionaries();
 
 #if UNITY_EDITOR
-			if (FMODUnity.EventManager.IsInitialized) //EventManager is an editor script
+            if (EventManager.IsInitialized) //EventManager is an editor script
 #endif
-				SetEventPaths();
-		}
+                SetEventPaths();
+        }
 
-		public void OnAfterDeserialize()
-		{
-		}
-	}
+        public void OnAfterDeserialize()
+        {
+        }
+    }
 }

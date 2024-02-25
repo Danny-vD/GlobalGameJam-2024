@@ -2,67 +2,54 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using Ink.Parsed;
+using Path = System.IO.Path;
 
 namespace Ink
 {
     public class PluginManager
     {
-        public PluginManager (List<string> pluginDirectories)
-        {
-            _plugins = new List<IPlugin> ();
+        private readonly List<IPlugin> _plugins;
 
-            foreach (string pluginName in pluginDirectories) 
-            {
-                foreach (string file in Directory.GetFiles(pluginName, "*.dll"))
-                {
-                    foreach (Type type in Assembly.LoadFile(Path.GetFullPath(file)).GetExportedTypes())
-                    {
-                        if (typeof(IPlugin).IsAssignableFrom(type))
-                        {
-                            _plugins.Add((IPlugin)Activator.CreateInstance(type));
-                        }
-                    }
-                }
-            }
+        public PluginManager(List<string> pluginDirectories)
+        {
+            _plugins = new List<IPlugin>();
+
+            foreach (var pluginName in pluginDirectories)
+            foreach (var file in Directory.GetFiles(pluginName, "*.dll"))
+            foreach (var type in Assembly.LoadFile(Path.GetFullPath(file)).GetExportedTypes())
+                if (typeof(IPlugin).IsAssignableFrom(type))
+                    _plugins.Add((IPlugin)Activator.CreateInstance(type));
         }
 
-		public string PreParse(string storyContent)
-		{
-			object[] args = new object[] { storyContent };
+        public string PreParse(string storyContent)
+        {
+            object[] args = { storyContent };
 
-            foreach (var plugin in _plugins) 
-            {
+            foreach (var plugin in _plugins)
                 typeof(IPlugin).InvokeMember("PreParse", BindingFlags.InvokeMethod, null, plugin, args);
-            }
 
-			return (string)args[0];
-		}
+            return (string)args[0];
+        }
 
-        public Parsed.Story PostParse(Parsed.Story parsedStory)
+        public Story PostParse(Story parsedStory)
         {
-            object[] args = new object[] { parsedStory };
+            object[] args = { parsedStory };
 
-            foreach (var plugin in _plugins) 
-            {
+            foreach (var plugin in _plugins)
                 typeof(IPlugin).InvokeMember("PostParse", BindingFlags.InvokeMethod, null, plugin, args);
-            }
 
-			return (Parsed.Story)args[0];
+            return (Story)args[0];
         }
 
-        public Runtime.Story PostExport(Parsed.Story parsedStory, Runtime.Story runtimeStory)
+        public Runtime.Story PostExport(Story parsedStory, Runtime.Story runtimeStory)
         {
-            object[] args = new object[] { parsedStory, runtimeStory };
+            object[] args = { parsedStory, runtimeStory };
 
-            foreach (var plugin in _plugins) 
-            {
+            foreach (var plugin in _plugins)
                 typeof(IPlugin).InvokeMember("PostExport", BindingFlags.InvokeMethod, null, plugin, args);
-            }
 
-			return (Runtime.Story)args[1];
+            return (Runtime.Story)args[1];
         }
-
-        List<IPlugin> _plugins;
     }
 }
-

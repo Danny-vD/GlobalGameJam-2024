@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using FMOD;
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -29,15 +30,29 @@ namespace FMODUnity
 #endif
     public class PlatformLinux : Platform
     {
+        private static readonly List<CodecChannelCount> staticCodecChannels = new()
+        {
+            new() { format = CodecType.FADPCM, channels = 0 },
+            new() { format = CodecType.Vorbis, channels = 32 }
+        };
+
         static PlatformLinux()
         {
             Settings.AddPlatformTemplate<PlatformLinux>("b7716510a1f36934c87976f3a81dbf3d");
         }
 
-        internal override string DisplayName { get { return "Linux"; } }
+        internal override string DisplayName => "Linux";
+
+        internal override List<CodecChannelCount> DefaultCodecChannels => staticCodecChannels;
+
         internal override void DeclareRuntimePlatforms(Settings settings)
         {
             settings.DeclareRuntimePlatform(RuntimePlatform.LinuxPlayer, this);
+        }
+
+        internal override string GetPluginPath(string pluginName)
+        {
+            return string.Format("{0}/lib{1}.so", GetPluginBasePath(), pluginName);
         }
 
 #if UNITY_EDITOR
@@ -46,14 +61,15 @@ namespace FMODUnity
             yield return BuildTarget.StandaloneLinux64;
         }
 
-        internal override Legacy.Platform LegacyIdentifier { get { return Legacy.Platform.Linux; } }
+        internal override Legacy.Platform LegacyIdentifier => Legacy.Platform.Linux;
 
         protected override BinaryAssetFolderInfo GetBinaryAssetFolder(BuildTarget buildTarget)
         {
             return new BinaryAssetFolderInfo("linux", "Plugins");
         }
 
-        protected override IEnumerable<FileRecord> GetBinaryFiles(BuildTarget buildTarget, bool allVariants, string suffix)
+        protected override IEnumerable<FileRecord> GetBinaryFiles(BuildTarget buildTarget, bool allVariants,
+            string suffix)
         {
             yield return new FileRecord(string.Format("x86_64/libfmodstudio{0}.so", suffix));
         }
@@ -77,32 +93,14 @@ namespace FMODUnity
         }
 #endif
 
-        internal override string GetPluginPath(string pluginName)
-        {
-            return string.Format("{0}/lib{1}.so", GetPluginBasePath(), pluginName);
-        }
-
 #if UNITY_EDITOR
-        internal override OutputType[] ValidOutputTypes
-        {
-            get
-            {
-                return sValidOutputTypes;
-            }
-        }
+        internal override OutputType[] ValidOutputTypes => sValidOutputTypes;
 
-        private static OutputType[] sValidOutputTypes = {
-           new OutputType() { displayName = "Pulse Audio", outputType = FMOD.OUTPUTTYPE.PULSEAUDIO },
-           new OutputType() { displayName = "Advanced Linux Sound Architecture", outputType = FMOD.OUTPUTTYPE.ALSA },
+        private static readonly OutputType[] sValidOutputTypes =
+        {
+            new() { displayName = "Pulse Audio", outputType = OUTPUTTYPE.PULSEAUDIO },
+            new() { displayName = "Advanced Linux Sound Architecture", outputType = OUTPUTTYPE.ALSA }
         };
 #endif
-
-        internal override List<CodecChannelCount> DefaultCodecChannels { get { return staticCodecChannels; } }
-
-        private static List<CodecChannelCount> staticCodecChannels = new List<CodecChannelCount>()
-        {
-            new CodecChannelCount { format = CodecType.FADPCM, channels = 0 },
-            new CodecChannelCount { format = CodecType.Vorbis, channels = 32 },
-        };
     }
 }

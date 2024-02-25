@@ -7,63 +7,59 @@ using VDFramework;
 
 namespace FMODUtilityPackage.Audioplayers
 {
-	public class AudioPlayerComponent : BetterMonoBehaviour, IAudioplayer
-	{
-		[SerializeField]
-		private AudioEventType audioEventType;
+    public class AudioPlayerComponent : BetterMonoBehaviour, IAudioplayer
+    {
+        [SerializeField] private AudioEventType audioEventType;
 
-		private EventInstance eventInstance;
+        private EventInstance eventInstance;
 
-		private void Start()
-		{
-			CacheEventInstance();
-		}
+        private void Start()
+        {
+            CacheEventInstance();
+        }
 
-		public void SetEventType(AudioEventType newAudioEventType)
-		{
-			audioEventType = newAudioEventType;
-			CacheEventInstance();
-		}
-		
-		public void Play()
-		{
-			eventInstance.start();
-		}
+        private void OnDestroy()
+        {
+            eventInstance.release();
+        }
 
-		public void PlayIfNotPlaying()
-		{
-			eventInstance.getPlaybackState(out PLAYBACK_STATE state);
+        public void Play()
+        {
+            eventInstance.start();
+        }
 
-			if (state is PLAYBACK_STATE.STOPPED or PLAYBACK_STATE.STOPPING)
-			{
-				eventInstance.start();
-			}
-		}
+        public void PlayIfNotPlaying()
+        {
+            eventInstance.getPlaybackState(out var state);
 
-		public void SetPause(bool paused)
-		{
-			eventInstance.setPaused(paused);
-		}
+            if (state is PLAYBACK_STATE.STOPPED or PLAYBACK_STATE.STOPPING) eventInstance.start();
+        }
 
-		public void Stop()
-		{
-			Stop(STOP_MODE.ALLOWFADEOUT);
-		}
-		
-		public void Stop(STOP_MODE stopMode)
-		{
-			eventInstance.stop(stopMode);
-		}
+        public void SetPause(bool paused)
+        {
+            eventInstance.setPaused(paused);
+        }
 
-		private void CacheEventInstance()
-		{
-			eventInstance.release();
-			eventInstance = AudioPlayer.GetEventInstance(audioEventType);
-		}
+        public void Stop()
+        {
+            Stop(STOP_MODE.ALLOWFADEOUT);
+        }
 
-		private void OnDestroy()
-		{
-			eventInstance.release();
-		}
-	}
+        public void SetEventType(AudioEventType newAudioEventType)
+        {
+            audioEventType = newAudioEventType;
+            CacheEventInstance();
+        }
+
+        public void Stop(STOP_MODE stopMode)
+        {
+            eventInstance.stop(stopMode);
+        }
+
+        private void CacheEventInstance()
+        {
+            eventInstance.release();
+            eventInstance = AudioPlayer.GetEventInstance(audioEventType);
+        }
+    }
 }

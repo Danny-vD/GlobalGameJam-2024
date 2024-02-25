@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEditor.IMGUI.Controls;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace FMODUnity
 {
@@ -12,161 +13,36 @@ namespace FMODUnity
     {
         public const string ReorganizerMenuItemPath = "FMOD/Reorganize Plugin Files";
 
-        [SerializeField]
-        private List<Task> tasks = new List<Task>();
+        [SerializeField] private List<Task> tasks = new();
 
-        [SerializeField]
-        private int taskCount;
+        [SerializeField] private int taskCount;
 
-        [SerializeField]
-        private int currentTask;
+        [SerializeField] private int currentTask;
 
-        private TaskView taskView;
+        [SerializeField] private TreeViewState taskViewState = new();
 
-        [SerializeField]
-        private TreeViewState taskViewState = new TreeViewState();
+        [SerializeField] private MultiColumnHeaderState taskHeaderState;
 
-        [SerializeField]
-        private MultiColumnHeaderState taskHeaderState;
-
-        [SerializeField]
-        private bool reloadingFromSerializedState = false;
-
-        [NonSerialized]
-        private GUIContent statusContent = GUIContent.none;
+        [SerializeField] private bool reloadingFromSerializedState;
 
         private IEnumerator<string> processingState;
 
-        [MenuItem(ReorganizerMenuItemPath)]
-        public static void ShowWindow()
-        {
-            FileReorganizer reorganizer = GetWindow<FileReorganizer>("FMOD File Reorganizer");
-            reorganizer.minSize = new Vector2(850, 600);
+        [NonSerialized] private GUIContent statusContent = GUIContent.none;
 
-            reorganizer.PopulateTasks();
-
-            reorganizer.Show();
-        }
-
-        [Serializable]
-        private class Task
-        {
-            public int step = int.MaxValue;
-
-            private Task()
-            {
-            }
-
-            public static Task Move(string source, string destination, Platform platform)
-            {
-                return new Task() {
-                    type = Type.Move,
-                    status = Status.Pending,
-                    platform = platform,
-                    source = source,
-                    destination = destination,
-                    statusText = string.Format("{0} will be moved to\n{1}", source, destination),
-                };
-            }
-
-            public static Task RemoveFolder(string path)
-            {
-                return new Task() {
-                    type = Type.RemoveFolder,
-                    status = Status.Pending,
-                    source = path,
-                    statusText = string.Format("{0} will be removed if it is empty", path),
-                };
-            }
-
-            public static Task Missing(string path, Platform platform)
-            {
-                return new Task() {
-                    type = Type.Missing,
-                    status = Status.Missing,
-                    platform = platform,
-                    source = path,
-                    statusText = string.Format(
-                        "{0} is missing.\nYou may need to reinstall the {1} support package from {2}.",
-                        path, platform.DisplayName, EditorSettings.DownloadURL),
-                };
-            }
-
-            public static Task RemoveAsset(string path, Platform platform)
-            {
-                return new Task() {
-                    type = Type.RemoveAsset,
-                    status = Status.Pending,
-                    platform = platform,
-                    source = path,
-                    statusText = string.Format("{0} will be removed", path),
-                };
-            }
-
-            public Platform platform { get; private set; }
-            public string source { get; private set; }
-            public string destination { get; private set; }
-
-            public enum Status
-            {
-                Pending,
-                Succeeded,
-                Failed,
-                Missing,
-            }
-
-            public Status status { get; private set; }
-            public string statusText { get; private set; }
-
-            public void SetSucceeded(string message)
-            {
-                status = Status.Succeeded;
-                statusText = message;
-            }
-
-            public void SetFailed(string message)
-            {
-                status = Status.Failed;
-                statusText = message;
-            }
-
-            public enum Type
-            {
-                Move,
-                RemoveFolder,
-                RemoveAsset,
-                Missing,
-            }
-
-            public Type type { get; private set; }
-
-            public string platformName { get { return (platform != null) ? platform.DisplayName : string.Empty; } }
-        }
-
-        public void OnBeforeSerialize()
-        {
-            taskViewState = taskView.state;
-            taskHeaderState = taskView.multiColumnHeader.state;
-        }
-
-        public void OnAfterDeserialize()
-        {
-        }
+        private TaskView taskView;
 
         private void OnEnable()
         {
             {
-                MultiColumnHeaderState newHeaderState = TaskView.CreateHeaderState();
+                var newHeaderState = TaskView.CreateHeaderState();
 
                 if (MultiColumnHeaderState.CanOverwriteSerializedFields(taskHeaderState, newHeaderState))
-                {
                     MultiColumnHeaderState.OverwriteSerializedFields(taskHeaderState, newHeaderState);
-                }
 
                 taskHeaderState = newHeaderState;
             }
 
-            MultiColumnHeader taskHeader = new MultiColumnHeader(taskHeaderState);
+            var taskHeader = new MultiColumnHeader(taskHeaderState);
 
             taskView = new TaskView(taskViewState, taskHeader, tasks);
             taskView.taskSelected += OnTaskSelected;
@@ -195,6 +71,91 @@ namespace FMODUnity
             StopProcessing();
         }
 
+        private void OnGUI()
+        {
+            if (focusedWindow == this
+                && Event.current.type == EventType.KeyDown
+                && Event.current.keyCode == KeyCode.Escape)
+            {
+                Cancel();
+                Event.current.Use();
+            }
+
+            // Task list
+            GUILayout.BeginVertical(GUI.skin.box);
+
+            var treeViewRect =
+                GUILayoutUtility.GetRect(0, 0, GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
+
+            taskView.OnGUI(treeViewRect);
+
+            GUILayout.EndVertical();
+
+            // Status bar
+            GUILayout.BeginHorizontal(GUI.skin.box, GUILayout.Height(EditorGUIUtility.singleLineHeight * 2));
+
+            GUILayout.Label(statusContent.image, GUILayout.ExpandWidth(false));
+            EditorGUILayout.SelectableLabel(statusContent.text, Resources.StatusBarStyle());
+
+            GUILayout.EndHorizontal();
+
+            // Buttons
+            var buttonHeight = EditorGUIUtility.singleLineHeight * 2;
+
+            GUILayout.BeginHorizontal();
+
+            if (GUILayout.Button("Cancel", GUILayout.Height(buttonHeight))) Cancel();
+
+            EditorGUI.BeginDisabledGroup(IsProcessing());
+
+            if (GUILayout.Button("Refresh", GUILayout.Height(buttonHeight))) PopulateTasks();
+
+            EditorGUI.EndDisabledGroup();
+
+            if (IsProcessing())
+            {
+                EditorGUI.BeginDisabledGroup(true);
+
+                GUILayout.Button(string.Format("Processing Task {0} of {1}", currentTask, taskCount),
+                    GUILayout.Height(buttonHeight));
+
+                EditorGUI.EndDisabledGroup();
+            }
+            else
+            {
+                if (GUILayout.Button(string.Format("Process {0} Tasks", taskCount), GUILayout.Height(buttonHeight)))
+                    StartProcessing();
+            }
+
+            GUILayout.EndHorizontal();
+        }
+
+        private void OnInspectorUpdate()
+        {
+            ProcessNextTask();
+        }
+
+        public void OnBeforeSerialize()
+        {
+            taskViewState = taskView.state;
+            taskHeaderState = taskView.multiColumnHeader.state;
+        }
+
+        public void OnAfterDeserialize()
+        {
+        }
+
+        [MenuItem(ReorganizerMenuItemPath)]
+        public static void ShowWindow()
+        {
+            var reorganizer = GetWindow<FileReorganizer>("FMOD File Reorganizer");
+            reorganizer.minSize = new Vector2(850, 600);
+
+            reorganizer.PopulateTasks();
+
+            reorganizer.Show();
+        }
+
         private void PopulateTasks()
         {
             tasks.Clear();
@@ -211,7 +172,7 @@ namespace FMODUnity
 
         public static bool IsUpToDate()
         {
-            List<Task> tasks = new List<Task>();
+            var tasks = new List<Task>();
 
             TaskGenerator.Generate(tasks);
 
@@ -220,21 +181,17 @@ namespace FMODUnity
 
         private void SetDefaultStatus()
         {
-            int missingCount = tasks.Count(t => t.type == Task.Type.Missing);
+            var missingCount = tasks.Count(t => t.type == Task.Type.Missing);
 
             if (missingCount > 0)
             {
                 string message;
 
                 if (missingCount == 1)
-                {
                     message = "There is a file missing. Select it above for more information.";
-                }
                 else
-                {
                     message = string.Format(
                         "There are {0} files missing. Select them above for more information.", missingCount);
-                }
 
                 statusContent = new GUIContent(message, Resources.StatusIcon[Task.Status.Missing]);
             }
@@ -246,22 +203,22 @@ namespace FMODUnity
 
         private void SetTaskSequence()
         {
-            int step = 1;
+            var step = 1;
 
-            foreach (Task task in tasks.Where(t => t.type == Task.Type.Move))
+            foreach (var task in tasks.Where(t => t.type == Task.Type.Move))
             {
                 task.step = step;
                 ++step;
             }
 
-            foreach (Task task in tasks.Where(t => t.type == Task.Type.RemoveAsset))
+            foreach (var task in tasks.Where(t => t.type == Task.Type.RemoveAsset))
             {
                 task.step = step;
                 ++step;
             }
 
             // Sort folder tasks in reverse path order, so subfolders are processed before their parents
-            foreach (Task task in tasks.Where(t => t.type == Task.Type.RemoveFolder).OrderByDescending(t => t.source))
+            foreach (var task in tasks.Where(t => t.type == Task.Type.RemoveFolder).OrderByDescending(t => t.source))
             {
                 task.step = step;
                 ++step;
@@ -275,13 +232,318 @@ namespace FMODUnity
             taskCount = tasks.Count(t => t.status == Task.Status.Pending);
         }
 
+        private static IOrderedEnumerable<T1> Sort<T1, T2>(IEnumerable<T1> enumerable,
+            Func<T1, T2> keySelector, bool ascending)
+        {
+            if (ascending)
+                return enumerable.OrderBy(keySelector);
+            return enumerable.OrderByDescending(keySelector);
+        }
+
+        private static IOrderedEnumerable<T1> SubSort<T1, T2>(IOrderedEnumerable<T1> enumerable,
+            Func<T1, T2> keySelector, bool ascending)
+        {
+            if (ascending)
+                return enumerable.ThenBy(keySelector);
+            return enumerable.ThenByDescending(keySelector);
+        }
+
+        private void OnTaskSelected(Task task)
+        {
+            if (task != null)
+                statusContent = new GUIContent(task.statusText, Resources.StatusIcon[task.status]);
+            else
+                SetDefaultStatus();
+        }
+
+        private void Cancel()
+        {
+            if (IsProcessing())
+                StopProcessing();
+            else
+                Close();
+        }
+
+        private static void DrawAssetPath(Rect rect, string path)
+        {
+            var pathStyle = Resources.AssetPathStyle();
+            var pathContent = new GUIContent(path);
+
+            var pathRect = rect;
+            pathRect.width = pathStyle.CalcSize(pathContent).x;
+
+            GUI.Label(pathRect, pathContent, pathStyle);
+            EditorGUIUtility.AddCursorRect(pathRect, MouseCursor.Link);
+
+            if (Event.current.type == EventType.MouseDown
+                && pathRect.Contains(Event.current.mousePosition))
+            {
+                SelectAssetOrParentFolder(path);
+                Event.current.Use();
+            }
+        }
+
+        private static void SelectAssetOrParentFolder(string path)
+        {
+            while (!AssetExists(path))
+            {
+                path = EditorUtils.GetParentFolder(path);
+
+                if (string.IsNullOrEmpty(path)) return;
+            }
+
+            Selection.activeObject = AssetDatabase.LoadAssetAtPath<Object>(path);
+        }
+
+        private void StartProcessing()
+        {
+            if (!IsProcessing())
+            {
+                EditorApplication.LockReloadAssemblies();
+
+                currentTask = 0;
+                processingState = ProcessMoveTasks()
+                    .Concat(ProcessRemoveAssetTasks())
+                    .Concat(ProcessRemoveFolderTasks())
+                    .GetEnumerator();
+            }
+        }
+
+        private void StopProcessing()
+        {
+            if (IsProcessing())
+            {
+                processingState = null;
+                UpdateTaskCount();
+                SetDefaultStatus();
+
+                EditorApplication.UnlockReloadAssemblies();
+
+                if (taskCount == 0)
+                    SetupWizardWindow.SetUpdateTaskComplete(SetupWizardWindow.UpdateTaskType.ReorganizePluginFiles);
+            }
+        }
+
+        private bool IsProcessing()
+        {
+            return processingState != null;
+        }
+
+        private void ProcessNextTask()
+        {
+            if (processingState != null)
+            {
+                if (processingState.MoveNext())
+                {
+                    statusContent = new GUIContent(processingState.Current);
+                    Repaint();
+                }
+                else
+                {
+                    StopProcessing();
+                }
+            }
+        }
+
+        private IEnumerable<string> ProcessMoveTasks()
+        {
+            foreach (var task in tasks.Where(t => t.type == Task.Type.Move && t.status == Task.Status.Pending))
+            {
+                EditorUtils.EnsureFolderExists(EditorUtils.GetParentFolder(task.destination));
+
+                currentTask = task.step;
+
+                yield return string.Format("Moving {0} to {1}", task.source, task.destination);
+
+                var result = AssetDatabase.MoveAsset(task.source, task.destination);
+
+                if (string.IsNullOrEmpty(result))
+                    task.SetSucceeded(string.Format("{0} was moved to\n{1}", task.source, task.destination));
+                else
+                    task.SetFailed(string.Format("{0} could not be moved to\n{1}: '{2}'",
+                        task.source, task.destination, result));
+
+                yield return task.statusText;
+            }
+        }
+
+        private static bool AssetExists(string path)
+        {
+            return EditorUtils.AssetExists(path);
+        }
+
+        private IEnumerable<string> ProcessRemoveAssetTasks()
+        {
+            foreach (var task in tasks.Where(t => t.type == Task.Type.RemoveAsset && t.status == Task.Status.Pending))
+            {
+                currentTask = task.step;
+
+                if (AssetDatabase.MoveAssetToTrash(task.source))
+                    task.SetSucceeded(string.Format("{0} was removed", task.source));
+                else
+                    task.SetFailed(string.Format("{0} could not be removed", task.source));
+
+                yield return task.statusText;
+            }
+        }
+
+        private static bool IsFolderEmpty(string path)
+        {
+            return AssetDatabase.FindAssets(string.Empty, new[] { path }).Length == 0;
+        }
+
+        private IEnumerable<string> ProcessRemoveFolderTasks()
+        {
+            foreach (var task in tasks.Where(t => t.type == Task.Type.RemoveFolder && t.status == Task.Status.Pending))
+            {
+                currentTask = task.step;
+
+                foreach (var result in RemoveFolderIfEmpty(task)) yield return result;
+            }
+        }
+
+        private static IEnumerable<string> RemoveFolderIfEmpty(Task task)
+        {
+            if (!Directory.Exists(Application.dataPath + "/../" + task.source))
+            {
+                task.SetSucceeded(string.Format("{0} has already been removed", task.source));
+                yield break;
+            }
+
+            if (!AssetDatabase.IsValidFolder(task.source))
+            {
+                task.SetFailed(string.Format("{0} is not a valid folder", task.source));
+                yield break;
+            }
+
+            if (!IsFolderEmpty(task.source))
+            {
+                task.SetFailed(string.Format("{0} is not empty", task.source));
+                yield break;
+            }
+
+            yield return string.Format("Removing empty folder {0}", task.source);
+
+            if (AssetDatabase.MoveAssetToTrash(task.source))
+                task.SetSucceeded(string.Format("{0} was removed", task.source));
+            else
+                task.SetFailed(string.Format("{0} could not be removed", task.source));
+
+            yield return task.statusText;
+        }
+
+        [Serializable]
+        private class Task
+        {
+            public enum Status
+            {
+                Pending,
+                Succeeded,
+                Failed,
+                Missing
+            }
+
+            public enum Type
+            {
+                Move,
+                RemoveFolder,
+                RemoveAsset,
+                Missing
+            }
+
+            public int step = int.MaxValue;
+
+            private Task()
+            {
+            }
+
+            public Platform platform { get; private set; }
+            public string source { get; private set; }
+            public string destination { get; private set; }
+
+            public Status status { get; private set; }
+            public string statusText { get; private set; }
+
+            public Type type { get; private set; }
+
+            public string platformName => platform != null ? platform.DisplayName : string.Empty;
+
+            public static Task Move(string source, string destination, Platform platform)
+            {
+                return new Task
+                {
+                    type = Type.Move,
+                    status = Status.Pending,
+                    platform = platform,
+                    source = source,
+                    destination = destination,
+                    statusText = string.Format("{0} will be moved to\n{1}", source, destination)
+                };
+            }
+
+            public static Task RemoveFolder(string path)
+            {
+                return new Task
+                {
+                    type = Type.RemoveFolder,
+                    status = Status.Pending,
+                    source = path,
+                    statusText = string.Format("{0} will be removed if it is empty", path)
+                };
+            }
+
+            public static Task Missing(string path, Platform platform)
+            {
+                return new Task
+                {
+                    type = Type.Missing,
+                    status = Status.Missing,
+                    platform = platform,
+                    source = path,
+                    statusText = string.Format(
+                        "{0} is missing.\nYou may need to reinstall the {1} support package from {2}.",
+                        path, platform.DisplayName, EditorSettings.DownloadURL)
+                };
+            }
+
+            public static Task RemoveAsset(string path, Platform platform)
+            {
+                return new Task
+                {
+                    type = Type.RemoveAsset,
+                    status = Status.Pending,
+                    platform = platform,
+                    source = path,
+                    statusText = string.Format("{0} will be removed", path)
+                };
+            }
+
+            public void SetSucceeded(string message)
+            {
+                status = Status.Succeeded;
+                statusText = message;
+            }
+
+            public void SetFailed(string message)
+            {
+                status = Status.Failed;
+                statusText = message;
+            }
+        }
+
         private class TaskView : TreeView
         {
-            private List<Task> tasks;
-
             public delegate void TaskSelectedHandler(Task task);
 
-            public event TaskSelectedHandler taskSelected;
+            public enum Column
+            {
+                Step,
+                Status,
+                Platform,
+                Description
+            }
+
+            private readonly List<Task> tasks;
 
             public TaskView(TreeViewState state, MultiColumnHeader header, List<Task> tasks)
                 : base(state, header)
@@ -293,66 +555,58 @@ namespace FMODUnity
                 header.sortingChanged += SortRows;
             }
 
+            public event TaskSelectedHandler taskSelected;
+
             public static MultiColumnHeaderState CreateHeaderState()
             {
-                MultiColumnHeaderState.Column[] columns = new MultiColumnHeaderState.Column[] {
-                    new MultiColumnHeaderState.Column()
+                MultiColumnHeaderState.Column[] columns =
+                {
+                    new()
                     {
                         headerContent = new GUIContent("Task #"),
                         width = 50,
                         autoResize = false,
-                        allowToggleVisibility = false,
+                        allowToggleVisibility = false
                     },
-                    new MultiColumnHeaderState.Column()
+                    new()
                     {
                         headerContent = new GUIContent("Status"),
                         width = 100,
                         autoResize = false,
-                        allowToggleVisibility = false,
+                        allowToggleVisibility = false
                     },
-                    new MultiColumnHeaderState.Column() {
+                    new()
+                    {
                         headerContent = new GUIContent("Platform"),
                         width = 150,
                         autoResize = false,
-                        allowToggleVisibility = false,
+                        allowToggleVisibility = false
                     },
-                    new MultiColumnHeaderState.Column()
+                    new()
                     {
                         headerContent = new GUIContent("Description"),
                         minWidth = 500,
-                        allowToggleVisibility = false,
-                    },
+                        allowToggleVisibility = false
+                    }
                 };
 
                 return new MultiColumnHeaderState(columns);
             }
 
-            public enum Column
-            {
-                Step,
-                Status,
-                Platform,
-                Description,
-            }
-
-            private class TaskItem : TreeViewItem
-            {
-                public Task task;
-            }
-
             protected override TreeViewItem BuildRoot()
             {
-                TreeViewItem root = new TreeViewItem(-1, -1);
+                var root = new TreeViewItem(-1, -1);
 
                 if (tasks.Count > 0)
                 {
-                    int index = 0;
+                    var index = 0;
 
-                    foreach (Task task in tasks)
+                    foreach (var task in tasks)
                     {
-                        TreeViewItem taskItem = new TaskItem() {
+                        TreeViewItem taskItem = new TaskItem
+                        {
                             id = index++,
-                            task = task,
+                            task = task
                         };
 
                         root.AddChild(taskItem);
@@ -360,7 +614,7 @@ namespace FMODUnity
                 }
                 else
                 {
-                    TreeViewItem item = new TreeViewItem(0);
+                    var item = new TreeViewItem(0);
                     item.displayName = "Nothing to do here.";
 
                     root.AddChild(item);
@@ -384,7 +638,7 @@ namespace FMODUnity
                 {
                     if (selectedIds.Count > 0)
                     {
-                        TaskItem item = FindItem(selectedIds[0], rootItem) as TaskItem;
+                        var item = FindItem(selectedIds[0], rootItem) as TaskItem;
 
                         if (item != null)
                         {
@@ -404,36 +658,32 @@ namespace FMODUnity
 
             private void SortRows(MultiColumnHeader header)
             {
-                IList<TreeViewItem> rows = GetRows();
-                int[] sortedColumns = header.state.sortedColumns;
+                var rows = GetRows();
+                var sortedColumns = header.state.sortedColumns;
 
                 if (sortedColumns.Length > 0 && rows.Count > 1)
                 {
-                    int firstColumn = sortedColumns[0];
+                    var firstColumn = sortedColumns[0];
 
-                    IOrderedEnumerable<TreeViewItem> query =
+                    var query =
                         InitialQuery(rows, (Column)firstColumn, header.IsSortedAscending(firstColumn));
 
-                    for (int i = 1; i < sortedColumns.Length; ++i)
-                    {
+                    for (var i = 1; i < sortedColumns.Length; ++i)
                         query = SubQuery(query, sortedColumns[i], header.IsSortedAscending(sortedColumns[i]));
-                    }
 
                     // We need to execute the query before clearing rows, otherwise it returns nothing
-                    List<TreeViewItem> newRows = query.ToList();
+                    var newRows = query.ToList();
 
                     rows.Clear();
 
-                    foreach (TreeViewItem item in newRows)
-                    {
-                        rows.Add(item);
-                    }
+                    foreach (var item in newRows) rows.Add(item);
                 }
 
                 RefreshCustomRowHeights();
             }
 
-            private IOrderedEnumerable<TreeViewItem> InitialQuery(IList<TreeViewItem> rows, Column column, bool ascending)
+            private IOrderedEnumerable<TreeViewItem> InitialQuery(IList<TreeViewItem> rows, Column column,
+                bool ascending)
             {
                 switch (column)
                 {
@@ -472,33 +722,24 @@ namespace FMODUnity
             {
                 if (item is TaskItem)
                 {
-                    Task task = (item as TaskItem).task;
+                    var task = (item as TaskItem).task;
 
                     if (task.type == Task.Type.Move)
-                    {
                         return EditorGUIUtility.singleLineHeight * 2;
-                    }
-                    else
-                    {
-                        return Resources.StatusHeight();
-                    }
+                    return Resources.StatusHeight();
                 }
-                else
-                {
-                    return base.GetCustomRowHeight(row, item);
-                }
+
+                return base.GetCustomRowHeight(row, item);
             }
 
             protected override void RowGUI(RowGUIArgs args)
             {
                 if (args.item is TaskItem)
                 {
-                    TaskItem taskItem = args.item as TaskItem;
+                    var taskItem = args.item as TaskItem;
 
-                    for (int i = 0; i < args.GetNumVisibleColumns(); ++i)
-                    {
+                    for (var i = 0; i < args.GetNumVisibleColumns(); ++i)
                         CellGUI(args.GetCellRect(i), taskItem.task, args.GetColumn(i));
-                    }
                 }
                 else
                 {
@@ -511,10 +752,7 @@ namespace FMODUnity
                 switch ((Column)columnIndex)
                 {
                     case Column.Step:
-                        if (task.step != int.MaxValue)
-                        {
-                            GUI.Label(rect, task.step.ToString(), Resources.StepStyle());
-                        }
+                        if (task.step != int.MaxValue) GUI.Label(rect, task.step.ToString(), Resources.StepStyle());
                         break;
                     case Column.Status:
                         GUI.Label(rect, Resources.StatusContent[task.status], Resources.StatusColumnStyle());
@@ -549,16 +787,16 @@ namespace FMODUnity
 
             private void DrawMoveDescription(Rect rect, Task task)
             {
-                Rect sourcePrefixRect = new Rect(rect.x, rect.y, Resources.PrefixSize().x, Resources.PrefixSize().y);
+                var sourcePrefixRect = new Rect(rect.x, rect.y, Resources.PrefixSize().x, Resources.PrefixSize().y);
 
-                Rect destinationPrefixRect = sourcePrefixRect;
+                var destinationPrefixRect = sourcePrefixRect;
                 destinationPrefixRect.y = sourcePrefixRect.yMax;
 
-                Rect sourceRect = sourcePrefixRect;
+                var sourceRect = sourcePrefixRect;
                 sourceRect.x = sourcePrefixRect.xMax;
                 sourceRect.xMax = rect.xMax;
 
-                Rect destinationRect = destinationPrefixRect;
+                var destinationRect = destinationPrefixRect;
                 destinationRect.x = destinationPrefixRect.xMax;
                 destinationRect.xMax = rect.xMax;
 
@@ -575,13 +813,13 @@ namespace FMODUnity
 
             private void DrawRemoveFolderDescription(Rect rect, Task task)
             {
-                Rect prefixRect = new Rect(rect.x, rect.y, Resources.PrefixSize().x, Resources.PrefixSize().y);
+                var prefixRect = new Rect(rect.x, rect.y, Resources.PrefixSize().x, Resources.PrefixSize().y);
 
-                Rect pathRect = prefixRect;
+                var pathRect = prefixRect;
                 pathRect.x = prefixRect.xMax;
                 pathRect.width = Resources.AssetPathStyle().CalcSize(new GUIContent(task.source)).x;
 
-                Rect suffixRect = prefixRect;
+                var suffixRect = prefixRect;
                 suffixRect.x = pathRect.xMax;
                 suffixRect.xMax = rect.xMax;
 
@@ -602,9 +840,9 @@ namespace FMODUnity
 
             private void DrawRemoveAssetDescription(Rect rect, Task task)
             {
-                Rect prefixRect = new Rect(rect.x, rect.y, Resources.PrefixSize().x, Resources.PrefixSize().y);
+                var prefixRect = new Rect(rect.x, rect.y, Resources.PrefixSize().x, Resources.PrefixSize().y);
 
-                Rect pathRect = prefixRect;
+                var pathRect = prefixRect;
                 pathRect.x = prefixRect.xMax;
                 pathRect.width = Resources.AssetPathStyle().CalcSize(new GUIContent(task.source)).x;
 
@@ -619,36 +857,15 @@ namespace FMODUnity
 
             private void DrawMissingDescription(Rect rect, Task task)
             {
-                Rect sourceRect = rect;
+                var sourceRect = rect;
                 sourceRect.xMin += Resources.PrefixSize().x;
 
                 DrawAssetPath(sourceRect, task.source);
             }
-        }
 
-        private static IOrderedEnumerable<T1> Sort<T1, T2>(IEnumerable<T1> enumerable,
-            Func<T1, T2> keySelector, bool ascending)
-        {
-            if (ascending)
+            private class TaskItem : TreeViewItem
             {
-                return enumerable.OrderBy(keySelector);
-            }
-            else
-            {
-                return enumerable.OrderByDescending(keySelector);
-            }
-        }
-
-        private static IOrderedEnumerable<T1> SubSort<T1, T2>(IOrderedEnumerable<T1> enumerable,
-            Func<T1, T2> keySelector, bool ascending)
-        {
-            if (ascending)
-            {
-                return enumerable.ThenBy(keySelector);
-            }
-            else
-            {
-                return enumerable.ThenByDescending(keySelector);
+                public Task task;
             }
         }
 
@@ -662,9 +879,9 @@ namespace FMODUnity
 
             private static GUIStyle stepStyle;
 
-            public static readonly GUIContent SourcePrefix = new GUIContent("Move");
-            public static readonly GUIContent DestinationPrefix = new GUIContent("to");
-            public static readonly GUIContent RemovePrefix = new GUIContent("Remove");
+            public static readonly GUIContent SourcePrefix = new("Move");
+            public static readonly GUIContent DestinationPrefix = new("to");
+            public static readonly GUIContent RemovePrefix = new("Remove");
 
             private static Vector2 prefixSize;
 
@@ -674,23 +891,25 @@ namespace FMODUnity
 
             private static GUIStyle assetPathStyle;
 
-            private static bool cacheInitialized = false;
+            private static bool cacheInitialized;
 
             public static readonly Dictionary<Task.Status, Texture> StatusIcon =
-                new Dictionary<Task.Status, Texture>() {
-                {  Task.Status.Pending, EditorGUIUtility.FindTexture("TestNormal") },
-                {  Task.Status.Succeeded, EditorGUIUtility.FindTexture("TestPassed") },
-                {  Task.Status.Failed, EditorGUIUtility.FindTexture("TestFailed") },
-                {  Task.Status.Missing, EditorGUIUtility.FindTexture("console.warnicon.sml") },
-            };
+                new()
+                {
+                    { Task.Status.Pending, EditorGUIUtility.FindTexture("TestNormal") },
+                    { Task.Status.Succeeded, EditorGUIUtility.FindTexture("TestPassed") },
+                    { Task.Status.Failed, EditorGUIUtility.FindTexture("TestFailed") },
+                    { Task.Status.Missing, EditorGUIUtility.FindTexture("console.warnicon.sml") }
+                };
 
             public static readonly Dictionary<Task.Status, GUIContent> StatusContent =
-                new Dictionary<Task.Status, GUIContent>() {
-                {  Task.Status.Pending, new GUIContent("Pending", StatusIcon[Task.Status.Pending]) },
-                {  Task.Status.Succeeded, new GUIContent("Succeeded", StatusIcon[Task.Status.Succeeded]) },
-                {  Task.Status.Failed, new GUIContent("Failed", StatusIcon[Task.Status.Failed]) },
-                {  Task.Status.Missing, new GUIContent("Missing", StatusIcon[Task.Status.Missing]) },
-            };
+                new()
+                {
+                    { Task.Status.Pending, new GUIContent("Pending", StatusIcon[Task.Status.Pending]) },
+                    { Task.Status.Succeeded, new GUIContent("Succeeded", StatusIcon[Task.Status.Succeeded]) },
+                    { Task.Status.Failed, new GUIContent("Failed", StatusIcon[Task.Status.Failed]) },
+                    { Task.Status.Missing, new GUIContent("Missing", StatusIcon[Task.Status.Missing]) }
+                };
 
             public static GUIStyle StatusColumnStyle()
             {
@@ -712,12 +931,8 @@ namespace FMODUnity
             public static float StatusHeight()
             {
                 if (statusHeight == 0)
-                {
                     foreach (var current in StatusIcon)
-                    {
                         statusHeight = Math.Max(statusHeight, current.Value.height + 4);
-                    }
-                }
 
                 return statusHeight;
             }
@@ -758,25 +973,30 @@ namespace FMODUnity
                 {
                     cacheInitialized = true;
 
-                    statusColumnStyle = new GUIStyle(GUI.skin.label) {
-                        alignment = TextAnchor.MiddleLeft,
+                    statusColumnStyle = new GUIStyle(GUI.skin.label)
+                    {
+                        alignment = TextAnchor.MiddleLeft
                     };
 
-                    statusBarStyle = new GUIStyle(GUI.skin.label) {
+                    statusBarStyle = new GUIStyle(GUI.skin.label)
+                    {
                         alignment = TextAnchor.UpperLeft,
-                        wordWrap = true,
+                        wordWrap = true
                     };
 
-                    stepStyle = new GUIStyle(GUI.skin.label) {
-                        alignment = TextAnchor.MiddleRight,
+                    stepStyle = new GUIStyle(GUI.skin.label)
+                    {
+                        alignment = TextAnchor.MiddleRight
                     };
 
-                    prefixStyle = new GUIStyle(GUI.skin.label) {
-                        alignment = TextAnchor.MiddleRight,
+                    prefixStyle = new GUIStyle(GUI.skin.label)
+                    {
+                        alignment = TextAnchor.MiddleRight
                     };
 
-                    suffixStyle = new GUIStyle(GUI.skin.label) {
-                        alignment = TextAnchor.MiddleLeft,
+                    suffixStyle = new GUIStyle(GUI.skin.label)
+                    {
+                        alignment = TextAnchor.MiddleLeft
                     };
 
                     assetPathStyle = new GUIStyle(GUI.skin.label);
@@ -788,178 +1008,53 @@ namespace FMODUnity
             }
         }
 
-        private void OnTaskSelected(Task task)
-        {
-            if (task != null)
-            {
-                statusContent = new GUIContent(task.statusText, Resources.StatusIcon[task.status]);
-            }
-            else
-            {
-                SetDefaultStatus();
-            }
-        }
-
-        private void OnGUI()
-        {
-            if (focusedWindow == this
-                && Event.current.type == EventType.KeyDown
-                && Event.current.keyCode == KeyCode.Escape)
-            {
-                Cancel();
-                Event.current.Use();
-            }
-
-            // Task list
-            GUILayout.BeginVertical(GUI.skin.box);
-
-            Rect treeViewRect = GUILayoutUtility.GetRect(0, 0, GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
-
-            taskView.OnGUI(treeViewRect);
-
-            GUILayout.EndVertical();
-
-            // Status bar
-            GUILayout.BeginHorizontal(GUI.skin.box, GUILayout.Height(EditorGUIUtility.singleLineHeight * 2));
-
-            GUILayout.Label(statusContent.image, GUILayout.ExpandWidth(false));
-            EditorGUILayout.SelectableLabel(statusContent.text, Resources.StatusBarStyle());
-
-            GUILayout.EndHorizontal();
-
-            // Buttons
-            float buttonHeight = EditorGUIUtility.singleLineHeight * 2;
-
-            GUILayout.BeginHorizontal();
-
-            if (GUILayout.Button("Cancel", GUILayout.Height(buttonHeight)))
-            {
-                Cancel();
-            }
-
-            EditorGUI.BeginDisabledGroup(IsProcessing());
-
-            if (GUILayout.Button("Refresh", GUILayout.Height(buttonHeight)))
-            {
-                PopulateTasks();
-            }
-
-            EditorGUI.EndDisabledGroup();
-
-            if (IsProcessing())
-            {
-                EditorGUI.BeginDisabledGroup(true);
-
-                GUILayout.Button(string.Format("Processing Task {0} of {1}", currentTask, taskCount), GUILayout.Height(buttonHeight));
-
-                EditorGUI.EndDisabledGroup();
-            }
-            else
-            {
-                if (GUILayout.Button(string.Format("Process {0} Tasks", taskCount), GUILayout.Height(buttonHeight)))
-                {
-                    StartProcessing();
-                }
-            }
-
-            GUILayout.EndHorizontal();
-        }
-
-        private void Cancel()
-        {
-            if (IsProcessing())
-            {
-                StopProcessing();
-            }
-            else
-            {
-                Close();
-            }
-        }
-
-        private static void DrawAssetPath(Rect rect, string path)
-        {
-            GUIStyle pathStyle = Resources.AssetPathStyle();
-            GUIContent pathContent = new GUIContent(path);
-
-            Rect pathRect = rect;
-            pathRect.width = pathStyle.CalcSize(pathContent).x;
-
-            GUI.Label(pathRect, pathContent, pathStyle);
-            EditorGUIUtility.AddCursorRect(pathRect, MouseCursor.Link);
-
-            if (Event.current.type == EventType.MouseDown
-                && pathRect.Contains(Event.current.mousePosition))
-            {
-                SelectAssetOrParentFolder(path);
-                Event.current.Use();
-            }
-        }
-
-        private static void SelectAssetOrParentFolder(string path)
-        {
-            while (!AssetExists(path))
-            {
-                path = EditorUtils.GetParentFolder(path);
-
-                if (string.IsNullOrEmpty(path))
-                {
-                    return;
-                }
-            }
-
-            Selection.activeObject = AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(path);
-        }
-
-        private void OnInspectorUpdate()
-        {
-            ProcessNextTask();
-        }
-
         private struct TaskGenerator
         {
             private const string AssetsFolder = "Assets";
             private const string FMODRoot = "Assets/Plugins/FMOD";
             private const string FMODSource = FMODRoot + "/src";
 
-            private static readonly string[] BaseFolders = {
+            private static readonly string[] BaseFolders =
+            {
                 FMODSource,
                 FMODRoot,
                 "Assets/Plugins",
-                "Assets",
+                "Assets"
             };
 
-            private static readonly MoveRecord[] looseAssets = {
+            private static readonly MoveRecord[] looseAssets =
+            {
                 // Release 1.10 layout
-                new MoveRecord() { source = FMODRoot + "/fmodplugins.cpp", destination = "obsolete" },
-                new MoveRecord() { source = "Assets/Editor/FMODMigrationUtil.cs", destination = "obsolete" },
-                new MoveRecord() { source = "Assets/GoogleVR", destination = "addons" },
-                new MoveRecord() { source = "Assets/ResonanceAudio", destination = "addons" },
-                new MoveRecord() { source = "Assets/Resources/FMODStudioSettings.asset", destination = "Resources" },
-                new MoveRecord() { source = "Assets/FMODStudioCache.asset", destination = "Resources" },
+                new() { source = FMODRoot + "/fmodplugins.cpp", destination = "obsolete" },
+                new() { source = "Assets/Editor/FMODMigrationUtil.cs", destination = "obsolete" },
+                new() { source = "Assets/GoogleVR", destination = "addons" },
+                new() { source = "Assets/ResonanceAudio", destination = "addons" },
+                new() { source = "Assets/Resources/FMODStudioSettings.asset", destination = "Resources" },
+                new() { source = "Assets/FMODStudioCache.asset", destination = "Resources" },
 
                 // Release 2.0 layout
-                new MoveRecord() { source = FMODRoot + "/src/Runtime/fmodplugins.cpp", destination = "obsolete" },
+                new() { source = FMODRoot + "/src/Runtime/fmodplugins.cpp", destination = "obsolete" },
 
                 // Release 2.1 layout
-                new MoveRecord() { source = FMODRoot + "/src/Runtime/fmod_static_plugin_support.h", destination = "obsolete" },
+                new() { source = FMODRoot + "/src/Runtime/fmod_static_plugin_support.h", destination = "obsolete" },
 
                 // Release 2.2 layout
-                new MoveRecord() { source = FMODRoot + "/src/fmodplugins.cpp", destination = "obsolete" },
-                new MoveRecord() { source = FMODRoot + "/src/fmod_static_plugin_support.h", destination = "obsolete" },
-                new MoveRecord() { source = FMODSource + "/CodeGeneration.cs", destination = "src/Editor" },
+                new() { source = FMODRoot + "/src/fmodplugins.cpp", destination = "obsolete" },
+                new() { source = FMODRoot + "/src/fmod_static_plugin_support.h", destination = "obsolete" },
+                new() { source = FMODSource + "/CodeGeneration.cs", destination = "src/Editor" }
             };
 
-            private static readonly string[] foldersToCleanUp = {
+            private static readonly string[] foldersToCleanUp =
+            {
                 "Assets/Plugins/FMOD/Runtime",
-                "Assets/Plugins/Editor",
+                "Assets/Plugins/Editor"
             };
 
             private List<Task> tasks;
 
             public static void Generate(List<Task> tasks)
             {
-                TaskGenerator generator = new TaskGenerator() { tasks = tasks };
+                var generator = new TaskGenerator { tasks = tasks };
 
                 Settings.Instance.Platforms.ForEach(generator.GenerateTasksForPlatform);
                 generator.GenerateTasksForLooseAssets();
@@ -970,23 +1065,21 @@ namespace FMODUnity
 
             private void GenerateTasksForPlatform(Platform platform)
             {
-                IEnumerable<Platform.FileInfo> files = platform.GetSourceFileInfo().Cast<Platform.FileInfo>();
+                IEnumerable<Platform.FileInfo> files = platform.GetSourceFileInfo();
 
-                foreach (BuildTarget buildTarget in platform.GetBuildTargets())
-                {
-                    files = files.Concat(platform.GetBinaryFileInfo(buildTarget, Platform.BinaryType.All).Cast<Platform.FileInfo>());
-                }
+                foreach (var buildTarget in platform.GetBuildTargets())
+                    files = files.Concat(platform.GetBinaryFileInfo(buildTarget, Platform.BinaryType.All));
 
-                foreach (Platform.FileInfo info in files)
+                foreach (var info in files)
                 {
-                    string newPath = info.LatestLocation();
+                    var newPath = info.LatestLocation();
 
                     if (!AssetExists(newPath))
                     {
-                        bool foundPath = false;
+                        var foundPath = false;
                         string oldPath = null;
 
-                        foreach (string path in info.OldLocations())
+                        foreach (var path in info.OldLocations())
                         {
                             oldPath = path;
 
@@ -1007,43 +1100,32 @@ namespace FMODUnity
 
                         if (oldPath != null)
                         {
-                            string oldFolder = EditorUtils.GetParentFolder(oldPath);
-                            string newFolder = EditorUtils.GetParentFolder(newPath);
+                            var oldFolder = EditorUtils.GetParentFolder(oldPath);
+                            var newFolder = EditorUtils.GetParentFolder(newPath);
 
-                            if (newFolder != oldFolder)
-                            {
-                                AddFolderTasks(oldFolder);
-                            }
+                            if (newFolder != oldFolder) AddFolderTasks(oldFolder);
                         }
 
-                        if (!foundPath && ((info.type & Platform.BinaryType.Optional) == 0)
-                            && !tasks.Any(t => t.source == newPath))
-                        {
+                        if (!foundPath && (info.type & Platform.BinaryType.Optional) == 0
+                                       && !tasks.Any(t => t.source == newPath))
                             tasks.Add(Task.Missing(newPath, platform));
-                        }
                     }
                 }
 
-                foreach (string path in platform.GetObsoleteAssetPaths())
-                {
+                foreach (var path in platform.GetObsoleteAssetPaths())
                     if (AssetExists(path) && !tasks.Any(t => t.source == path))
-                    {
                         tasks.Add(Task.RemoveAsset(path, platform));
-                    }
-                }
             }
 
-           private void AddFolderTasks(string path)
+            private void AddFolderTasks(string path)
             {
-                string baseFolder = BaseFolders.First(f => path.StartsWith(f));
+                var baseFolder = BaseFolders.First(f => path.StartsWith(f));
 
-                string currentFolder = path;
+                var currentFolder = path;
 
                 // Find the last folder in the path that exists, without leaving the base folder
                 while (currentFolder.StartsWith(baseFolder) && !AssetDatabase.IsValidFolder(currentFolder))
-                {
                     currentFolder = EditorUtils.GetParentFolder(currentFolder);
-                }
 
                 while (currentFolder.StartsWith(baseFolder) && currentFolder != baseFolder)
                 {
@@ -1055,9 +1137,7 @@ namespace FMODUnity
             private void AddFolderTask(string path)
             {
                 if (!tasks.Any(t => t.type == Task.Type.RemoveFolder && t.source == path))
-                {
                     tasks.Add(Task.RemoveFolder(path));
-                }
             }
 
             private struct MoveRecord
@@ -1066,54 +1146,49 @@ namespace FMODUnity
                 public string destination;
             }
 
-            private static readonly MoveRecord[] codeFolders = {
+            private static readonly MoveRecord[] codeFolders =
+            {
                 // Release 2.0 layout
-                new MoveRecord() { source = FMODSource + "/Runtime", destination = "src" },
-                new MoveRecord() { source = FMODSource + "/Runtime/Timeline", destination = "src" },
-                new MoveRecord() { source = FMODSource + "/Runtime/wrapper", destination = "src" },
-                new MoveRecord() { source = FMODSource + "/Editor/Timeline", destination = "src/Editor" },
+                new() { source = FMODSource + "/Runtime", destination = "src" },
+                new() { source = FMODSource + "/Runtime/Timeline", destination = "src" },
+                new() { source = FMODSource + "/Runtime/wrapper", destination = "src" },
+                new() { source = FMODSource + "/Editor/Timeline", destination = "src/Editor" },
 
                 // Release 1.10 layout
-                new MoveRecord() { source = FMODRoot + "/Timeline", destination = "src" },
-                new MoveRecord() { source = FMODRoot + "/Wrapper", destination = "src" },
-                new MoveRecord() { source = "Assets/Plugins/Editor/FMOD", destination = "src/Editor" },
-                new MoveRecord() { source = "Assets/Plugins/Editor/FMOD/Timeline", destination = "src/Editor" },
+                new() { source = FMODRoot + "/Timeline", destination = "src" },
+                new() { source = FMODRoot + "/Wrapper", destination = "src" },
+                new() { source = "Assets/Plugins/Editor/FMOD", destination = "src/Editor" },
+                new() { source = "Assets/Plugins/Editor/FMOD/Timeline", destination = "src/Editor" }
             };
 
             private void AddMoveTask(string source, string destination)
             {
-                if (!tasks.Any(t => t.source == source))
-                {
-                    tasks.Add(Task.Move(source, destination, null));
-                }
+                if (!tasks.Any(t => t.source == source)) tasks.Add(Task.Move(source, destination, null));
             }
 
             private void GenerateTasksForCodeFolders()
             {
-                foreach (MoveRecord folder in codeFolders)
-                {
+                foreach (var folder in codeFolders)
                     if (AssetDatabase.IsValidFolder(folder.source))
                     {
-                        foreach (string sourcePath in FindFileAssets(folder.source))
+                        foreach (var sourcePath in FindFileAssets(folder.source))
                         {
-                            string filename = Path.GetFileName(sourcePath);
+                            var filename = Path.GetFileName(sourcePath);
 
                             AddMoveTask(
                                 sourcePath, $"{RuntimeUtils.PluginBasePath}/{folder.destination}/{filename}");
-
                         }
 
                         AddFolderTask(folder.source);
                     }
-                }
             }
 
             private void GenerateTasksForLooseAssets()
             {
-                foreach (MoveRecord asset in looseAssets)
+                foreach (var asset in looseAssets)
                 {
-                    string filename = Path.GetFileName(asset.source);
-                    string destinationPath = $"{RuntimeUtils.PluginBasePath}/{asset.destination}/{filename}";
+                    var filename = Path.GetFileName(asset.source);
+                    var destinationPath = $"{RuntimeUtils.PluginBasePath}/{asset.destination}/{filename}";
 
                     if (AssetExists(asset.source) && !AssetExists(destinationPath))
                     {
@@ -1130,21 +1205,18 @@ namespace FMODUnity
 
             private void GenerateFolderMergeTasks(string sourceFolder, string destinationFolder)
             {
-                IEnumerable<string> assetPaths = AssetDatabase.FindAssets(string.Empty, new string[] { sourceFolder })
+                var assetPaths = AssetDatabase.FindAssets(string.Empty, new[] { sourceFolder })
                     .Select(g => AssetDatabase.GUIDToAssetPath(g))
                     .Where(p => !AssetDatabase.IsValidFolder(p) || IsFolderEmpty(p));
 
-                foreach (string sourcePath in assetPaths)
+                foreach (var sourcePath in assetPaths)
                 {
-                    int prefixLength = sourceFolder.Length;
+                    var prefixLength = sourceFolder.Length;
 
-                    if (!sourceFolder.EndsWith("/"))
-                    {
-                        ++prefixLength;
-                    }
+                    if (!sourceFolder.EndsWith("/")) ++prefixLength;
 
-                    string relativePath = sourcePath.Substring(prefixLength);
-                    string destinationPath = string.Format("{0}/{1}", destinationFolder, relativePath);
+                    var relativePath = sourcePath.Substring(prefixLength);
+                    var destinationPath = string.Format("{0}/{1}", destinationFolder, relativePath);
 
                     if (!AssetExists(destinationPath))
                     {
@@ -1160,195 +1232,29 @@ namespace FMODUnity
 
             private void GenerateTasksForLegacyCodeFiles()
             {
-                foreach (string path in FindFileAssets(FMODRoot).Where(p => p.EndsWith(".cs")))
+                foreach (var path in FindFileAssets(FMODRoot).Where(p => p.EndsWith(".cs")))
                 {
-                    string destinationPath = $"{RuntimeUtils.PluginBasePath}/src/{Path.GetFileName(path)}";
+                    var destinationPath = $"{RuntimeUtils.PluginBasePath}/src/{Path.GetFileName(path)}";
 
-                    if (!AssetExists(destinationPath))
-                    {
-                        AddMoveTask(path, destinationPath);
-                    }
+                    if (!AssetExists(destinationPath)) AddMoveTask(path, destinationPath);
                 }
             }
 
             private void GenerateTasksForFolderCleanup()
             {
-                foreach (string folder in foldersToCleanUp)
-                {
+                foreach (var folder in foldersToCleanUp)
                     if (AssetDatabase.IsValidFolder(folder))
-                    {
                         AddFolderTask(folder);
-                    }
-                }
             }
 
             private static IEnumerable<string> FindFileAssets(string folder)
             {
                 if (AssetDatabase.IsValidFolder(folder))
-                {
-                    return AssetDatabase.FindAssets(string.Empty, new string[] { folder })
+                    return AssetDatabase.FindAssets(string.Empty, new[] { folder })
                         .Select(g => AssetDatabase.GUIDToAssetPath(g))
-                        .Where(p => (EditorUtils.GetParentFolder(p) == folder) && !AssetDatabase.IsValidFolder(p));
-                }
-                else
-                {
-                    return Enumerable.Empty<string>();
-                }
+                        .Where(p => EditorUtils.GetParentFolder(p) == folder && !AssetDatabase.IsValidFolder(p));
+                return Enumerable.Empty<string>();
             }
-        }
-
-        private void StartProcessing()
-        {
-            if (!IsProcessing())
-            {
-                EditorApplication.LockReloadAssemblies();
-
-                currentTask = 0;
-                processingState = ProcessMoveTasks()
-                    .Concat(ProcessRemoveAssetTasks())
-                    .Concat(ProcessRemoveFolderTasks())
-                    .GetEnumerator();
-            }
-        }
-
-        private void StopProcessing()
-        {
-            if (IsProcessing())
-            {
-                processingState = null;
-                UpdateTaskCount();
-                SetDefaultStatus();
-
-                EditorApplication.UnlockReloadAssemblies();
-
-                if (taskCount == 0)
-                {
-                    SetupWizardWindow.SetUpdateTaskComplete(SetupWizardWindow.UpdateTaskType.ReorganizePluginFiles);
-                }
-            }
-        }
-
-        private bool IsProcessing()
-        {
-            return processingState != null;
-        }
-
-        private void ProcessNextTask()
-        {
-            if (processingState != null)
-            {
-                if (processingState.MoveNext())
-                {
-                    statusContent = new GUIContent(processingState.Current);
-                    Repaint();
-                }
-                else
-                {
-                    StopProcessing();
-                }
-            }
-        }
-
-        private IEnumerable<string> ProcessMoveTasks()
-        {
-            foreach (Task task in tasks.Where(t => t.type == Task.Type.Move && t.status == Task.Status.Pending))
-            {
-                EditorUtils.EnsureFolderExists(EditorUtils.GetParentFolder(task.destination));
-
-                currentTask = task.step;
-
-                yield return string.Format("Moving {0} to {1}", task.source, task.destination);
-
-                string result = AssetDatabase.MoveAsset(task.source, task.destination);
-
-                if (string.IsNullOrEmpty(result))
-                {
-                    task.SetSucceeded(string.Format("{0} was moved to\n{1}", task.source, task.destination));
-                }
-                else
-                {
-                    task.SetFailed(string.Format("{0} could not be moved to\n{1}: '{2}'",
-                        task.source, task.destination, result));
-                }
-
-                yield return task.statusText;
-            }
-        }
-
-        private static bool AssetExists(string path)
-        {
-            return EditorUtils.AssetExists(path);
-        }
-
-        private IEnumerable<string> ProcessRemoveAssetTasks()
-        {
-            foreach (Task task in tasks.Where(t => t.type == Task.Type.RemoveAsset && t.status == Task.Status.Pending))
-            {
-                currentTask = task.step;
-
-                if (AssetDatabase.MoveAssetToTrash(task.source))
-                {
-                    task.SetSucceeded(string.Format("{0} was removed", task.source));
-                }
-                else
-                {
-                    task.SetFailed(string.Format("{0} could not be removed", task.source));
-                }
-
-                yield return task.statusText;
-            }
-        }
-
-        private static bool IsFolderEmpty(string path)
-        {
-            return AssetDatabase.FindAssets(string.Empty, new string[] { path }).Length == 0;
-        }
-
-        private IEnumerable<string> ProcessRemoveFolderTasks()
-        {
-            foreach (Task task in tasks.Where(t => t.type == Task.Type.RemoveFolder && t.status == Task.Status.Pending))
-            {
-                currentTask = task.step;
-
-                foreach (string result in RemoveFolderIfEmpty(task))
-                {
-                    yield return result;
-                }
-            }
-        }
-
-        private static IEnumerable<string> RemoveFolderIfEmpty(Task task)
-        {
-            if (!Directory.Exists(Application.dataPath + "/../" + task.source))
-            {
-                task.SetSucceeded(string.Format("{0} has already been removed", task.source));
-                yield break;
-            }
-
-            if (!AssetDatabase.IsValidFolder(task.source))
-            {
-                task.SetFailed(string.Format("{0} is not a valid folder", task.source));
-                yield break;
-            }
-
-            if (!IsFolderEmpty(task.source))
-            {
-                task.SetFailed(string.Format("{0} is not empty", task.source));
-                yield break;
-            }
-
-            yield return string.Format("Removing empty folder {0}", task.source);
-
-            if (AssetDatabase.MoveAssetToTrash(task.source))
-            {
-                task.SetSucceeded(string.Format("{0} was removed", task.source));
-            }
-            else
-            {
-                task.SetFailed(string.Format("{0} could not be removed", task.source));
-            }
-
-            yield return task.statusText;
         }
     }
 }

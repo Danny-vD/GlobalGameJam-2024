@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -15,28 +14,17 @@ namespace FMODUnity
             Identifier = ConstIdentifier;
         }
 
-        internal override string DisplayName { get { return "Default"; } }
-        internal override void DeclareRuntimePlatforms(Settings settings) { }
+        internal override string DisplayName => "Default";
+
+        internal override bool IsIntrinsic => true;
+
+        // null means no valid output types - don't display the field in the UI
 #if UNITY_EDITOR
-        internal override IEnumerable<BuildTarget> GetBuildTargets()
-        {
-            yield break;
-        }
-
-        internal override Legacy.Platform LegacyIdentifier { get { return Legacy.Platform.Default; } }
-
-        protected override BinaryAssetFolderInfo GetBinaryAssetFolder(BuildTarget buildTarget)
-        {
-            return null;
-        }
-
-        protected override IEnumerable<FileRecord> GetBinaryFiles(BuildTarget buildTarget, bool allVariants, string suffix)
-        {
-            yield break;
-        }
+        internal override OutputType[] ValidOutputTypes => null;
 #endif
-
-        internal override bool IsIntrinsic { get { return true; } }
+        internal override void DeclareRuntimePlatforms(Settings settings)
+        {
+        }
 
         internal override void InitializeProperties()
         {
@@ -50,15 +38,26 @@ namespace FMODUnity
         {
             base.EnsurePropertiesAreValid();
 
-            if (StaticPlugins == null)
-            {
-                PropertyAccessors.StaticPlugins.Set(this, new List<string>());
-            }
+            if (StaticPlugins == null) PropertyAccessors.StaticPlugins.Set(this, new List<string>());
+        }
+#if UNITY_EDITOR
+        internal override IEnumerable<BuildTarget> GetBuildTargets()
+        {
+            yield break;
         }
 
-        // null means no valid output types - don't display the field in the UI
-#if UNITY_EDITOR
-        internal override OutputType[] ValidOutputTypes { get { return null; } }
+        internal override Legacy.Platform LegacyIdentifier => Legacy.Platform.Default;
+
+        protected override BinaryAssetFolderInfo GetBinaryAssetFolder(BuildTarget buildTarget)
+        {
+            return null;
+        }
+
+        protected override IEnumerable<FileRecord> GetBinaryFiles(BuildTarget buildTarget, bool allVariants,
+            string suffix)
+        {
+            yield break;
+        }
 #endif
     }
 }

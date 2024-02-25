@@ -5,6 +5,6 @@
         Overworld,
         Menus,
         Combat,
-        Dialogue,
+        Dialogue
     }
 }

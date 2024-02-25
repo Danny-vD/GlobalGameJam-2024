@@ -1,9 +1,9 @@
 ﻿namespace UtilityPackage.Interfaces
 {
-	public interface IEventListener
-	{
-		void AddListeners();
+    public interface IEventListener
+    {
+        void AddListeners();
 
-		void RemoveListeners();
-	}
+        void RemoveListeners();
+    }
 }

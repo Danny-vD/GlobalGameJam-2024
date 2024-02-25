@@ -14,7 +14,7 @@ namespace FMODUnity
     [DisplayName("FMOD/Event Track")]
     public class FMODEventTrack : TrackAsset
     {
-        public FMODEventMixerBehaviour template = new FMODEventMixerBehaviour();
+        public FMODEventMixerBehaviour template = new();
 
         public override Playable CreateTrackMixer(PlayableGraph graph, GameObject go, int inputCount)
         {
@@ -40,8 +40,7 @@ namespace FMODUnity
     [Serializable]
     public class FMODEventMixerBehaviour : PlayableBehaviour
     {
-        [Range(0, 1)]
-        public float volume = 1;
+        [Range(0, 1)] public float volume = 1;
 
         public override void ProcessFrame(Playable playable, FrameData info, object playerData)
         {
@@ -50,20 +49,17 @@ namespace FMODUnity
              * Process frame is called from OnGUI() when auditioning.
              * Check playing to avoid retriggering sounds while scrubbing or repainting.
              */
-            bool playing = playable.GetGraph().IsPlaying();
-            if (!playing)
-            {
-                return;
-            }
+            var playing = playable.GetGraph().IsPlaying();
+            if (!playing) return;
 #endif //UNITY_EDITOR
 
-            int inputCount = playable.GetInputCount();
-            float time = (float)playable.GetGraph().GetRootPlayable(0).GetTime();
+            var inputCount = playable.GetInputCount();
+            var time = (float)playable.GetGraph().GetRootPlayable(0).GetTime();
 
-            for (int i = 0; i < inputCount; i++)
+            for (var i = 0; i < inputCount; i++)
             {
-                ScriptPlayable<FMODEventPlayableBehavior> inputPlayable = (ScriptPlayable<FMODEventPlayableBehavior>)playable.GetInput(i);
-                FMODEventPlayableBehavior input = inputPlayable.GetBehaviour();
+                var inputPlayable = (ScriptPlayable<FMODEventPlayableBehavior>)playable.GetInput(i);
+                var input = inputPlayable.GetBehaviour();
 
                 input.UpdateBehavior(time, volume);
             }

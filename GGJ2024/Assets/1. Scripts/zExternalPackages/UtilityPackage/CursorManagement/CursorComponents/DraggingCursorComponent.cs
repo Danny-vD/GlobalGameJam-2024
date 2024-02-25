@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using SerializableDictionaryPackage.SerializableDictionary;
+﻿using SerializableDictionaryPackage.SerializableDictionary;
 using UnityEngine;
 using UtilityPackage.CursorManagement.CursorUtility;
 using UtilityPackage.CursorManagement.Singletons;
@@ -7,55 +6,48 @@ using UtilityPackage.CursorManagement.Structs;
 
 namespace UtilityPackage.CursorManagement.CursorComponents
 {
-	public class DraggingCursorComponent : AbstractCursorComponent
-	{
-		[SerializeField]
-		private bool keepUsingAfterStoppedMoving = false;
-		
-		[SerializeField, Tooltip("Order matters, higher placed will be shown over lower")]
-		private SerializableDictionary<MouseButtonUtil.MouseButton, CursorData> draggingData;
+    public class DraggingCursorComponent : AbstractCursorComponent
+    {
+        [SerializeField] private bool keepUsingAfterStoppedMoving;
 
-		private CursorData dataToSet;
+        [SerializeField] [Tooltip("Order matters, higher placed will be shown over lower")]
+        private SerializableDictionary<MouseButtonUtil.MouseButton, CursorData> draggingData;
 
-		private bool draggingStarted;
+        private CursorData dataToSet;
 
-		public override bool IsAdditiveEffect => false;
+        private bool draggingStarted;
 
-		protected override void OnActivate()
-		{
-			ShouldUpdateCursor = true; // Always update when we are activated
-		}
+        public override bool IsAdditiveEffect => false;
 
-		public override bool AreConditionsMet()
-		{
-			if (keepUsingAfterStoppedMoving && draggingStarted || CursorMovementChecker.Instance.IsCursorMoving)
-			{
-				foreach (KeyValuePair<MouseButtonUtil.MouseButton, CursorData> pair in draggingData)
-				{
-					if (MouseButtonHeldChecker.Instance.IsButtonHeld(pair.Key))
-					{
-						if (!pair.Value.Equals(dataToSet)) // Prevent constantly updating to the same cursor
-						{
-							ShouldUpdateCursor = true;
-						}
-						
-						dataToSet       = pair.Value;
-						draggingStarted = true;
-						return true;
-					}
-				}
-			}
+        protected override void OnActivate()
+        {
+            ShouldUpdateCursor = true; // Always update when we are activated
+        }
 
-			draggingStarted = false;
-			
-			return false;
-		}
+        public override bool AreConditionsMet()
+        {
+            if ((keepUsingAfterStoppedMoving && draggingStarted) || CursorMovementChecker.Instance.IsCursorMoving)
+                foreach (var pair in draggingData)
+                    if (MouseButtonHeldChecker.Instance.IsButtonHeld(pair.Key))
+                    {
+                        if (!pair.Value.Equals(dataToSet)) // Prevent constantly updating to the same cursor
+                            ShouldUpdateCursor = true;
 
-		public override CursorData GetCursorData()
-		{
-			ShouldUpdateCursor = false;
+                        dataToSet = pair.Value;
+                        draggingStarted = true;
+                        return true;
+                    }
 
-			return dataToSet;
-		}
-	}
+            draggingStarted = false;
+
+            return false;
+        }
+
+        public override CursorData GetCursorData()
+        {
+            ShouldUpdateCursor = false;
+
+            return dataToSet;
+        }
+    }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-namespace Ink.Runtime
+﻿namespace Ink.Runtime
 {
     // When looking up content within the story (e.g. in Container.ContentAtPath),
     // the result is generally found, but if the story is modified, then when loading
@@ -9,10 +8,10 @@ namespace Ink.Runtime
     // we might see some slight oddness in the content, but hopefully it recovers!
     public struct SearchResult
     {
-        public Runtime.Object obj;
+        public Object obj;
         public bool approximate;
 
-        public Runtime.Object correctObj { get { return approximate ? null : obj; } }
-        public Container container { get { return obj as Container; } }
+        public Object correctObj => approximate ? null : obj;
+        public Container container => obj as Container;
     }
 }

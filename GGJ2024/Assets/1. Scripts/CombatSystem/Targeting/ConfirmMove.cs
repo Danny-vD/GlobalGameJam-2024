@@ -4,6 +4,5 @@ namespace CombatSystem.Targeting
 {
     public class ConfirmMove : BetterMonoBehaviour
     {
-        
     }
 }

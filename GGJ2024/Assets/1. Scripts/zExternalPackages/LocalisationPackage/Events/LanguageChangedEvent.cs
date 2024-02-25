@@ -2,7 +2,7 @@
 
 namespace LocalisationPackage.Events
 {
-	public class LanguageChangedEvent : VDEvent<LanguageChangedEvent>
-	{
-	}
+    public class LanguageChangedEvent : VDEvent<LanguageChangedEvent>
+    {
+    }
 }

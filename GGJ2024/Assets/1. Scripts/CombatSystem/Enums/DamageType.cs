@@ -1,10 +1,10 @@
 ﻿namespace CombatSystem.Enums
 {
-	public enum DamageType
-	{
-		Normal,
-		Fire,
-		Ice,
-		Lightning,
-	}
+    public enum DamageType
+    {
+        Normal,
+        Fire,
+        Ice,
+        Lightning
+    }
 }

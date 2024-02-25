@@ -6,85 +6,92 @@ using VDFramework.Interfaces;
 
 namespace Structs.Utility.SerializableDictionary
 {
-	[Serializable]
-	public struct SerializableKeyValuePair<TKey, TValue> : IKeyValuePair<TKey, TValue>, IEquatable<SerializableKeyValuePair<TKey, TValue>>
-	{
-		public static implicit operator KeyValuePair<TKey, TValue>(SerializableKeyValuePair<TKey, TValue> pair)
-		{
-			return new KeyValuePair<TKey, TValue>(pair.key, pair.value);
-		}
+    [Serializable]
+    public struct SerializableKeyValuePair<TKey, TValue> : IKeyValuePair<TKey, TValue>,
+        IEquatable<SerializableKeyValuePair<TKey, TValue>>
+    {
+        [SerializeField] private TKey key;
 
-		public static implicit operator SerializableKeyValuePair<TKey, TValue>(KeyValuePair<TKey, TValue> pair)
-		{
-			return new SerializableKeyValuePair<TKey, TValue>(pair.Key, pair.Value);
-		}
+        [SerializeField] private TValue value;
 
-		public static bool operator ==(SerializableKeyValuePair<TKey, TValue> lhs, SerializableKeyValuePair<TKey, TValue> rhs)
-		{
-			return lhs.Equals(rhs);
-		}
-		
-		public static bool operator !=(SerializableKeyValuePair<TKey, TValue> lhs, SerializableKeyValuePair<TKey, TValue> rhs)
-		{
-			return !lhs.Equals(rhs);
-		}
-		
-		public static bool operator ==(SerializableKeyValuePair<TKey, TValue> lhs, IKeyValuePair<TKey, TValue> rhs)
-		{
-			return lhs.Equals(rhs);
-		}
-		
-		public static bool operator !=(SerializableKeyValuePair<TKey, TValue> lhs, IKeyValuePair<TKey, TValue> rhs)
-		{
-			return !lhs.Equals(rhs);
-		}
+        public SerializableKeyValuePair(TKey pairKey, TValue pairValue)
+        {
+            key = pairKey;
+            value = pairValue;
+        }
 
-		[SerializeField]
-		private TKey key;
+        public bool Equals(SerializableKeyValuePair<TKey, TValue> other)
+        {
+            return Key != null && Key.Equals(other.Key);
+        }
 
-		[SerializeField]
-		private TValue value;
+        public TKey Key
+        {
+            get => key;
+            set => key = value;
+        }
 
-		public TKey Key
-		{
-			get => key;
-			set => key = value;
-		}
+        public TValue Value
+        {
+            get => value;
+            set => this.value = value;
+        }
 
-		public TValue Value
-		{
-			get => value;
-			set => this.value = value;
-		}
+        public bool Equals(IKeyValuePair<TKey, TValue> other)
+        {
+            return other != null && Key != null && Key.Equals(other.Key);
+        }
 
-		public SerializableKeyValuePair(TKey pairKey, TValue pairValue)
-		{
-			key   = pairKey;
-			value = pairValue;
-		}
+        public static implicit operator KeyValuePair<TKey, TValue>(SerializableKeyValuePair<TKey, TValue> pair)
+        {
+            return new KeyValuePair<TKey, TValue>(pair.key, pair.value);
+        }
 
-		public bool Equals(IKeyValuePair<TKey, TValue> other) => other != null && Key != null && Key.Equals(other.Key);
+        public static implicit operator SerializableKeyValuePair<TKey, TValue>(KeyValuePair<TKey, TValue> pair)
+        {
+            return new SerializableKeyValuePair<TKey, TValue>(pair.Key, pair.Value);
+        }
 
-		public bool Equals(SerializableKeyValuePair<TKey, TValue> other) => Key != null && Key.Equals(other.Key);
+        public static bool operator ==(SerializableKeyValuePair<TKey, TValue> lhs,
+            SerializableKeyValuePair<TKey, TValue> rhs)
+        {
+            return lhs.Equals(rhs);
+        }
 
-		public override bool Equals(object obj)
-		{
-			if (obj is not IKeyValuePair<TKey, TValue> pair)
-			{
-				return false;
-			}
-		
-			return Key.Equals(pair.Key);
-		}
+        public static bool operator !=(SerializableKeyValuePair<TKey, TValue> lhs,
+            SerializableKeyValuePair<TKey, TValue> rhs)
+        {
+            return !lhs.Equals(rhs);
+        }
 
-		public override int GetHashCode() => EqualityComparer<TKey>.Default.GetHashCode(key);
+        public static bool operator ==(SerializableKeyValuePair<TKey, TValue> lhs, IKeyValuePair<TKey, TValue> rhs)
+        {
+            return lhs.Equals(rhs);
+        }
 
-		public override string ToString()
-		{
-			StringBuilder sb = new StringBuilder();
-			sb.Clear();
-			sb.Append('[').Append(key).Append(", ").Append(value).Append(']');
-			return sb.ToString();
-		}
-	}
+        public static bool operator !=(SerializableKeyValuePair<TKey, TValue> lhs, IKeyValuePair<TKey, TValue> rhs)
+        {
+            return !lhs.Equals(rhs);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is not IKeyValuePair<TKey, TValue> pair) return false;
+
+            return Key.Equals(pair.Key);
+        }
+
+        public override int GetHashCode()
+        {
+            return EqualityComparer<TKey>.Default.GetHashCode(key);
+        }
+
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+            sb.Clear();
+            sb.Append('[').Append(key).Append(", ").Append(value).Append(']');
+            return sb.ToString();
+        }
+    }
 }

@@ -5,41 +5,39 @@ using VDFramework.Interfaces;
 
 namespace FMODUtilityPackage.Structs
 {
-	[Serializable]
-	public struct InitialVolumePerBus : IKeyValuePair<BusType, float>
-	{
-		[SerializeField]
-		private BusType key;
+    [Serializable]
+    public struct InitialVolumePerBus : IKeyValuePair<BusType, float>
+    {
+        [SerializeField] private BusType key;
 
-		[SerializeField]
-		private float value;
+        [SerializeField] private float value;
 
-		public bool isMuted;
+        public bool isMuted;
 
-		public static InitialVolumePerBus DefaultValue => new InitialVolumePerBus(default, 1, false);
+        public InitialVolumePerBus(BusType busType, float volumeValue, bool muted)
+        {
+            key = busType;
+            value = volumeValue;
+            isMuted = muted;
+        }
 
-		public BusType Key
-		{
-			get => key;
-			set => key = value;
-		}
+        public static InitialVolumePerBus DefaultValue => new(default, 1, false);
 
-		public float Value
-		{
-			get => value;
-			set => this.value = value;
-		}
+        public BusType Key
+        {
+            get => key;
+            set => key = value;
+        }
 
-		public InitialVolumePerBus(BusType busType, float volumeValue, bool muted)
-		{
-			key     = busType;
-			value   = volumeValue;
-			isMuted = muted;
-		}
+        public float Value
+        {
+            get => value;
+            set => this.value = value;
+        }
 
-		public bool Equals(IKeyValuePair<BusType, float> other)
-		{
-			return other != null && other.Key == Key;
-		}
-	}
+        public bool Equals(IKeyValuePair<BusType, float> other)
+        {
+            return other != null && other.Key == Key;
+        }
+    }
 }

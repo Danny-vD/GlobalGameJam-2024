@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -13,7 +12,7 @@ public class UIfunctionality : MonoBehaviour
     public void QuitApplication()
     {
 #if UNITY_EDITOR
-        UnityEditor.EditorApplication.ExitPlaymode();
+        EditorApplication.ExitPlaymode();
 #else
         Application.Quit();
 #endif

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using FMOD;
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -40,7 +42,8 @@ namespace FMODUnity
             Settings.AddPlatformTemplate<PlatformWindows>("2c5177b11d81d824dbb064f9ac8527da");
         }
 
-        internal override string DisplayName { get { return "Windows"; } }
+        internal override string DisplayName => "Windows";
+
         internal override void DeclareRuntimePlatforms(Settings settings)
         {
             settings.DeclareRuntimePlatform(RuntimePlatform.WindowsPlayer, this);
@@ -57,7 +60,7 @@ namespace FMODUnity
             yield return BuildTarget.WSAPlayer;
         }
 
-        internal override Legacy.Platform LegacyIdentifier { get { return Legacy.Platform.Windows; } }
+        internal override Legacy.Platform LegacyIdentifier => Legacy.Platform.Windows;
 #endif
 
 #if UNITY_WINRT_8_1 || UNITY_WSA_10_0
@@ -78,13 +81,14 @@ namespace FMODUnity
                 case BuildTarget.WSAPlayer:
                     return new BinaryAssetFolderInfo("uwp", "Plugins/UWP");
                 default:
-                    throw new System.ArgumentException("Unrecognised build target: " + buildTarget);
+                    throw new ArgumentException("Unrecognised build target: " + buildTarget);
             }
         }
 
-        protected override IEnumerable<FileRecord> GetBinaryFiles(BuildTarget buildTarget, bool allVariants, string suffix)
+        protected override IEnumerable<FileRecord> GetBinaryFiles(BuildTarget buildTarget, bool allVariants,
+            string suffix)
         {
-            string dllSuffix = suffix + ".dll";
+            var dllSuffix = suffix + ".dll";
 
             switch (buildTarget)
             {
@@ -95,14 +99,15 @@ namespace FMODUnity
                     yield return new FileRecord("x86_64/fmodstudio" + dllSuffix);
                     break;
                 case BuildTarget.WSAPlayer:
-                    foreach (string architecture in new[] { "arm", "x64", "x86" })
+                    foreach (var architecture in new[] { "arm", "x64", "x86" })
                     {
                         yield return new FileRecord(string.Format("{0}/fmod{1}", architecture, dllSuffix));
                         yield return new FileRecord(string.Format("{0}/fmodstudio{1}", architecture, dllSuffix));
                     }
+
                     break;
                 default:
-                    throw new System.NotSupportedException("Unrecognised Build Target");
+                    throw new NotSupportedException("Unrecognised Build Target");
             }
         }
 
@@ -121,7 +126,7 @@ namespace FMODUnity
                 case BuildTarget.WSAPlayer:
                     yield break;
                 default:
-                    throw new System.NotSupportedException("Unrecognised Build Target");
+                    throw new NotSupportedException("Unrecognised Build Target");
             }
         }
 
@@ -144,28 +149,23 @@ namespace FMODUnity
 #endif
         }
 #if UNITY_EDITOR
-        internal override OutputType[] ValidOutputTypes
-        {
-            get
-            {
-                return sValidOutputTypes;
-            }
-        }
+        internal override OutputType[] ValidOutputTypes => sValidOutputTypes;
 
-        private static OutputType[] sValidOutputTypes = {
-           new OutputType() { displayName = "Windows Audio Session API", outputType = FMOD.OUTPUTTYPE.WASAPI },
-           new OutputType() { displayName = "Windows Sonic", outputType = FMOD.OUTPUTTYPE.WINSONIC },
+        private static readonly OutputType[] sValidOutputTypes =
+        {
+            new() { displayName = "Windows Audio Session API", outputType = OUTPUTTYPE.WASAPI },
+            new() { displayName = "Windows Sonic", outputType = OUTPUTTYPE.WINSONIC }
         };
 
-        internal override int CoreCount { get { return MaximumCoreCount; } }
+        internal override int CoreCount => MaximumCoreCount;
 #endif
 
-        internal override List<CodecChannelCount> DefaultCodecChannels { get { return staticCodecChannels; } }
+        internal override List<CodecChannelCount> DefaultCodecChannels => staticCodecChannels;
 
-        private static List<CodecChannelCount> staticCodecChannels = new List<CodecChannelCount>()
+        private static readonly List<CodecChannelCount> staticCodecChannels = new()
         {
-            new CodecChannelCount { format = CodecType.FADPCM, channels = 0 },
-            new CodecChannelCount { format = CodecType.Vorbis, channels = 32 },
+            new() { format = CodecType.FADPCM, channels = 0 },
+            new() { format = CodecType.Vorbis, channels = 32 }
         };
     }
 }

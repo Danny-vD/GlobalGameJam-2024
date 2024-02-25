@@ -13,14 +13,14 @@ public class PlayerAudioFootsteps : MonoBehaviour
         footstepInstance = AudioPlayer.GetEventInstance(AudioEventType.SFX_Player_Footsteps);
     }
 
-    private void PlayFootsteps()
-    {
-        footstepInstance.start();
-    }
-    
     private void OnDestroy()
     {
         footstepInstance.release();
         footstepInstance.stop(STOP_MODE.IMMEDIATE);
+    }
+
+    private void PlayFootsteps()
+    {
+        footstepInstance.start();
     }
 }

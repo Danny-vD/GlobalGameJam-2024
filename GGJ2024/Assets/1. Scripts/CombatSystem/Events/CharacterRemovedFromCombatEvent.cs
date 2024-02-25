@@ -2,7 +2,7 @@
 
 namespace CombatSystem.Events
 {
-	public class CharacterRemovedFromCombatEvent : VDEvent<CharacterRemovedFromCombatEvent>
-	{
-	}
+    public class CharacterRemovedFromCombatEvent : VDEvent<CharacterRemovedFromCombatEvent>
+    {
+    }
 }

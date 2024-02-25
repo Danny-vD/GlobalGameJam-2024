@@ -1,220 +1,215 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using SerializableDictionaryPackage.SerializableDictionary;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
-using Utility;
 using Utility.EditorPackage;
 
 namespace PropertyDrawers.SerializableDictionaryPackage
 {
-	[CustomPropertyDrawer(typeof(SerializableDictionary<,>), true)]
-	public class SerializableDictionaryDrawer : PropertyDrawer
-	{
-		// Constants, for consistent layout
-		private const float baseSize = 15f;
-		
-		private const float warningHeight = 45.0f;
-		private const float spacingWarningToDictionary = 10.0f;
+    [CustomPropertyDrawer(typeof(SerializableDictionary<,>), true)]
+    public class SerializableDictionaryDrawer : PropertyDrawer
+    {
+        // Constants, for consistent layout
+        private const float baseSize = 15f;
 
-		private const float paddingAtBeginOfElement = 2.0f;
-		private const float spacingBetweenPairValues = 5.0f;
-		private const float paddingAtEndOfElement = 8f;
-		
-		private const float paddingAtEndOfProperty = 0.0f;
+        private const float warningHeight = 45.0f;
+        private const float spacingWarningToDictionary = 10.0f;
 
-		private float propertySize;
+        private const float paddingAtBeginOfElement = 2.0f;
+        private const float spacingBetweenPairValues = 5.0f;
+        private const float paddingAtEndOfElement = 8f;
 
-		private SerializedProperty current;
-		private SerializedProperty serializedDictionary;
-		private GUIContent currentLabel;
+        private const float paddingAtEndOfProperty = 0.0f;
 
-		private ReorderableList reorderableList;
-		private float headerHeight = 20f;
-		private float elementHeight = 21f;
+        private SerializedProperty current;
+        private GUIContent currentLabel;
+        private float elementHeight = 21f;
+        private float headerHeight = 20f;
 
-		private bool isFoldOut;
-		private bool isValid;
+        private bool isFoldOut;
+        private bool isValid;
 
-		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
-		{
-			current      = property;
-			currentLabel = label;
+        private float propertySize;
 
-			EditorGUI.BeginProperty(position, label, property);
-			propertySize = baseSize;
+        private ReorderableList reorderableList;
+        private SerializedProperty serializedDictionary;
 
-			serializedDictionary = property.FindPropertyRelative("serializedDictionary");
-			isValid              = IsValidDictionary(serializedDictionary, out int actualCount);
+        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+        {
+            current = property;
+            currentLabel = label;
 
-			if (ReferenceEquals(reorderableList, null)) // Prevent creating a new list every update
-			{
-				reorderableList = new ReorderableList(current.serializedObject, serializedDictionary, isFoldOut, true, isFoldOut, isFoldOut);
-				headerHeight    = reorderableList.headerHeight;
-				elementHeight   = reorderableList.elementHeight;
+            EditorGUI.BeginProperty(position, label, property);
+            propertySize = baseSize;
 
-				// Setup the reorderable list
-				reorderableList.drawHeaderCallback      += DrawHeader;
-				reorderableList.drawElementCallback     += DrawElement;
-				reorderableList.elementHeightCallback   += GetElementHeight;
-				reorderableList.drawNoneElementCallback += DrawNoneElement;
-			}
+            serializedDictionary = property.FindPropertyRelative("serializedDictionary");
+            isValid = IsValidDictionary(serializedDictionary, out var actualCount);
 
-			if (!isFoldOut)
-			{
-				reorderableList.elementHeight = 0;
-			}
+            if (ReferenceEquals(reorderableList, null)) // Prevent creating a new list every update
+            {
+                reorderableList = new ReorderableList(current.serializedObject, serializedDictionary, isFoldOut, true,
+                    isFoldOut, isFoldOut);
+                headerHeight = reorderableList.headerHeight;
+                elementHeight = reorderableList.elementHeight;
 
-			// TODO: Drawing the warning messes up the header (2023.2.7)
-			//if (isFoldOut && !isValid)
-			//{
-			//	DrawDuplicateKeyWarning(position, actualCount);
-			//
-			//	position.y   += warningHeight;
-			//	position.y   += spacingWarningToDictionary;
-			//	propertySize += spacingWarningToDictionary;
-			//}
+                // Setup the reorderable list
+                reorderableList.drawHeaderCallback += DrawHeader;
+                reorderableList.drawElementCallback += DrawElement;
+                reorderableList.elementHeightCallback += GetElementHeight;
+                reorderableList.drawNoneElementCallback += DrawNoneElement;
+            }
 
-			reorderableList.DoList(position); // Draw the reorderable list
+            if (!isFoldOut) reorderableList.elementHeight = 0;
 
-			propertySize += paddingAtEndOfProperty;
+            // TODO: Drawing the warning messes up the header (2023.2.7)
+            //if (isFoldOut && !isValid)
+            //{
+            //	DrawDuplicateKeyWarning(position, actualCount);
+            //
+            //	position.y   += warningHeight;
+            //	position.y   += spacingWarningToDictionary;
+            //	propertySize += spacingWarningToDictionary;
+            //}
 
-			EditorGUI.EndProperty();
-		}
+            reorderableList.DoList(position); // Draw the reorderable list
 
-		/// <summary>
-		/// Check if all the keys are distinct by comparing their value as a string
-		/// </summary>
-		/// <seealso cref="Structs.Utility.SerializableDictionary.SerializableKeyValuePair.key"/>
-		/// <seealso cref="EditorUtils.GetValueString"/>
-		private static bool IsValidDictionary(SerializedProperty dictionary, out int actualKeyCount)
-		{
-			List<string> pairLabels = GetKeyLabels(dictionary);
+            propertySize += paddingAtEndOfProperty;
 
-			actualKeyCount = pairLabels.Distinct().Count();
-			return actualKeyCount == pairLabels.Count; // If the count of all distinct keys equals the count of all keys, then all keys are distinct
-		}
+            EditorGUI.EndProperty();
+        }
 
-		private void DrawHeader(Rect rect)
-		{
-			propertySize += headerHeight;
+        /// <summary>
+        ///     Check if all the keys are distinct by comparing their value as a string
+        /// </summary>
+        /// <seealso cref="Structs.Utility.SerializableDictionary.SerializableKeyValuePair.key" />
+        /// <seealso cref="EditorUtils.GetValueString" />
+        private static bool IsValidDictionary(SerializedProperty dictionary, out int actualKeyCount)
+        {
+            var pairLabels = GetKeyLabels(dictionary);
 
-			Rect foldoutRect = new Rect(rect.x + 10, rect.y, rect.width - 10, rect.height);
+            actualKeyCount = pairLabels.Distinct().Count();
+            return
+                actualKeyCount ==
+                pairLabels.Count; // If the count of all distinct keys equals the count of all keys, then all keys are distinct
+        }
 
-			GUIContent label = currentLabel;
+        private void DrawHeader(Rect rect)
+        {
+            propertySize += headerHeight;
 
-			if (!isValid)
-			{
-				label.text += " [CONFLICTS!]";
-			}
+            var foldoutRect = new Rect(rect.x + 10, rect.y, rect.width - 10, rect.height);
 
-			bool newFoldout = EditorGUI.Foldout(foldoutRect, isFoldOut, label, true);
+            var label = currentLabel;
 
-			if (isFoldOut != newFoldout) // Foldout changed
-			{
-				reorderableList = null;
-				isFoldOut       = newFoldout;
-			}
-		}
+            if (!isValid) label.text += " [CONFLICTS!]";
 
-		private void DrawDuplicateKeyWarning(Rect position, int actualCount)
-		{
-			propertySize += warningHeight;
+            var newFoldout = EditorGUI.Foldout(foldoutRect, isFoldOut, label, true);
 
-			position.height = warningHeight;
-			EditorGUI.HelpBox(position, $"Duplicate keys found! These will be removed after serialization.\nActual Size: {actualCount}", MessageType.Warning);
-		}
+            if (isFoldOut != newFoldout) // Foldout changed
+            {
+                reorderableList = null;
+                isFoldOut = newFoldout;
+            }
+        }
 
-		private void DrawElement(Rect rect, int index, bool isactive, bool isfocused)
-		{
-			if (!isFoldOut)
-			{
-				return;
-			}
+        private void DrawDuplicateKeyWarning(Rect position, int actualCount)
+        {
+            propertySize += warningHeight;
 
-			rect.y += paddingAtBeginOfElement;
+            position.height = warningHeight;
+            EditorGUI.HelpBox(position,
+                $"Duplicate keys found! These will be removed after serialization.\nActual Size: {actualCount}",
+                MessageType.Warning);
+        }
 
-			SerializedProperty keyValuePair = serializedDictionary.GetArrayElementAtIndex(index);
-			SerializedProperty key = keyValuePair.FindPropertyRelative("key");
-			SerializedProperty value = keyValuePair.FindPropertyRelative("value");
+        private void DrawElement(Rect rect, int index, bool isactive, bool isfocused)
+        {
+            if (!isFoldOut) return;
 
-			Type[] genericArguments = fieldInfo.FieldType.GetGenericArguments();
-			Type keyType = genericArguments[0];
+            rect.y += paddingAtBeginOfElement;
 
-			rect.height = EditorGUI.GetPropertyHeight(key, true);
+            var keyValuePair = serializedDictionary.GetArrayElementAtIndex(index);
+            var key = keyValuePair.FindPropertyRelative("key");
+            var value = keyValuePair.FindPropertyRelative("value");
 
-			EditorGUI.PropertyField(rect, key, new GUIContent($"{EditorUtils.GetValueString(key, index, propertyType: keyType)} [{EditorUtils.GetTypeString(key)}]"), true);
+            var genericArguments = fieldInfo.FieldType.GetGenericArguments();
+            var keyType = genericArguments[0];
 
-			rect.y += rect.height + spacingBetweenPairValues; // Move the position down to beneath the last element + spacing
+            rect.height = EditorGUI.GetPropertyHeight(key, true);
 
-			rect.height = EditorGUI.GetPropertyHeight(value, true);
+            EditorGUI.PropertyField(rect, key,
+                new GUIContent(
+                    $"{EditorUtils.GetValueString(key, index, propertyType: keyType)} [{EditorUtils.GetTypeString(key)}]"),
+                true);
 
-			EditorGUI.PropertyField(rect, value, new GUIContent($"Value [{EditorUtils.GetTypeString(value)}]"), true);
+            rect.y += rect.height +
+                      spacingBetweenPairValues; // Move the position down to beneath the last element + spacing
 
-			propertySize += GetElementHeight(index) + 2; // + 2 because Unity adds 2 pixels padding to each element
-		}
+            rect.height = EditorGUI.GetPropertyHeight(value, true);
 
-		private void DrawNoneElement(Rect rect)
-		{
-			if (!isFoldOut)
-			{
-				return;
-			}
+            EditorGUI.PropertyField(rect, value, new GUIContent($"Value [{EditorUtils.GetTypeString(value)}]"), true);
 
-			propertySize += elementHeight; // GetElementHeight is not called for the NoneElement
-			EditorGUI.LabelField(rect, EditorGUIUtility.TrTextContent("Dictionary is Empty"));
-		}
+            propertySize += GetElementHeight(index) + 2; // + 2 because Unity adds 2 pixels padding to each element
+        }
 
-		private float GetElementHeight(int index)
-		{
-			/*
-			 * We do not update propertySize here because element height is cached and therefore not called every update
-			 */
+        private void DrawNoneElement(Rect rect)
+        {
+            if (!isFoldOut) return;
 
-			if (!isFoldOut)
-			{
-				return 0;
-			}
+            propertySize += elementHeight; // GetElementHeight is not called for the NoneElement
+            EditorGUI.LabelField(rect, EditorGUIUtility.TrTextContent("Dictionary is Empty"));
+        }
 
-			float currentElementHeight = paddingAtBeginOfElement;
+        private float GetElementHeight(int index)
+        {
+            /*
+             * We do not update propertySize here because element height is cached and therefore not called every update
+             */
 
-			SerializedProperty keyValuePair = serializedDictionary.GetArrayElementAtIndex(index);
-			SerializedProperty key = keyValuePair.FindPropertyRelative("key");
-			SerializedProperty value = keyValuePair.FindPropertyRelative("value");
+            if (!isFoldOut) return 0;
 
-			currentElementHeight += EditorGUI.GetPropertyHeight(key, true) + EditorGUI.GetPropertyHeight(value, true);
+            var currentElementHeight = paddingAtBeginOfElement;
 
-			currentElementHeight += spacingBetweenPairValues;
-			currentElementHeight += paddingAtEndOfElement;
+            var keyValuePair = serializedDictionary.GetArrayElementAtIndex(index);
+            var key = keyValuePair.FindPropertyRelative("key");
+            var value = keyValuePair.FindPropertyRelative("value");
 
-			return currentElementHeight;
-		}
+            currentElementHeight += EditorGUI.GetPropertyHeight(key, true) + EditorGUI.GetPropertyHeight(value, true);
 
-		private static List<string> GetKeyLabels(SerializedProperty dictionary)
-		{
-			List<string> labels = new List<string>();
+            currentElementHeight += spacingBetweenPairValues;
+            currentElementHeight += paddingAtEndOfElement;
 
-			for (int i = 0; i < dictionary.arraySize; i++)
-			{
-				SerializedProperty keyValuePair = dictionary.GetArrayElementAtIndex(i);
-				SerializedProperty key = keyValuePair.FindPropertyRelative("key"); // The key of a SerializableKeyValuePair<> is always called 'key'
+            return currentElementHeight;
+        }
 
-				labels.Add(GetKeyLabel(key, i));
-			}
+        private static List<string> GetKeyLabels(SerializedProperty dictionary)
+        {
+            var labels = new List<string>();
 
-			return labels;
-		}
+            for (var i = 0; i < dictionary.arraySize; i++)
+            {
+                var keyValuePair = dictionary.GetArrayElementAtIndex(i);
+                var key = keyValuePair
+                    .FindPropertyRelative("key"); // The key of a SerializableKeyValuePair<> is always called 'key'
 
-		private static string GetKeyLabel(SerializedProperty key, int index)
-		{
-			return EditorUtils.GetValueString(key, index, "Pair {index}");
-		}
+                labels.Add(GetKeyLabel(key, i));
+            }
 
-		public override float GetPropertyHeight(SerializedProperty property, GUIContent label) =>
-			base.GetPropertyHeight(property, label) + propertySize;
-	}
+            return labels;
+        }
+
+        private static string GetKeyLabel(SerializedProperty key, int index)
+        {
+            return EditorUtils.GetValueString(key, index, "Pair {index}");
+        }
+
+        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+        {
+            return base.GetPropertyHeight(property, label) + propertySize;
+        }
+    }
 }
 
 /*
@@ -228,177 +223,177 @@ using static Utility.EditorUtils;
 
 namespace PropertyDrawers.Dictionary
 {
-	[CustomPropertyDrawer(typeof(SerializableDictionary<,>), false)]
-	public class SerializableDictionaryDrawer : PropertyDrawer
-	{
-		// Constants, for consistent layout
-		private const float spacingWarningToDictionary = 5.0f;
-		private const float spacingDictionaryToPairs = 5.0f;
-		private const float spacingLabelToPair = 0.0f;
-		private const float pairIndent = 10.0f;
-		private const float spacingBetweenPairValues = 2.0f;
-		private const float spacingBetweenPairs = 0.0f;
-		private const float paddingAtEndOfProperty = 0.0f;
+    [CustomPropertyDrawer(typeof(SerializableDictionary<,>), false)]
+    public class SerializableDictionaryDrawer : PropertyDrawer
+    {
+        // Constants, for consistent layout
+        private const float spacingWarningToDictionary = 5.0f;
+        private const float spacingDictionaryToPairs = 5.0f;
+        private const float spacingLabelToPair = 0.0f;
+        private const float pairIndent = 10.0f;
+        private const float spacingBetweenPairValues = 2.0f;
+        private const float spacingBetweenPairs = 0.0f;
+        private const float paddingAtEndOfProperty = 0.0f;
 
-		private const float foldoutHeight = 20.0f;
-		private const float warningHeight = 30.0f;
+        private const float foldoutHeight = 20.0f;
+        private const float warningHeight = 30.0f;
 
-		// Instance variables, to allow variable size between properties
-		private Vector2 origin;
-		private float propertySize;
-		private float xpos;
-		private float ypos;
-		private float maxWidth;
+        // Instance variables, to allow variable size between properties
+        private Vector2 origin;
+        private float propertySize;
+        private float xpos;
+        private float ypos;
+        private float maxWidth;
 
-		// Foldouts for the foldout fields
-		private bool foldoutDictionary;
-		private bool[] foldouts;
+        // Foldouts for the foldout fields
+        private bool foldoutDictionary;
+        private bool[] foldouts;
 
-		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
-		{
-			EditorGUI.BeginProperty(position, label, property);
-			origin = new Vector2(position.x, position.y);
+        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+        {
+            EditorGUI.BeginProperty(position, label, property);
+            origin = new Vector2(position.x, position.y);
 
-			propertySize = 0;
+            propertySize = 0;
 
-			xpos = origin.x;
-			ypos = origin.y;
-			maxWidth = position.width;
+            xpos = origin.x;
+            ypos = origin.y;
+            maxWidth = position.width;
 
-			DrawDictionary(property, property.displayName);
+            DrawDictionary(property, property.displayName);
 
-			propertySize += paddingAtEndOfProperty;
+            propertySize += paddingAtEndOfProperty;
 
-			EditorGUI.EndProperty();
-		}
+            EditorGUI.EndProperty();
+        }
 
-		private void DrawDictionary(SerializedProperty property, string dictionaryName)
-		{
-			if (IsFoldOut(ref foldoutDictionary, $"{dictionaryName}"))
-			{
-				SerializedProperty list = property.FindPropertyRelative("serializedDictionary");
-				
-				List<string> pairLabels = GetLabels(list, "key");
-				int actualCount = pairLabels.Distinct().Count(); 
-				bool conflicts = actualCount != pairLabels.Count;
-				
-				if (conflicts)
-				{
-					DrawWarning(actualCount);
-				}
-				
-				DrawSizeField(list);
-				ResizeFoldouts(list);
+        private void DrawDictionary(SerializedProperty property, string dictionaryName)
+        {
+            if (IsFoldOut(ref foldoutDictionary, $"{dictionaryName}"))
+            {
+                SerializedProperty list = property.FindPropertyRelative("serializedDictionary");
 
-				ypos += spacingDictionaryToPairs;
+                List<string> pairLabels = GetLabels(list, "key");
+                int actualCount = pairLabels.Distinct().Count();
+                bool conflicts = actualCount != pairLabels.Count;
 
-				DrawKeyValueArray(list, "key", "value", DrawPair);
+                if (conflicts)
+                {
+                    DrawWarning(actualCount);
+                }
 
-				// Size = Y pos of end - Y pos of beginning - spacing at end of last pair
-				propertySize = ypos - origin.y - spacingBetweenPairs;
-			}
-		}
+                DrawSizeField(list);
+                ResizeFoldouts(list);
 
-		private void DrawWarning(int actualCount)
-		{
-			Rect rect = new Rect(xpos, ypos, maxWidth - xpos, warningHeight);
-			EditorGUI.HelpBox(rect, "Duplicate keys found! These will be removed after serialization.", MessageType.Warning);
+                ypos += spacingDictionaryToPairs;
 
-			ypos += warningHeight;
-			
-			rect.y = ypos;
-			rect.height = 20.0f;
+                DrawKeyValueArray(list, "key", "value", DrawPair);
 
-			EditorGUI.LabelField(rect, $"Actual Size: {actualCount}");
-			
-			ypos += 20.0f;
-			ypos += spacingWarningToDictionary;
-		}
+                // Size = Y pos of end - Y pos of beginning - spacing at end of last pair
+                propertySize = ypos - origin.y - spacingBetweenPairs;
+            }
+        }
 
-		private void ResizeFoldouts(SerializedProperty list)
-		{
-			if (foldouts == null)
-			{
-				foldouts = new bool[list.arraySize];
-				return;
-			}
+        private void DrawWarning(int actualCount)
+        {
+            Rect rect = new Rect(xpos, ypos, maxWidth - xpos, warningHeight);
+            EditorGUI.HelpBox(rect, "Duplicate keys found! These will be removed after serialization.", MessageType.Warning);
 
-			if (foldouts.Length != list.arraySize)
-			{
-				List<bool> temp = foldouts.ToList();
-				temp.ResizeList(list.arraySize);
-				foldouts = temp.ToArray();
-			}
-		}
+            ypos += warningHeight;
 
-		private void DrawSizeField(SerializedProperty list)
-		{
-			Rect sizeRect = new Rect(xpos + pairIndent, ypos, maxWidth - xpos, foldoutHeight);
-			list.arraySize = Mathf.Clamp(EditorGUI.IntField(sizeRect, new GUIContent("Size"), list.arraySize), 0, int.MaxValue);
+            rect.y = ypos;
+            rect.height = 20.0f;
 
-			ypos += foldoutHeight;
-		}
+            EditorGUI.LabelField(rect, $"Actual Size: {actualCount}");
 
-		private void DrawPair(int index, SerializedProperty key, SerializedProperty value)
-		{
-			if (IsFoldOut(ref foldouts[index], GetPairLabel(key, index).ReplaceUnderscoreWithSpace()))
-			{
-				ypos += spacingLabelToPair;
-				DrawVariable(key, new GUIContent($"Key [{GetTypeString(key)}]"));
+            ypos += 20.0f;
+            ypos += spacingWarningToDictionary;
+        }
 
-				ypos += spacingBetweenPairValues;
-				DrawVariable(value, new GUIContent($"Value [{GetTypeString(value)}]"));
-			}
+        private void ResizeFoldouts(SerializedProperty list)
+        {
+            if (foldouts == null)
+            {
+                foldouts = new bool[list.arraySize];
+                return;
+            }
 
-			ypos += spacingBetweenPairs;
-		}
+            if (foldouts.Length != list.arraySize)
+            {
+                List<bool> temp = foldouts.ToList();
+                temp.ResizeList(list.arraySize);
+                foldouts = temp.ToArray();
+            }
+        }
 
-		private void DrawVariable(SerializedProperty value, GUIContent label)
-		{
-			float xPosition = xpos + pairIndent;
-			float height = EditorGUI.GetPropertyHeight(value, true);
+        private void DrawSizeField(SerializedProperty list)
+        {
+            Rect sizeRect = new Rect(xpos + pairIndent, ypos, maxWidth - xpos, foldoutHeight);
+            list.arraySize = Mathf.Clamp(EditorGUI.IntField(sizeRect, new GUIContent("Size"), list.arraySize), 0, int.MaxValue);
 
-			Rect rect = new Rect(xPosition, ypos, maxWidth - xPosition, height);
-			EditorGUI.PropertyField(rect, value, label, true);
+            ypos += foldoutHeight;
+        }
 
-			ypos += height;
-		}
+        private void DrawPair(int index, SerializedProperty key, SerializedProperty value)
+        {
+            if (IsFoldOut(ref foldouts[index], GetPairLabel(key, index).ReplaceUnderscoreWithSpace()))
+            {
+                ypos += spacingLabelToPair;
+                DrawVariable(key, new GUIContent($"Key [{GetTypeString(key)}]"));
 
-		/// <summary>
-		/// Creates a foldout label
-		/// </summary>
-		private bool IsFoldOut(ref bool foldout, string label = "")
-		{
-			Rect rect = new Rect(xpos, ypos, maxWidth - xpos, foldoutHeight);
-			foldout = EditorGUI.Foldout(rect, foldout, label);
+                ypos += spacingBetweenPairValues;
+                DrawVariable(value, new GUIContent($"Value [{GetTypeString(value)}]"));
+            }
 
-			ypos += foldoutHeight;
+            ypos += spacingBetweenPairs;
+        }
 
-			return foldout;
-		}
+        private void DrawVariable(SerializedProperty value, GUIContent label)
+        {
+            float xPosition = xpos + pairIndent;
+            float height = EditorGUI.GetPropertyHeight(value, true);
 
-		private static List<string> GetLabels(SerializedProperty list, string keyName)
-		{
-			List<string> labels = new List<string>();
-			
-			for (int i = 0; i < list.arraySize; i++)
-			{
-				SerializedProperty keyValuePair = list.GetArrayElementAtIndex(i);
-				SerializedProperty key = keyValuePair.FindPropertyRelative(keyName);
-				
-				labels.Add(GetPairLabel(key, i));
-			}
+            Rect rect = new Rect(xPosition, ypos, maxWidth - xPosition, height);
+            EditorGUI.PropertyField(rect, value, label, true);
 
-			return labels;
-		}
+            ypos += height;
+        }
 
-		private static string GetPairLabel(SerializedProperty key, int index)
-		{
-			return GetValueString(key, index, "Pair {index}");
-		}
+        /// <summary>
+        /// Creates a foldout label
+        /// </summary>
+        private bool IsFoldOut(ref bool foldout, string label = "")
+        {
+            Rect rect = new Rect(xpos, ypos, maxWidth - xpos, foldoutHeight);
+            foldout = EditorGUI.Foldout(rect, foldout, label);
 
-		public override float GetPropertyHeight(SerializedProperty property, GUIContent label) =>
-			base.GetPropertyHeight(property, label) + propertySize;
-	}
-}		
+            ypos += foldoutHeight;
+
+            return foldout;
+        }
+
+        private static List<string> GetLabels(SerializedProperty list, string keyName)
+        {
+            List<string> labels = new List<string>();
+
+            for (int i = 0; i < list.arraySize; i++)
+            {
+                SerializedProperty keyValuePair = list.GetArrayElementAtIndex(i);
+                SerializedProperty key = keyValuePair.FindPropertyRelative(keyName);
+
+                labels.Add(GetPairLabel(key, i));
+            }
+
+            return labels;
+        }
+
+        private static string GetPairLabel(SerializedProperty key, int index)
+        {
+            return GetValueString(key, index, "Pair {index}");
+        }
+
+        public override float GetPropertyHeight(SerializedProperty property, GUIContent label) =>
+            base.GetPropertyHeight(property, label) + propertySize;
+    }
+}
 /**/ // old dictionary drawer (does not use reorderable list)

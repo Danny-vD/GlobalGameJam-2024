@@ -1,5 +1,4 @@
-﻿using System;
-using InterationSystem.Interfaces;
+﻿using InterationSystem.Interfaces;
 using UnityEngine;
 using VDFramework;
 using VDFramework.EventSystem;
@@ -10,15 +9,14 @@ namespace Dialogue
     {
         [SerializeField] private TextAsset InkFile;
 
+        private void Start()
+        {
+        }
+
         private void OnTriggerEnter(Collider collider)
         {
             EventManager.RaiseEvent(new EnterDialogueModeEvent(InkFile));
             Debug.Log("EVENT RAISED");
-        }
-
-        private void Start()
-        {
-            
         }
     }
 }

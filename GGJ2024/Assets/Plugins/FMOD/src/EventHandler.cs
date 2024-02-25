@@ -3,18 +3,14 @@ using UnityEngine.EventSystems;
 
 namespace FMODUnity
 {
-    public abstract class EventHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
+    public abstract class EventHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler,
+        IPointerUpHandler
     {
         public string CollisionTag = "";
 
         protected virtual void Start()
         {
             HandleGameEvent(EmitterGameEvent.ObjectStart);
-        }
-
-        protected virtual void OnDestroy()
-        {
-            HandleGameEvent(EmitterGameEvent.ObjectDestroy);
         }
 
         private void OnEnable()
@@ -27,50 +23,14 @@ namespace FMODUnity
             HandleGameEvent(EmitterGameEvent.ObjectDisable);
         }
 
-        #if UNITY_PHYSICS_EXIST
-        private void OnTriggerEnter(Collider other)
+        protected virtual void OnDestroy()
         {
-            if (string.IsNullOrEmpty(CollisionTag) || other.CompareTag(CollisionTag) || (other.attachedRigidbody && other.attachedRigidbody.CompareTag(CollisionTag)))
-            {
-                HandleGameEvent(EmitterGameEvent.TriggerEnter);
-            }
+            HandleGameEvent(EmitterGameEvent.ObjectDestroy);
         }
-
-        private void OnTriggerExit(Collider other)
-        {
-            if (string.IsNullOrEmpty(CollisionTag) || other.CompareTag(CollisionTag) || (other.attachedRigidbody && other.attachedRigidbody.CompareTag(CollisionTag)))
-            {
-                HandleGameEvent(EmitterGameEvent.TriggerExit);
-            }
-        }
-        #endif
-
-        #if UNITY_PHYSICS2D_EXIST
-        private void OnTriggerEnter2D(Collider2D other)
-        {
-            if (string.IsNullOrEmpty(CollisionTag) || other.CompareTag(CollisionTag))
-            {
-                HandleGameEvent(EmitterGameEvent.TriggerEnter2D);
-            }
-        }
-
-        private void OnTriggerExit2D(Collider2D other)
-        {
-            if (string.IsNullOrEmpty(CollisionTag) || other.CompareTag(CollisionTag))
-            {
-                HandleGameEvent(EmitterGameEvent.TriggerExit2D);
-            }
-        }
-        #endif
 
         private void OnCollisionEnter()
         {
             HandleGameEvent(EmitterGameEvent.CollisionEnter);
-        }
-
-        private void OnCollisionExit()
-        {
-            HandleGameEvent(EmitterGameEvent.CollisionExit);
         }
 
         private void OnCollisionEnter2D()
@@ -78,9 +38,19 @@ namespace FMODUnity
             HandleGameEvent(EmitterGameEvent.CollisionEnter2D);
         }
 
+        private void OnCollisionExit()
+        {
+            HandleGameEvent(EmitterGameEvent.CollisionExit);
+        }
+
         private void OnCollisionExit2D()
         {
             HandleGameEvent(EmitterGameEvent.CollisionExit2D);
+        }
+
+        private void OnMouseDown()
+        {
+            HandleGameEvent(EmitterGameEvent.ObjectMouseDown);
         }
 
         private void OnMouseEnter()
@@ -93,14 +63,14 @@ namespace FMODUnity
             HandleGameEvent(EmitterGameEvent.ObjectMouseExit);
         }
 
-        private void OnMouseDown()
-        {
-            HandleGameEvent(EmitterGameEvent.ObjectMouseDown);
-        }
-
         private void OnMouseUp()
         {
             HandleGameEvent(EmitterGameEvent.ObjectMouseUp);
+        }
+
+        public void OnPointerDown(PointerEventData eventData)
+        {
+            HandleGameEvent(EmitterGameEvent.UIMouseDown);
         }
 
         public void OnPointerEnter(PointerEventData eventData)
@@ -112,10 +82,6 @@ namespace FMODUnity
         {
             HandleGameEvent(EmitterGameEvent.UIMouseExit);
         }
-        public void OnPointerDown(PointerEventData eventData)
-        {
-            HandleGameEvent(EmitterGameEvent.UIMouseDown);
-        }
 
         public void OnPointerUp(PointerEventData eventData)
         {
@@ -123,5 +89,35 @@ namespace FMODUnity
         }
 
         protected abstract void HandleGameEvent(EmitterGameEvent gameEvent);
+
+#if UNITY_PHYSICS_EXIST
+        private void OnTriggerEnter(Collider other)
+        {
+            if (string.IsNullOrEmpty(CollisionTag) || other.CompareTag(CollisionTag) ||
+                (other.attachedRigidbody && other.attachedRigidbody.CompareTag(CollisionTag)))
+                HandleGameEvent(EmitterGameEvent.TriggerEnter);
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            if (string.IsNullOrEmpty(CollisionTag) || other.CompareTag(CollisionTag) ||
+                (other.attachedRigidbody && other.attachedRigidbody.CompareTag(CollisionTag)))
+                HandleGameEvent(EmitterGameEvent.TriggerExit);
+        }
+#endif
+
+#if UNITY_PHYSICS2D_EXIST
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            if (string.IsNullOrEmpty(CollisionTag) || other.CompareTag(CollisionTag))
+                HandleGameEvent(EmitterGameEvent.TriggerEnter2D);
+        }
+
+        private void OnTriggerExit2D(Collider2D other)
+        {
+            if (string.IsNullOrEmpty(CollisionTag) || other.CompareTag(CollisionTag))
+                HandleGameEvent(EmitterGameEvent.TriggerExit2D);
+        }
+#endif
     }
 }

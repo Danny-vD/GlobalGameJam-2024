@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
-using UnityEngine.EventSystems;
 using VDFramework.Singleton;
-
 #if UNITY_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
@@ -12,45 +10,43 @@ using System.Reflection;
 
 namespace UtilityPackage.CursorManagement.CursorUtility.Singletons
 {
-	public class CursorUtil : Singleton<CursorUtil>
-	{
+    public class CursorUtil : Singleton<CursorUtil>
+    {
 #if UNITY_INPUT_SYSTEM
-		private InputSystemUIInputModule inputModule;
+        private InputSystemUIInputModule inputModule;
 
-		private void OnEnable()
-		{
-			if (inputModule == null)
-			{
-				inputModule = FindAnyObjectByType<InputSystemUIInputModule>(FindObjectsInactive.Exclude);
+        private void OnEnable()
+        {
+            if (inputModule == null)
+            {
+                inputModule = FindAnyObjectByType<InputSystemUIInputModule>(FindObjectsInactive.Exclude);
 
-				if (inputModule == null)
-				{
-					Debug.LogErrorFormat("No {0} found in the scene!", nameof(InputSystemUIInputModule));
-				}
-			}
-		}
+                if (inputModule == null)
+                    Debug.LogErrorFormat("No {0} found in the scene!", nameof(InputSystemUIInputModule));
+            }
+        }
 
-		public bool TryGetHoveredGameObject(int pointerID, out GameObject hoveredGameObject)
-		{
-			if (inputModule.IsPointerOverGameObject(pointerID))
-			{
-				RaycastResult raycastResult = inputModule.GetLastRaycastResult(pointerID);
+        public bool TryGetHoveredGameObject(int pointerID, out GameObject hoveredGameObject)
+        {
+            if (inputModule.IsPointerOverGameObject(pointerID))
+            {
+                var raycastResult = inputModule.GetLastRaycastResult(pointerID);
 
-				if (raycastResult.isValid)
-				{
-					hoveredGameObject = raycastResult.gameObject;
-					return true;
-				}
-			}
+                if (raycastResult.isValid)
+                {
+                    hoveredGameObject = raycastResult.gameObject;
+                    return true;
+                }
+            }
 
-			hoveredGameObject = null;
-			return false;
-		}
+            hoveredGameObject = null;
+            return false;
+        }
 
-		public bool TryGetHoveredGameObject(out GameObject hoveredGameObject)
-		{
-			return TryGetHoveredGameObject(Mouse.current.deviceId, out hoveredGameObject);
-		}
+        public bool TryGetHoveredGameObject(out GameObject hoveredGameObject)
+        {
+            return TryGetHoveredGameObject(Mouse.current.deviceId, out hoveredGameObject);
+        }
 #else
 		private static EventSystem EventSystem => EventSystem.current;
 		
@@ -63,7 +59,8 @@ namespace UtilityPackage.CursorManagement.CursorUtility.Singletons
 		{
 			base.Awake();
 			
-			getPointerData = typeof(PointerInputModule).GetMethod("GetPointerData", BindingFlags.Instance | BindingFlags.NonPublic);
+			getPointerData =
+																																																																																			                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 typeof(PointerInputModule).GetMethod("GetPointerData", BindingFlags.Instance | BindingFlags.NonPublic);
 		}
 
 		public bool TryGetHoveredGameObject(int pointerID, out GameObject hoveredGameObject)
@@ -94,5 +91,5 @@ namespace UtilityPackage.CursorManagement.CursorUtility.Singletons
 			return TryGetHoveredGameObject(PointerInputModule.kMouseLeftId, out hoveredGameObject);
 		}
 #endif
-	}
+    }
 }

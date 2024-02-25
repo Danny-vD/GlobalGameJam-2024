@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using CombatMoves.ScriptableObjects.BaseClasses;
 using CombatMoves.TargetingLogic.Enums;
 using CombatSystem.Enums;
 using CombatSystem.Events.Queues;
@@ -9,96 +8,94 @@ using VDFramework.EventSystem;
 
 namespace CombatSystem.CharacterScripts.CharacterStates
 {
-	public class CastingState : AbstractCharacterState
-	{
-		public event Action OnCastingStarted = delegate { };
+    public class CastingState : AbstractCharacterState
+    {
+        private ConfirmedMoveHolder confirmedMoveHolder;
 
-		public bool IsCasting { get; private set; }
+        public bool IsCasting { get; private set; }
 
-		public override CharacterCombatStateType NextState => CharacterCombatStateType.Idle;
+        public override CharacterCombatStateType NextState => CharacterCombatStateType.Idle;
 
-		private ConfirmedMoveHolder confirmedMoveHolder;
+        private void Awake()
+        {
+            confirmedMoveHolder = GetComponent<ConfirmedMoveHolder>();
+        }
 
-		private void Awake()
-		{
-			confirmedMoveHolder = GetComponent<ConfirmedMoveHolder>();
-		}
+        public event Action OnCastingStarted = delegate { };
 
-		public override void Enter()
-		{
-			EventManager.RaiseEvent(new NewCharacterReadyToCastEvent(this));
-		}
+        public override void Enter()
+        {
+            EventManager.RaiseEvent(new NewCharacterReadyToCastEvent(this));
+        }
 
-		public override void Exit()
-		{
-			if (IsCasting)
-			{
-				// This prevents other moves from starting if this was called before the selected move called AllowNextMoveToStart (should never happen)
+        public override void Exit()
+        {
+            if (IsCasting)
+            {
+                // This prevents other moves from starting if this was called before the selected move called AllowNextMoveToStart (should never happen)
 
-				// no call to base because StopCasting already calls it
-				confirmedMoveHolder.SelectedMove.ForceStopCombatMove(gameObject);
-			}
-			else
-			{
-				EventManager.RaiseEvent(new CastingPreventedEvent(this));
-				base.Exit();
-			}
-		}
+                // no call to base because StopCasting already calls it
+                confirmedMoveHolder.SelectedMove.ForceStopCombatMove(gameObject);
+            }
+            else
+            {
+                EventManager.RaiseEvent(new CastingPreventedEvent(this));
+                base.Exit();
+            }
+        }
 
-		public void StartCasting()
-		{
-			AbstractCombatMove selectedMove = confirmedMoveHolder.SelectedMove;
+        public void StartCasting()
+        {
+            var selectedMove = confirmedMoveHolder.SelectedMove;
 
-			List<GameObject> validTargets = new List<GameObject>();
-			
-			if (selectedMove.TargetingMode != TargetingMode.None)
-			{
-				validTargets = ValidateTargets();
+            var validTargets = new List<GameObject>();
 
-				if (validTargets.Count == 0)
-				{
-					base.Exit();
-				}
-			}
+            if (selectedMove.TargetingMode != TargetingMode.None)
+            {
+                validTargets = ValidateTargets();
 
-			selectedMove.OnCombatMoveEnded += OnCombatMoveEnded;
+                if (validTargets.Count == 0) base.Exit();
+            }
 
-			IsCasting = true;
+            selectedMove.OnCombatMoveEnded += OnCombatMoveEnded;
 
-			OnCastingStarted.Invoke(); // invoked before the move starts because otherwise it would be invoked after OnStateEnded if the move immediately finishes
+            IsCasting = true;
 
-			selectedMove.StartCombatMove(validTargets, CachedGameObject);
-		}
+            OnCastingStarted
+                .Invoke(); // invoked before the move starts because otherwise it would be invoked after OnStateEnded if the move immediately finishes
 
-		private void OnCombatMoveEnded(GameObject caster)
-		{
-			if (ReferenceEquals(caster, gameObject)) // Because the event is shared between all instances, it might be another combat move that ended
-			{
-				StopCasting();
-			}
-		}
+            selectedMove.StartCombatMove(validTargets, CachedGameObject);
+        }
 
-		private void StopCasting()
-		{
-			confirmedMoveHolder.SelectedMove.OnCombatMoveEnded -= OnCombatMoveEnded;
-			IsCasting                                          =  false;
-			base.Exit();
-		}
+        private void OnCombatMoveEnded(GameObject caster)
+        {
+            if (ReferenceEquals(caster,
+                    gameObject)) // Because the event is shared between all instances, it might be another combat move that ended
+                StopCasting();
+        }
 
-		/// <summary>
-		/// Removes all invalid targets (e.g. dead ones)
-		/// </summary>
-		private List<GameObject> ValidateTargets()
-		{
-			List<GameObject> validTargets = new List<GameObject>(confirmedMoveHolder.SelectedTargets);
-			validTargets.RemoveAll(NullOrDead);
+        private void StopCasting()
+        {
+            confirmedMoveHolder.SelectedMove.OnCombatMoveEnded -= OnCombatMoveEnded;
+            IsCasting = false;
+            base.Exit();
+        }
 
-			return validTargets;
-		}
+        /// <summary>
+        ///     Removes all invalid targets (e.g. dead ones)
+        /// </summary>
+        private List<GameObject> ValidateTargets()
+        {
+            var validTargets = new List<GameObject>(confirmedMoveHolder.SelectedTargets);
+            validTargets.RemoveAll(NullOrDead);
 
-		private bool NullOrDead(GameObject obj)
-		{
-			return obj == null || obj.GetComponent<CharacterStateManager>().CurrentStateType == CharacterCombatStateType.Dead;
-		}
-	}
+            return validTargets;
+        }
+
+        private bool NullOrDead(GameObject obj)
+        {
+            return obj == null || obj.GetComponent<CharacterStateManager>().CurrentStateType ==
+                CharacterCombatStateType.Dead;
+        }
+    }
 }

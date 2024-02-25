@@ -1,9 +1,7 @@
-using System;
 using Dialogue.Events;
 using Ink.Runtime;
 using InputScripts;
 using InputScripts.Enums;
-using SerializableDictionaryPackage.SerializableDictionary;
 using UnityEngine;
 using VDFramework.EventSystem;
 using VDFramework.Singleton;
@@ -12,10 +10,9 @@ namespace Dialogue
 {
     public class DialogueParseManager : Singleton<DialogueParseManager>
     {
+        [SerializeField] private GameObject canvas;
         private Story currentStory;
         public bool Conversing { get; set; }
- 
-        [SerializeField] private GameObject canvas;
 
         private void Start()
         {
@@ -39,7 +36,7 @@ namespace Dialogue
         }
 
         private void OnChoiceSelected(ChoiceSelectedEvent @event)
-        {   
+        {
             if (@event.Skip)
             {
                 ParseLine();
@@ -82,7 +79,6 @@ namespace Dialogue
         private string GetAuthor()
         {
             return currentStory.currentTags?[0]?.Split(':', 2)?[1]?.Trim();
-            
         }
     }
 }

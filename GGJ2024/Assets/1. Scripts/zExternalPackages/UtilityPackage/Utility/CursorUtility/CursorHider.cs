@@ -5,51 +5,43 @@ using VDFramework;
 
 namespace UtilityPackage.Utility.CursorUtility
 {
-	[DisallowMultipleComponent]
-	public class CursorHider : BetterMonoBehaviour
-	{
-		private enum CursorHideMode
-		{
-			AlwaysShowCursor,
-			HideCursor,
-			
-			[UsedImplicitly]
-			HideCursorAfterClick,
-		}
+    [DisallowMultipleComponent]
+    public class CursorHider : BetterMonoBehaviour
+    {
+        [SerializeField] [Tooltip("When should the cursor be hidden?")]
+        private CursorHideMode hideMode = CursorHideMode.HideCursor;
 
-		[SerializeField, Tooltip("When should the cursor be hidden?")]
-		private CursorHideMode hideMode = CursorHideMode.HideCursor;
+        private void OnEnable()
+        {
+            if (hideMode == CursorHideMode.AlwaysShowCursor)
+                ShowCursor();
+            else // HideCursorAfterClick || HideCursor
+                MouseButtonUtil.OnAnyMouseButtonUp += HideCursor;
 
-		private void OnEnable()
-		{
-			if (hideMode == CursorHideMode.AlwaysShowCursor)
-			{
-				ShowCursor();
-			}
-			else // HideCursorAfterClick || HideCursor
-			{
-				MouseButtonUtil.OnAnyMouseButtonUp += HideCursor;
-			}
+            if (hideMode == CursorHideMode.HideCursor) HideCursor();
+        }
 
-			if (hideMode == CursorHideMode.HideCursor)
-			{
-				HideCursor();
-			}
-		}
+        private void OnDisable()
+        {
+            MouseButtonUtil.OnAnyMouseButtonUp -= HideCursor;
+        }
 
-		private void OnDisable()
-		{
-			MouseButtonUtil.OnAnyMouseButtonUp -= HideCursor;
-		}
+        public static void HideCursor()
+        {
+            Cursor.visible = false;
+        }
 
-		public static void HideCursor()
-		{
-			Cursor.visible = false;
-		}
+        public static void ShowCursor()
+        {
+            Cursor.visible = true;
+        }
 
-		public static void ShowCursor()
-		{
-			Cursor.visible = true;
-		}
-	}
+        private enum CursorHideMode
+        {
+            AlwaysShowCursor,
+            HideCursor,
+
+            [UsedImplicitly] HideCursorAfterClick
+        }
+    }
 }

@@ -7,16 +7,15 @@ using UtilityPackage.Utility.UnityFunctionHandlers.Enums;
 namespace FMODUtilityPackage.Audioplayers.UnityFunctionHandlers.EmitterHandlers
 {
 	/// <summary>
-	/// Stop the emitter as a reaction to a given unity event function
+	///     Stop the emitter as a reaction to a given unity event function
 	/// </summary>
 	public class EmitterStopperFunctionHandler : AbstractAudioFunctionHandler
-	{
-		[SerializeField]
-		private EmitterType emitterType;
-		
-		protected override void ReactToEvent(UnityFunction unityFunction)
-		{
-			AudioPlayer.StopEmitter(emitterType);
-		}
-	}
+    {
+        [SerializeField] private EmitterType emitterType;
+
+        protected override void ReactToEvent(UnityFunction unityFunction)
+        {
+            AudioPlayer.StopEmitter(emitterType);
+        }
+    }
 }

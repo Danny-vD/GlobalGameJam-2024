@@ -3,11 +3,11 @@ using UnityEngine;
 
 namespace CombatMoves.TargetingLogic.TargetingValidators
 {
-	public class TargetSelf : ITargetingValidator
-	{
-		public bool IsValidTarget(GameObject target, GameObject caster)
-		{
-			return ReferenceEquals(target, caster);
-		}
-	}
+    public class TargetSelf : ITargetingValidator
+    {
+        public bool IsValidTarget(GameObject target, GameObject caster)
+        {
+            return ReferenceEquals(target, caster);
+        }
+    }
 }

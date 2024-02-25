@@ -3,35 +3,34 @@ using VDFramework;
 
 namespace CombatSystem.UIScripts.CombatMoves.AnimationScripts
 {
-	public class CombatMovesListAnimation : BetterMonoBehaviour
-	{
-		private static readonly int isHidden = Animator.StringToHash("IsHidden");
-		
-		private Animator animator;
+    public class CombatMovesListAnimation : BetterMonoBehaviour
+    {
+        private static readonly int isHidden = Animator.StringToHash("IsHidden");
 
-		private void Awake()
-		{
-			animator = GetComponent<Animator>();
+        private Animator animator;
 
-			CombatMoveUISpawner.OnShowMoves += PlayShowAnimation;
-			CombatMoveUISpawner.OnHideMoves += PlayHideAnimation;
-			
-		}
+        private void Awake()
+        {
+            animator = GetComponent<Animator>();
 
-		private void OnDestroy()
-		{
-			CombatMoveUISpawner.OnShowMoves -= PlayShowAnimation;
-			CombatMoveUISpawner.OnHideMoves -= PlayHideAnimation;
-		}
-		
-		private void PlayShowAnimation()
-		{
+            CombatMoveUISpawner.OnShowMoves += PlayShowAnimation;
+            CombatMoveUISpawner.OnHideMoves += PlayHideAnimation;
+        }
+
+        private void OnDestroy()
+        {
+            CombatMoveUISpawner.OnShowMoves -= PlayShowAnimation;
+            CombatMoveUISpawner.OnHideMoves -= PlayHideAnimation;
+        }
+
+        private void PlayShowAnimation()
+        {
             animator.SetBool(isHidden, false);
-		}
-		
-		private void PlayHideAnimation()
-		{
+        }
+
+        private void PlayHideAnimation()
+        {
             animator.SetBool(isHidden, true);
-		}
-	}
+        }
+    }
 }
