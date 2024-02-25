@@ -1,4 +1,5 @@
 ﻿using CombatSystem.Events.CharacterSelection;
+using InputScripts;
 using UnityEngine;
 using UtilityPackage.CursorManagement.CursorUtility;
 using VDFramework.EventSystem;
@@ -30,33 +31,21 @@ namespace CameraScripts
 
         private void OnEnable()
         {
-            rayCastTimerHandle = TimerManager.StartNewTimer(raycastInterval, CastRay, true);
+            MouseButtonUtil.OnLeftMouseButtonUp += CastRay;
         }
 
         private void OnDisable()
         {
-            rayCastTimerHandle.Stop();
+            MouseButtonUtil.OnLeftMouseButtonUp -= CastRay;
         }
 
         private void CastRay()
         {
-            if (Physics.Raycast(MouseButtonUtil.GetMouseToWorldRay(cameraComponent), out var hitInfo, float.MaxValue,
-                    layerMask))
-            {
-                if (hitInfo.collider.gameObject != currentlyHoveredObject)
-                {
-                    currentlyHoveredObject = hitInfo.collider.gameObject;
-                    EventManager.RaiseEvent(new CharacterHoveredEvent(currentlyHoveredObject));
-                }
-            }
-            else
-            {
-                if (currentlyHoveredObject)
-                {
-                    currentlyHoveredObject = null;
-                    EventManager.RaiseEvent(new CharacterHoveredEvent(currentlyHoveredObject));
-                }
-            }
+            if (!Physics.Raycast(MouseButtonUtil.GetMouseToWorldRay(cameraComponent), out var hitInfo, float.MaxValue,
+                    layerMask)) return;
+            
+            currentlyHoveredObject = hitInfo.collider.gameObject;
+            EventManager.RaiseEvent(new CharacterHoveredEvent(currentlyHoveredObject));
         }
     }
 }

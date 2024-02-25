@@ -23,20 +23,20 @@ namespace CombatSystem.Managers.TargettingSystem
 
         private CombatManager combatManager;
 
-        private GameObject currentSelectedCharacter;
-
         private bool targetsChoosen;
 
         private AbstractCombatMove toBeConfirmedMove;
+        private List<GameObject> selectedTargets;
 
         protected override void Awake()
         {
             base.Awake();
-
+        
             combatManager = GetComponent<CombatManager>();
 
+            selectedTargets = new List<GameObject>();
+
             EventManager.AddListener<CombatStartedEvent>(OnCombatStart);
-            EventManager.AddListener<CombatEndedEvent>(StopListeneningToConfirmInput);
 
             EventManager.AddListener<CharacterEnterCombatEvent>(OnCharacterEnterCombat);
             EventManager.AddListener<CharacterHoveredEvent>(OnCharacterHovered);
@@ -45,7 +45,6 @@ namespace CombatSystem.Managers.TargettingSystem
         protected override void OnDestroy()
         {
             EventManager.RemoveListener<CombatStartedEvent>(OnCombatStart);
-            EventManager.RemoveListener<CombatEndedEvent>(StopListeneningToConfirmInput);
 
             EventManager.RemoveListener<CharacterEnterCombatEvent>(OnCharacterEnterCombat);
             EventManager.RemoveListener<CharacterHoveredEvent>(OnCharacterHovered);
@@ -56,7 +55,6 @@ namespace CombatSystem.Managers.TargettingSystem
         public void ChooseMove(AbstractCombatMove move, GameObject caster)
         {
             // BUG: left click confirms, but left click also selects a move | trying to select a move after you already selected a move simultaneously confirms the target and then selects the move (which causes you to select a move on someone who is not allowed yet to select a move)
-            StartListeneningToConfirmInput();
 
             toBeConfirmedMove = move;
             casterToBe = caster;
@@ -66,36 +64,25 @@ namespace CombatSystem.Managers.TargettingSystem
         private void OnCharacterHovered(CharacterHoveredEvent @event)
         {
             if (!@event.Character) currentSelectedCharacterIndicator.transform.position = Vector3.zero;
-
+            
             if (!characterList.Contains(@event.Character)) return;
+            
+            selectedTargets.Add(@event.Character.gameObject);
 
-            currentSelectedCharacter = @event.Character.gameObject;
-
-            currentSelectedCharacterIndicator.transform.position = currentSelectedCharacter.transform.position;
+            currentSelectedCharacterIndicator.transform.position = @event.Character.gameObject.transform.position;
             currentSelectedCharacterIndicator.transform.Translate(Vector3.up * 1.5f);
         }
+        
 
-        private void OnTargetSelectConfirm(InputAction.CallbackContext obj)
+        public void OnTargetSelectConfirm()
         {
-            if (!toBeConfirmedMove) return;
-
-            //TODO: Check if there is a target selected
-
-            if (targetsChoosen)
-            {
-                if (toBeConfirmedMove.IsValidTarget(currentSelectedCharacter, casterToBe))
-                {
-                    var confirmedMoveHolder = casterToBe.GetComponent<ConfirmedMoveHolder>();
-                    confirmedMoveHolder.SelectMove(toBeConfirmedMove, currentSelectedCharacter);
-                    toBeConfirmedMove = null;
-                    targetsChoosen = false;
-                    StopListeneningToConfirmInput();
-                }
-            }
-            else
-            {
-                targetsChoosen = true;
-            }
+            if (selectedTargets.Count == 0) return;
+            var confirmedMoveHolder = casterToBe.GetComponent<ConfirmedMoveHolder>();
+            confirmedMoveHolder.SelectMove(toBeConfirmedMove, selectedTargets);
+            toBeConfirmedMove = null;
+            targetsChoosen = false;
+            
+            selectedTargets.Clear();
         }
 
         private void OnCombatStart(CombatStartedEvent @event)
@@ -112,16 +99,6 @@ namespace CombatSystem.Managers.TargettingSystem
             if (characterList.Contains(@event.Character)) return;
 
             characterList.Add(@event.Character);
-        }
-
-        private void StartListeneningToConfirmInput()
-        {
-            InputControlManager.Instance.playerControls.Combat.MoveConfirm.performed += OnTargetSelectConfirm;
-        }
-
-        private void StopListeneningToConfirmInput()
-        {
-            InputControlManager.Instance.playerControls.Combat.MoveConfirm.performed -= OnTargetSelectConfirm;
         }
     }
 }
