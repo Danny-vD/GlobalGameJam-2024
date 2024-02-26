@@ -145,16 +145,16 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 168757435}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 549432920}
+  m_Father: {fileID: 243037530}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 229.7, y: -282}
+  m_AnchoredPosition: {x: -335.3, y: -230.2}
   m_SizeDelta: {x: 487.5092, y: 466.39}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &168757437
@@ -238,12 +238,13 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 168757436}
   - {fileID: 1401145810}
   m_Father: {fileID: 549432920}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 530, y: 57}
+  m_AnchoredPosition: {x: 565, y: 57}
   m_SizeDelta: {x: 570, y: 240}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &373414907
@@ -280,7 +281,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 71.66, y: 21.1}
+  m_AnchoredPosition: {x: 113.8, y: 28.4}
   m_SizeDelta: {x: 226.55, y: 75.1566}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &373414909
@@ -568,7 +569,6 @@ RectTransform:
   - {fileID: 1532468307}
   - {fileID: 1149137110}
   - {fileID: 243037530}
-  - {fileID: 168757436}
   - {fileID: 2116663074}
   m_Father: {fileID: 1510097546}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -962,12 +962,20 @@ MonoBehaviour:
           Data3: -1852723559
           Data4: 1789634121
         Path: event:/SFX/Battle/Death
+    - key: 26
+      value:
+        Guid:
+          Data1: -1430813512
+          Data2: 1105490712
+          Data3: -1777642325
+          Data4: 1112781372
+        Path: event:/Music/BackgroundQuirkyCat
     buses:
     - key: 0
       value: bus:/
     emitterEvents:
     - key: 0
-      value: 2
+      value: 26
     - key: 1
       value: 0
     - key: 2
@@ -2369,8 +2377,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 767.66833, y: 394}
-  m_SizeDelta: {x: -1649.2751, y: -916.0115}
+  m_AnchoredPosition: {x: 688.24, y: 415.51843}
+  m_SizeDelta: {x: -1490.4, y: -959.0483}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2116663075
 MonoBehaviour:
@@ -2394,7 +2402,7 @@ MonoBehaviour:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: 16116dca272ac1340909dd2c3297a0bb, type: 3}
   m_Type: 0
-  m_PreserveAspect: 1
+  m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
