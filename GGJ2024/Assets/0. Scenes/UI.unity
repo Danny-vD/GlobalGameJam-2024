@@ -130,6 +130,7 @@ GameObject:
   - component: {fileID: 168757436}
   - component: {fileID: 168757438}
   - component: {fileID: 168757437}
+  - component: {fileID: 168757439}
   m_Layer: 5
   m_Name: Megaphone
   m_TagString: Untagged
@@ -194,6 +195,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 168757435}
   m_CullTransparentMesh: 1
+--- !u!114 &168757439
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 168757435}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 2, y: -2}
+  m_UseGraphicAlpha: 1
 --- !u!1 &243037529
 GameObject:
   m_ObjectHideFlags: 0
@@ -227,7 +243,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 446, y: 0}
+  m_AnchoredPosition: {x: 530, y: 57}
   m_SizeDelta: {x: 570, y: 240}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &373414907
@@ -264,7 +280,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 71.756, y: 28.6}
+  m_AnchoredPosition: {x: 71.66, y: 21.1}
   m_SizeDelta: {x: 226.55, y: 75.1566}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &373414909
@@ -692,6 +708,276 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!1 &749714705
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 749714706}
+  - component: {fileID: 749714707}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &749714706
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 749714705}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1047.4382, y: 555.1898, z: -97.885506}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &749714707
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 749714705}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 192818366e274e34969aa4b801ee7558, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EventPaths:
+    events:
+    - key: 0
+      value:
+        Guid:
+          Data1: -571623662
+          Data2: 1323839750
+          Data3: -1417151841
+          Data4: 1583263938
+        Path: event:/Music/Battle
+    - key: 1
+      value:
+        Guid:
+          Data1: -2103579860
+          Data2: 1341378342
+          Data3: 1659879305
+          Data4: -547227752
+        Path: event:/Music/Hell
+    - key: 2
+      value:
+        Guid:
+          Data1: -1715072943
+          Data2: 1180205317
+          Data3: 39655053
+          Data4: -578409225
+        Path: event:/Music/QuirkyCat
+    - key: 3
+      value:
+        Guid:
+          Data1: -503301471
+          Data2: 1207143358
+          Data3: 641356990
+          Data4: -2023728310
+        Path: event:/Music/Finalboss
+    - key: 4
+      value:
+        Guid:
+          Data1: 851400959
+          Data2: 1120797796
+          Data3: 1445915836
+          Data4: -1057713989
+        Path: event:/Music/BattleVictory
+    - key: 5
+      value:
+        Guid:
+          Data1: -1048673783
+          Data2: 1265608011
+          Data3: -392292933
+          Data4: 1885073217
+        Path: event:/SFX/Battle/HitEnemy
+    - key: 6
+      value:
+        Guid:
+          Data1: -1591707868
+          Data2: 1285081201
+          Data3: -606865258
+          Data4: -260985581
+        Path: event:/SFX/UI/ButtonWrong
+    - key: 7
+      value:
+        Guid:
+          Data1: -2010514882
+          Data2: 1245229847
+          Data3: 731382719
+          Data4: 525731058
+        Path: event:/SFX/Battle/MissAttack
+    - key: 8
+      value:
+        Guid:
+          Data1: 548493427
+          Data2: 1311476021
+          Data3: 1631237292
+          Data4: 29430389
+        Path: event:/SFX/Battle/MageSpells/Shower
+    - key: 9
+      value:
+        Guid:
+          Data1: -196411532
+          Data2: 1212755501
+          Data3: -1147340887
+          Data4: -1325991576
+        Path: event:/SFX/Battle/MageSpells/Furrball
+    - key: 10
+      value:
+        Guid:
+          Data1: 1710655093
+          Data2: 1230002297
+          Data3: -27408496
+          Data4: -306871611
+        Path: event:/SFX/Battle/SuperStrongPowerDowerSlam
+    - key: 11
+      value:
+        Guid:
+          Data1: -220118652
+          Data2: 1328142822
+          Data3: -1100630655
+          Data4: 1115729377
+        Path: event:/SFX/Battle/MageSpells/Hairdryer
+    - key: 12
+      value:
+        Guid:
+          Data1: 1446734994
+          Data2: 1138050921
+          Data3: 1436789948
+          Data4: 1956805464
+        Path: event:/SFX/Battle/TankBuff
+    - key: 13
+      value:
+        Guid:
+          Data1: -1488738381
+          Data2: 1207834650
+          Data3: 508354440
+          Data4: 1922579165
+        Path: event:/SFX/Battle/PlayerHurt
+    - key: 14
+      value:
+        Guid:
+          Data1: -858585150
+          Data2: 1073821285
+          Data3: -1664795463
+          Data4: -1038943321
+        Path: event:/SFX/Battle/MageSpells/SupersonicMeow
+    - key: 15
+      value:
+        Guid:
+          Data1: -1700295986
+          Data2: 1271545414
+          Data3: 1021670051
+          Data4: -826018882
+        Path: event:/SFX/Battle/MageSpells/MagicSuperSmack
+    - key: 16
+      value:
+        Guid:
+          Data1: -1299404327
+          Data2: 1194976004
+          Data3: -448180046
+          Data4: -1465747438
+        Path: event:/SFX/UI/ButtonClick
+    - key: 17
+      value:
+        Guid:
+          Data1: 339470811
+          Data2: 1108484599
+          Data3: 1657465766
+          Data4: 2056216108
+        Path: event:/SFX/Player/Footsteps
+    - key: 18
+      value:
+        Guid:
+          Data1: -505116708
+          Data2: 1296991354
+          Data3: -129354341
+          Data4: -2126867703
+        Path: event:/SFX/Battle/SwordAttack
+    - key: 19
+      value:
+        Guid:
+          Data1: -1937830430
+          Data2: 1189342228
+          Data3: 1427883683
+          Data4: 1174092788
+        Path: event:/SFX/UI/ButtonHover
+    - key: 20
+      value:
+        Guid:
+          Data1: 714086883
+          Data2: 1158917428
+          Data3: -1420750940
+          Data4: -1544819916
+        Path: event:/SFX/Ambience/HellAmbience
+    - key: 21
+      value:
+        Guid:
+          Data1: -665194152
+          Data2: 1079437962
+          Data3: 184073380
+          Data4: 1038940930
+        Path: event:/SFX/UI/Talking
+    - key: 22
+      value:
+        Guid:
+          Data1: -517145440
+          Data2: 1231351942
+          Data3: 1421026948
+          Data4: -922749817
+        Path: event:/SFX/Cutscenes/Scene6
+    - key: 23
+      value:
+        Guid:
+          Data1: -99057750
+          Data2: 1260753202
+          Data3: -585780595
+          Data4: 499407190
+        Path: event:/SFX/Cutscenes/Scene1
+    - key: 24
+      value:
+        Guid:
+          Data1: -2059410753
+          Data2: 1094164804
+          Data3: -784173413
+          Data4: -1823787148
+        Path: event:/SFX/Cutscenes/Scene8
+    - key: 25
+      value:
+        Guid:
+          Data1: -712222999
+          Data2: 1267167033
+          Data3: -1852723559
+          Data4: 1789634121
+        Path: event:/SFX/Battle/Death
+    buses:
+    - key: 0
+      value: bus:/
+    emitterEvents:
+    - key: 0
+      value: 0
+    - key: 1
+      value: 0
+    - key: 2
+      value: 0
+    - key: 3
+      value: 0
+  initialVolumes:
+  - key: 0
+    value: 1
+    isMuted: 0
 --- !u!1 &799280839 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 9177674402111693206, guid: ac7c3e83e7735a343b08bb580c89ea55, type: 3}
@@ -1066,7 +1352,6 @@ GameObject:
   - component: {fileID: 1149137113}
   - component: {fileID: 1149137112}
   - component: {fileID: 1149137111}
-  - component: {fileID: 1149137114}
   - component: {fileID: 1149137115}
   m_Layer: 5
   m_Name: HomeButton
@@ -1200,23 +1485,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1149137109}
   m_CullTransparentMesh: 1
---- !u!114 &1149137114
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1149137109}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 33f8ccc313d404d46bd93b72bebeebfa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  clickRestartsSound: 1
-  eventToPlayOnClick: 16
-  parameters:
-    parameters:
-      serializedDictionary: []
 --- !u!114 &1149137115
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1240,7 +1508,15 @@ MonoBehaviour:
     - key: 0
       value:
       - IsGlobalInstance: 0
-        AudioEvent: 19
+        audioAudioEvent: 19
+        PlayState: 0
+        Parameters:
+          parameters:
+            serializedDictionary: []
+    - key: 4
+      value:
+      - IsGlobalInstance: 0
+        audioAudioEvent: 16
         PlayState: 0
         Parameters:
           parameters:
@@ -1514,7 +1790,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
-  m_EffectDistance: {x: 5, y: -5}
+  m_EffectDistance: {x: 2, y: -2}
   m_UseGraphicAlpha: 1
 --- !u!114 &1401145816
 MonoBehaviour:
@@ -1539,16 +1815,22 @@ MonoBehaviour:
     - key: 0
       value:
       - IsGlobalInstance: 0
-        AudioEvent: 1
-        PlayState: 0
+        audioAudioEvent: 0
+        PlayState: 2
+        Parameters:
+          parameters:
+            serializedDictionary: []
+      - IsGlobalInstance: 0
+        audioAudioEvent: 0
+        PlayState: 1
         Parameters:
           parameters:
             serializedDictionary: []
     - key: 1
       value:
       - IsGlobalInstance: 0
-        AudioEvent: 1
-        PlayState: 5
+        audioAudioEvent: 0
+        PlayState: 3
         Parameters:
           parameters:
             serializedDictionary: []
@@ -2034,6 +2316,7 @@ GameObject:
   - component: {fileID: 2116663075}
   - component: {fileID: 2116663078}
   - component: {fileID: 2116663077}
+  - component: {fileID: 2116663079}
   m_Layer: 5
   m_Name: Cog
   m_TagString: Untagged
@@ -2058,8 +2341,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 718, y: 341}
-  m_SizeDelta: {x: -1549.9384, y: -916.0115}
+  m_AnchoredPosition: {x: 767.66833, y: 394}
+  m_SizeDelta: {x: -1649.2751, y: -916.0115}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2116663075
 MonoBehaviour:
@@ -2112,7 +2395,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
-  m_EffectDistance: {x: 5, y: -5}
+  m_EffectDistance: {x: 2, y: -2}
   m_UseGraphicAlpha: 1
 --- !u!114 &2116663078
 MonoBehaviour:
@@ -2170,6 +2453,42 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &2116663079
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2116663073}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0d1acc6eff948b8bb53e6f2081d7214, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allowFadeoutOnStop: 1
+  stopInstancesOnDisable: 0
+  stopGlobalInstancesOnDisable: 0
+  allowFadeoutOnDisable: 0
+  allowFadeoutOnDestroy: 0
+  stopGlobalInstancesOnDestroy: 1
+  audioDataPerTriggerType:
+    serializedDictionary:
+    - key: 0
+      value:
+      - IsGlobalInstance: 0
+        audioAudioEvent: 19
+        PlayState: 0
+        Parameters:
+          parameters:
+            serializedDictionary: []
+    - key: 4
+      value:
+      - IsGlobalInstance: 0
+        audioAudioEvent: 16
+        PlayState: 0
+        Parameters:
+          parameters:
+            serializedDictionary: []
 --- !u!1001 &226884254433001447
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2178,14 +2497,110 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1510097546}
     m_Modifications:
+    - target: {fileID: 115337836086246372, guid: ac7c3e83e7735a343b08bb580c89ea55, type: 3}
+      propertyPath: m_EffectDistance.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 115337836086246372, guid: ac7c3e83e7735a343b08bb580c89ea55, type: 3}
+      propertyPath: m_EffectDistance.y
+      value: -2
+      objectReference: {fileID: 0}
     - target: {fileID: 416020090845596419, guid: ac7c3e83e7735a343b08bb580c89ea55, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
       objectReference: {fileID: 549432919}
+    - target: {fileID: 1434389429203826669, guid: ac7c3e83e7735a343b08bb580c89ea55, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1434389429203826669, guid: ac7c3e83e7735a343b08bb580c89ea55, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1434389429203826669, guid: ac7c3e83e7735a343b08bb580c89ea55, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1434389429203826669, guid: ac7c3e83e7735a343b08bb580c89ea55, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2688242390462913376, guid: ac7c3e83e7735a343b08bb580c89ea55, type: 3}
+      propertyPath: audioDataPerTriggerType.serializedDictionary.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2688242390462913376, guid: ac7c3e83e7735a343b08bb580c89ea55, type: 3}
+      propertyPath: audioDataPerTriggerType.serializedDictionary.Array.data[1].key
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2688242390462913376, guid: ac7c3e83e7735a343b08bb580c89ea55, type: 3}
+      propertyPath: audioDataPerTriggerType.serializedDictionary.Array.data[0].value.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2688242390462913376, guid: ac7c3e83e7735a343b08bb580c89ea55, type: 3}
+      propertyPath: audioDataPerTriggerType.serializedDictionary.Array.data[1].value.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2688242390462913376, guid: ac7c3e83e7735a343b08bb580c89ea55, type: 3}
+      propertyPath: audioDataPerTriggerType.serializedDictionary.Array.data[0].value.Array.data[0].audioAudioEvent
+      value: 19
+      objectReference: {fileID: 0}
+    - target: {fileID: 2688242390462913376, guid: ac7c3e83e7735a343b08bb580c89ea55, type: 3}
+      propertyPath: audioDataPerTriggerType.serializedDictionary.Array.data[0].value.Array.data[1].audioAudioEvent
+      value: 19
+      objectReference: {fileID: 0}
+    - target: {fileID: 2688242390462913376, guid: ac7c3e83e7735a343b08bb580c89ea55, type: 3}
+      propertyPath: audioDataPerTriggerType.serializedDictionary.Array.data[1].value.Array.data[0].audioAudioEvent
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 5247456513895984941, guid: ac7c3e83e7735a343b08bb580c89ea55, type: 3}
+      propertyPath: audioDataPerTriggerType.serializedDictionary.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5247456513895984941, guid: ac7c3e83e7735a343b08bb580c89ea55, type: 3}
+      propertyPath: audioDataPerTriggerType.serializedDictionary.Array.data[1].key
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5247456513895984941, guid: ac7c3e83e7735a343b08bb580c89ea55, type: 3}
+      propertyPath: audioDataPerTriggerType.serializedDictionary.Array.data[1].value.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5247456513895984941, guid: ac7c3e83e7735a343b08bb580c89ea55, type: 3}
+      propertyPath: audioDataPerTriggerType.serializedDictionary.Array.data[0].value.Array.data[0].audioAudioEvent
+      value: 19
+      objectReference: {fileID: 0}
+    - target: {fileID: 5247456513895984941, guid: ac7c3e83e7735a343b08bb580c89ea55, type: 3}
+      propertyPath: audioDataPerTriggerType.serializedDictionary.Array.data[1].value.Array.data[0].audioAudioEvent
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 8168909538067800891, guid: ac7c3e83e7735a343b08bb580c89ea55, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8168909538067800891, guid: ac7c3e83e7735a343b08bb580c89ea55, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8168909538067800891, guid: ac7c3e83e7735a343b08bb580c89ea55, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8168909538067800891, guid: ac7c3e83e7735a343b08bb580c89ea55, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8377595123215286053, guid: ac7c3e83e7735a343b08bb580c89ea55, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1510097547}
+    - target: {fileID: 8735036402550628386, guid: ac7c3e83e7735a343b08bb580c89ea55, type: 3}
+      propertyPath: m_EffectDistance.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8735036402550628386, guid: ac7c3e83e7735a343b08bb580c89ea55, type: 3}
+      propertyPath: m_EffectDistance.y
+      value: -2
+      objectReference: {fileID: 0}
     - target: {fileID: 8788001633908997298, guid: ac7c3e83e7735a343b08bb580c89ea55, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -2270,7 +2685,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: StartmenuPanel
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 9177674402111693206, guid: ac7c3e83e7735a343b08bb580c89ea55, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 8081931722490503331, guid: ac7c3e83e7735a343b08bb580c89ea55, type: 3}
+    - {fileID: 5175112058125984789, guid: ac7c3e83e7735a343b08bb580c89ea55, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -2283,3 +2704,4 @@ SceneRoots:
   - {fileID: 729452633}
   - {fileID: 1510097546}
   - {fileID: 532583608}
+  - {fileID: 749714706}
