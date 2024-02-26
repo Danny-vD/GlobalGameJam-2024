@@ -967,7 +967,7 @@ MonoBehaviour:
       value: bus:/
     emitterEvents:
     - key: 0
-      value: 0
+      value: 2
     - key: 1
       value: 0
     - key: 2
@@ -1664,6 +1664,7 @@ GameObject:
   - component: {fileID: 1401145814}
   - component: {fileID: 1401145815}
   - component: {fileID: 1401145816}
+  - component: {fileID: 1401145817}
   m_Layer: 5
   m_Name: VolumeSlider
   m_TagString: Untagged
@@ -1834,6 +1835,18 @@ MonoBehaviour:
         Parameters:
           parameters:
             serializedDictionary: []
+--- !u!114 &1401145817
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1401145809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05a99f277e884bd48a8cfa56b2520381, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1484311621
 GameObject:
   m_ObjectHideFlags: 0
@@ -1922,6 +1935,7 @@ GameObject:
   - component: {fileID: 1510097544}
   - component: {fileID: 1510097543}
   - component: {fileID: 1510097547}
+  - component: {fileID: 1510097548}
   m_Layer: 5
   m_Name: Menu
   m_TagString: Untagged
@@ -2025,6 +2039,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 932df09dbec6ecd40a78aeb2386c463a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1510097548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1510097542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b43bac1a82e4b1da489dd7572c71c4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  reactTo: 2
+  emitterType: 0
 --- !u!1 &1532468306
 GameObject:
   m_ObjectHideFlags: 0
