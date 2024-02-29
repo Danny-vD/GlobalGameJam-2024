@@ -26,7 +26,10 @@ namespace CombatSystem.CharacterScripts
 
         private void Awake()
         {
-            if (!statesPerType.ContainsKey(CharacterCombatStateType.Idle)) Debug.LogError("No idle state present!");
+            if (statesPerType[CharacterCombatStateType.Idle] == null)
+            {
+                Debug.LogError("No idle state present!");
+            }
 
             CombatStartedEvent.ParameterlessListeners += this.Enable;
             CombatEndedEvent.ParameterlessListeners += this.Disable;

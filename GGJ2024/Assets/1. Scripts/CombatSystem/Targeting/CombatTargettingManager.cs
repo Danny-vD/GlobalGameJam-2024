@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
 using CombatMoves.ScriptableObjects.BaseClasses;
 using CombatSystem.CharacterScripts;
-using CombatSystem.Events;
 using CombatSystem.Events.CharacterSelection;
 using CombatSystem.Managers;
-using PlayerPartyScripts;
 using UnityEngine;
 using VDFramework.EventSystem;
 using VDFramework.Singleton;
@@ -34,19 +32,12 @@ namespace CombatSystem.Targeting
 			combatManager = GetComponent<CombatManager>();
 
 			selectedTargets = new List<GameObject>();
-
-			EventManager.AddListener<CombatStartedEvent>(OnCombatStart);
-
-			EventManager.AddListener<CharacterEnterCombatEvent>(OnCharacterEnterCombat);
-			EventManager.AddListener<CharacterHoveredEvent>(OnCharacterHovered);
+			EventManager.AddListener<CharacterClickedEvent>(OnCharacterClicked);
 		}
 
 		protected override void OnDestroy()
 		{
-			EventManager.RemoveListener<CombatStartedEvent>(OnCombatStart);
-
-			EventManager.RemoveListener<CharacterEnterCombatEvent>(OnCharacterEnterCombat);
-			EventManager.RemoveListener<CharacterHoveredEvent>(OnCharacterHovered);
+			EventManager.RemoveListener<CharacterClickedEvent>(OnCharacterClicked);
 
 			base.OnDestroy();
 		}
@@ -60,7 +51,7 @@ namespace CombatSystem.Targeting
 		}
 
 
-		private void OnCharacterHovered(CharacterHoveredEvent @event)
+		private void OnCharacterClicked(CharacterClickedEvent @event)
 		{
 			if (!@event.Character) currentSelectedCharacterIndicator.transform.position = Vector3.zero;
 
@@ -72,7 +63,6 @@ namespace CombatSystem.Targeting
 			currentSelectedCharacterIndicator.transform.Translate(Vector3.up * 1.5f);
 		}
 
-
 		public void OnTargetSelectConfirm()
 		{
 			if (selectedTargets.Count == 0) return;
@@ -83,25 +73,6 @@ namespace CombatSystem.Targeting
 			targetsChoosen    = false;
 
 			selectedTargets.Clear();
-		}
-
-		private void OnCombatStart(CombatStartedEvent @event)
-		{
-			characterList.Clear();
-
-			foreach (GameObject eventEnemy in @event.Enemies)
-			{
-				characterList.Add(eventEnemy);
-			}
-
-			foreach (GameObject partyMember in PlayerPartySingleton.Instance.Party) characterList.Add(partyMember);
-		}
-
-		private void OnCharacterEnterCombat(CharacterEnterCombatEvent @event)
-		{
-			if (characterList.Contains(@event.Character)) return;
-
-			characterList.Add(@event.Character);
 		}
 	}
 }

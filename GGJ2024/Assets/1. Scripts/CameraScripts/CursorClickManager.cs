@@ -1,20 +1,16 @@
 ﻿using CombatSystem.Events.CharacterSelection;
-using InputScripts;
 using UnityEngine;
 using UtilityPackage.CursorManagement.CursorUtility;
 using VDFramework.EventSystem;
 using VDFramework.Singleton;
-using VDFramework.Utility.TimerUtil;
 using VDFramework.Utility.TimerUtil.TimerHandles;
 
 namespace CameraScripts
 {
-    public class CursorHoverManager : Singleton<CursorHoverManager>
+    public class CursorClickManager : Singleton<CursorClickManager>
     {
-        [SerializeField] private LayerMask layerMask;
-
-        [SerializeField] [Tooltip("The interval in seconds between raycasts")]
-        private float raycastInterval = 0.05f;
+        [SerializeField] 
+        private LayerMask clickableLayers;
 
         private Camera cameraComponent;
 
@@ -41,11 +37,13 @@ namespace CameraScripts
 
         private void CastRay()
         {
-            if (!Physics.Raycast(MouseButtonUtil.GetMouseToWorldRay(cameraComponent), out var hitInfo, float.MaxValue,
-                    layerMask)) return;
+            if (!Physics.Raycast(MouseButtonUtil.GetMouseToWorldRay(cameraComponent), out RaycastHit hitInfo, float.MaxValue, clickableLayers))
+            {
+                return;
+            }
             
             currentlyHoveredObject = hitInfo.collider.gameObject;
-            EventManager.RaiseEvent(new CharacterHoveredEvent(currentlyHoveredObject));
+            EventManager.RaiseEvent(new CharacterClickedEvent(currentlyHoveredObject));
         }
     }
 }

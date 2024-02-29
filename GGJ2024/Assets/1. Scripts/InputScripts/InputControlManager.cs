@@ -11,7 +11,6 @@ namespace InputScripts
     {
         private Dictionary<ControlTypes, InputActionMap> actionMapsByType;
 
-
         private ControlTypes beforeMenu;
         private ControlTypes currentType;
         public PlayerControls playerControls;
