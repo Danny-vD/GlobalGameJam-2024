@@ -5,7 +5,6 @@ using FMODUnity;
 using FMODUtilityPackage.Enums;
 using FMODUtilityPackage.Structs;
 using FMODUtilityPackage.Utility;
-using UnityEditor;
 using UnityEngine;
 using VDFramework.Extensions;
 using VDFramework.Utility;
@@ -106,7 +105,7 @@ namespace FMODUtilityPackage.Core
             }
             catch (Exception e)
             {
-                if (EditorApplication.isPlaying) Debug.LogException(e);
+                if (UnityEditor.EditorApplication.isPlaying) Debug.LogException(e);
 
                 // ignore all exceptions outside of playmode
             }
@@ -174,7 +173,7 @@ namespace FMODUtilityPackage.Core
             UpdateDictionaries();
 
 #if UNITY_EDITOR
-            if (EventManager.IsInitialized) //EventManager is an editor script
+            if (EventManager.IsInitialized && !UnityEditor.EditorApplication.isPlaying) //EventManager is an editor script
 #endif
                 SetEventPaths();
         }

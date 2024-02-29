@@ -19,218 +19,225 @@ namespace FMODUtilityPackage.Audioplayers.UI
 	///     Play an <see cref="AudioEventType" /> as a reaction to an <see cref="UnityEngine.EventSystems" /> event
 	/// </summary>
 	public class EventTriggerAudioPlayer : BetterMonoBehaviour
-    {
-        // Static to allow sharing between different classes
-        private static readonly Dictionary<AudioEventType, EventInstance> staticInstancePerEventType = new();
+	{
+		// Static to allow sharing between different classes
+		private static readonly Dictionary<AudioEventType, EventInstance> staticInstancePerEventType = new();
 
-        [Header("On EventTrigger")] [SerializeField] [Tooltip("Allow any event to fade out when it is stopped")]
-        private bool allowFadeoutOnStop = true;
+		[Header("On EventTrigger")]
+		[SerializeField]
+		[Tooltip("Allow any event to fade out when it is stopped")]
+		private bool allowFadeoutOnStop = true;
 
-        [Header("On Disable")] [SerializeField] [Tooltip("Stop all instances when this object is disabled")]
-        private bool stopInstancesOnDisable;
+		[Header("On Disable")]
+		[SerializeField]
+		[Tooltip("Stop all instances when this object is disabled")]
+		private bool stopInstancesOnDisable;
 
-        [SerializeField] [Tooltip("Stop all global instances when this object is disabled")]
-        private bool stopGlobalInstancesOnDisable;
+		[SerializeField]
+		[Tooltip("Stop all global instances when this object is disabled")]
+		private bool stopGlobalInstancesOnDisable;
 
-        [SerializeField]
-        [Tooltip(
-            "Allow the playing events to fade out when this object is disabled (also applies to global events if they are stopped)")]
-        private bool allowFadeoutOnDisable;
+		[SerializeField]
+		[Tooltip(
+			"Allow the playing events to fade out when this object is disabled (also applies to global events if they are stopped)")]
+		private bool allowFadeoutOnDisable;
 
-        [Header("On Destroy")]
-        [SerializeField]
-        [Tooltip(
-            "Allow the playing events to fade out when this object is destroyed (also applies to global events if they are stopped)")]
-        private bool allowFadeoutOnDestroy;
+		[Header("On Destroy")]
+		[SerializeField]
+		[Tooltip(
+			"Allow the playing events to fade out when this object is destroyed (also applies to global events if they are stopped)")]
+		private bool allowFadeoutOnDestroy;
 
-        [SerializeField] [Tooltip("Stop (and release memory of) all global instances when this object is destroyed")]
-        private bool stopGlobalInstancesOnDestroy = true;
+		[SerializeField]
+		[Tooltip("Stop (and release memory of) all global instances when this object is destroyed")]
+		private bool stopGlobalInstancesOnDestroy = true;
 
-        [Space] [SerializeField]
-        private SerializableDictionary<EventTriggerType, AudioEventData[]> audioDataPerTriggerType;
+		[Space]
+		[SerializeField]
+		private SerializableDictionary<EventTriggerType, AudioEventData[]> audioDataPerTriggerType;
 
-        private readonly Dictionary<AudioEventType, EventInstance> instancePerEventType = new();
+		private readonly Dictionary<AudioEventType, EventInstance> instancePerEventType = new();
 
-        private EventTrigger eventTrigger;
+		private EventTrigger eventTrigger;
 
-        private void Awake()
-        {
-            eventTrigger = this.EnsureComponent<EventTrigger>();
+		private void Awake()
+		{
+			eventTrigger = this.EnsureComponent<EventTrigger>();
 
-            foreach (var eventDataPerTrigger in audioDataPerTriggerType)
-            {
-                var entry = new EventTrigger.Entry
-                {
-                    eventID = eventDataPerTrigger.Key
-                };
+			foreach (var eventDataPerTrigger in audioDataPerTriggerType)
+			{
+				var entry = new EventTrigger.Entry
+				{
+					eventID = eventDataPerTrigger.Key
+				};
 
-                foreach (var audioEventData in eventDataPerTrigger.Value)
-                {
-                    CacheInstanceIfNeeded(audioEventData);
+				foreach (var audioEventData in eventDataPerTrigger.Value)
+				{
+					CacheInstanceIfNeeded(audioEventData);
 
-                    entry.callback.AddListener(GetCallback(audioEventData));
-                }
+					entry.callback.AddListener(GetCallback(audioEventData));
+				}
 
-                eventTrigger.triggers.Add(entry);
-            }
-        }
+				eventTrigger.triggers.Add(entry);
+			}
+		}
 
-        private void OnDisable()
-        {
-            var stopMode = allowFadeoutOnDisable ? STOP_MODE.ALLOWFADEOUT : STOP_MODE.IMMEDIATE;
+		private void OnDisable()
+		{
+			var stopMode = allowFadeoutOnDisable ? STOP_MODE.ALLOWFADEOUT : STOP_MODE.IMMEDIATE;
 
-            if (stopInstancesOnDisable)
-                foreach (var keyValuePair in instancePerEventType)
-                    keyValuePair.Value.stop(stopMode);
+			if (stopInstancesOnDisable)
+				foreach (var keyValuePair in instancePerEventType)
+					keyValuePair.Value.stop(stopMode);
 
-            if (stopGlobalInstancesOnDisable)
-                foreach (var keyValuePair in staticInstancePerEventType)
-                    keyValuePair.Value.stop(stopMode);
-        }
+			if (stopGlobalInstancesOnDisable)
+				foreach (var keyValuePair in staticInstancePerEventType)
+					keyValuePair.Value.stop(stopMode);
+		}
 
-        private void OnDestroy()
-        {
-            var stopMode = allowFadeoutOnDestroy ? STOP_MODE.ALLOWFADEOUT : STOP_MODE.IMMEDIATE;
+		private void OnDestroy()
+		{
+			var stopMode = allowFadeoutOnDestroy ? STOP_MODE.ALLOWFADEOUT : STOP_MODE.IMMEDIATE;
 
-            // Always stop the local instances on Destroy, because there is no other way to stop them afterwards
-            foreach (var pair in instancePerEventType)
-            {
-                var instance = pair.Value;
-                instance.stop(stopMode);
-                instance.release();
-            }
+			// Always stop the local instances on Destroy, because there is no other way to stop them afterwards
+			foreach (var pair in instancePerEventType)
+			{
+				var instance = pair.Value;
+				instance.stop(stopMode);
+				instance.release();
+			}
 
-            if (stopGlobalInstancesOnDestroy) StopAllStaticInstances(stopMode);
-        }
+			if (stopGlobalInstancesOnDestroy) StopAllStaticInstances(stopMode);
+		}
 
-        public static void StopStaticInstance(AudioEventType audioEventType,
-            STOP_MODE stopMode = STOP_MODE.ALLOWFADEOUT, bool releaseMemory = true)
-        {
-            if (staticInstancePerEventType.ContainsKey(audioEventType))
-            {
-                var instance = staticInstancePerEventType[audioEventType];
-                instance.stop(stopMode);
+		public static void StopStaticInstance(AudioEventType audioEventType,
+			STOP_MODE                                        stopMode = STOP_MODE.ALLOWFADEOUT, bool releaseMemory = true)
+		{
+			if (staticInstancePerEventType.ContainsKey(audioEventType))
+			{
+				var instance = staticInstancePerEventType[audioEventType];
+				instance.stop(stopMode);
 
-                if (releaseMemory)
-                {
-                    instance.release();
-                    staticInstancePerEventType.Remove(audioEventType);
-                }
-            }
-        }
+				if (releaseMemory)
+				{
+					instance.release();
+					staticInstancePerEventType.Remove(audioEventType);
+				}
+			}
+		}
 
-        public static void StopAllStaticInstances(STOP_MODE stopMode = STOP_MODE.ALLOWFADEOUT,
-            bool releaseMemory = true)
-        {
-            foreach (var keyValuePair in staticInstancePerEventType)
-            {
-                var instance = keyValuePair.Value;
+		public static void StopAllStaticInstances(STOP_MODE stopMode      = STOP_MODE.ALLOWFADEOUT,
+			bool                                            releaseMemory = true)
+		{
+			foreach (var keyValuePair in staticInstancePerEventType)
+			{
+				var instance = keyValuePair.Value;
 
-                instance.stop(stopMode);
+				instance.stop(stopMode);
 
-                if (releaseMemory) instance.release();
-            }
+				if (releaseMemory) instance.release();
+			}
 
-            if (releaseMemory) staticInstancePerEventType.Clear();
-        }
+			if (releaseMemory) staticInstancePerEventType.Clear();
+		}
 
-        public void AddEventTriggerHandler(EventTriggerType triggerType, AudioEventData eventData)
-        {
-            var entry = eventTrigger.triggers.FirstOrDefault(trigger => trigger.eventID == triggerType);
+		public void AddEventTriggerHandler(EventTriggerType triggerType, AudioEventData eventData)
+		{
+			var entry = eventTrigger.triggers.FirstOrDefault(trigger => trigger.eventID == triggerType);
 
-            var entryExisted = entry != null;
+			var entryExisted = entry != null;
 
-            if (!entryExisted)
-                entry = new EventTrigger.Entry
-                {
-                    eventID = triggerType
-                };
+			if (!entryExisted)
+				entry = new EventTrigger.Entry
+				{
+					eventID = triggerType
+				};
 
-            CacheInstanceIfNeeded(eventData);
+			CacheInstanceIfNeeded(eventData);
 
-            entry.callback.AddListener(GetCallback(eventData));
+			entry.callback.AddListener(GetCallback(eventData));
 
-            if (!entryExisted) eventTrigger.triggers.Add(entry);
-        }
+			if (!entryExisted) eventTrigger.triggers.Add(entry);
+		}
 
-        private void CacheInstanceIfNeeded(AudioEventData audioEventData)
-        {
-            if (audioEventData.IsGlobalInstance)
-            {
-                if (!staticInstancePerEventType.ContainsKey(audioEventData.audioAudioEvent))
-                    staticInstancePerEventType.Add(audioEventData.audioAudioEvent,
-                        AudioPlayer.GetEventInstance(audioEventData.audioAudioEvent));
-            }
-            else
-            {
-                if (!instancePerEventType.ContainsKey(audioEventData.audioAudioEvent))
-                    instancePerEventType.Add(audioEventData.audioAudioEvent,
-                        AudioPlayer.GetEventInstance(audioEventData.audioAudioEvent));
-            }
-        }
+		private void CacheInstanceIfNeeded(AudioEventData audioEventData)
+		{
+			if (audioEventData.IsGlobalInstance)
+			{
+				if (!staticInstancePerEventType.ContainsKey(audioEventData.audioAudioEvent))
+					staticInstancePerEventType.Add(audioEventData.audioAudioEvent,
+						AudioPlayer.GetEventInstance(audioEventData.audioAudioEvent));
+			}
+			else
+			{
+				if (!instancePerEventType.ContainsKey(audioEventData.audioAudioEvent))
+					instancePerEventType.Add(audioEventData.audioAudioEvent,
+						AudioPlayer.GetEventInstance(audioEventData.audioAudioEvent));
+			}
+		}
 
-        private UnityAction<BaseEventData> GetCallback(AudioEventData audioEventData)
-        {
-            var instance = audioEventData.IsGlobalInstance
-                ? staticInstancePerEventType[audioEventData.audioAudioEvent]
-                : instancePerEventType[audioEventData.audioAudioEvent];
+		private UnityAction<BaseEventData> GetCallback(AudioEventData audioEventData)
+		{
+			var instance = audioEventData.IsGlobalInstance
+				? staticInstancePerEventType[audioEventData.audioAudioEvent]
+				: instancePerEventType[audioEventData.audioAudioEvent];
 
-            return audioEventData.PlayState switch
-            {
-                PlayState.Play => delegate
-                {
-                    instance.start();
+			return audioEventData.PlayState switch
+			{
+				PlayState.Play => delegate
+				{
+					instance.start();
 
-                    instance.SetParameters(audioEventData.Parameters);
-                },
-                PlayState.PlayIfNotPlaying => delegate
-                {
-                    instance.getPlaybackState(out var state);
+					instance.SetParameters(audioEventData.Parameters);
+				},
+				PlayState.PlayIfNotPlaying => delegate
+				{
+					instance.getPlaybackState(out var state);
 
-                    if (state is PLAYBACK_STATE.STOPPED or PLAYBACK_STATE.STOPPING) instance.start();
+					if (state is PLAYBACK_STATE.STOPPED or PLAYBACK_STATE.STOPPING) instance.start();
 
-                    instance.SetParameters(audioEventData.Parameters);
-                },
-                PlayState.Resume => delegate
-                {
-                    instance.setPaused(false);
+					instance.SetParameters(audioEventData.Parameters);
+				},
+				PlayState.Resume => delegate
+				{
+					instance.setPaused(false);
 
-                    instance.SetParameters(audioEventData.Parameters);
-                },
-                PlayState.Pause => delegate
-                {
-                    instance.setPaused(true);
+					instance.SetParameters(audioEventData.Parameters);
+				},
+				PlayState.Pause => delegate
+				{
+					instance.setPaused(true);
 
-                    instance.SetParameters(audioEventData.Parameters);
-                },
-                PlayState.TogglePause => delegate
-                {
-                    instance.getPaused(out var paused);
-                    instance.setPaused(!paused);
+					instance.SetParameters(audioEventData.Parameters);
+				},
+				PlayState.TogglePause => delegate
+				{
+					instance.getPaused(out var paused);
+					instance.setPaused(!paused);
 
-                    instance.SetParameters(audioEventData.Parameters);
-                },
-                PlayState.Stop => delegate
-                {
-                    instance.stop(allowFadeoutOnStop ? STOP_MODE.ALLOWFADEOUT : STOP_MODE.IMMEDIATE);
+					instance.SetParameters(audioEventData.Parameters);
+				},
+				PlayState.Stop => delegate
+				{
+					instance.stop(allowFadeoutOnStop ? STOP_MODE.ALLOWFADEOUT : STOP_MODE.IMMEDIATE);
 
-                    instance.SetParameters(audioEventData.Parameters);
-                },
-                PlayState.ParametersOnly => delegate { instance.SetParameters(audioEventData.Parameters); },
-                _ => throw new ArgumentOutOfRangeException(nameof(audioEventData.PlayState), audioEventData.PlayState,
-                    null)
-            };
-        }
+					instance.SetParameters(audioEventData.Parameters);
+				},
+				PlayState.ParametersOnly => delegate { instance.SetParameters(audioEventData.Parameters); },
+				_ => throw new ArgumentOutOfRangeException(nameof(audioEventData.PlayState), audioEventData.PlayState,
+					null)
+			};
+		}
 
-        [Serializable]
-        public struct AudioEventData
-        {
-            [Tooltip("Share this event instance between all EventTriggerSoundPlayers")]
-            public bool IsGlobalInstance;
+		[Serializable]
+		public struct AudioEventData
+		{
+			[Tooltip("Share this event instance between all EventTriggerSoundPlayers")]
+			public bool IsGlobalInstance;
 
-            public AudioEventType audioAudioEvent;
-            public PlayState PlayState;
-            public EventParameters Parameters;
-        }
-    }
+			public AudioEventType audioAudioEvent;
+			public PlayState PlayState;
+			public EventParameters Parameters;
+		}
+	}
 }

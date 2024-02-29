@@ -20,8 +20,7 @@ namespace Utility.FMODUtilityPackage.EnumWriter
         private const string scriptsFolder = "1. Scripts";
         private const string subFolder = "/zExternalPackages";
 
-        private static readonly string typePath =
-            @$"{Application.dataPath}/{scriptsFolder}{subFolder}/FMODUtilityPackage/Enums/";
+        private static readonly string typePath = @$"{Application.dataPath}/{scriptsFolder}{subFolder}/FMODUtilityPackage/Enums/";
 
         public static void WriteFmodEventsToEnum()
         {
