@@ -1,5 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using CharacterScripts;
+using CombatSystem.Enums;
 using CombatSystem.Events;
+using CombatSystem.Events.EnterCombatArenaEvent;
+using PlayerPartyScripts;
 using UnityEngine;
 using VDFramework;
 using VDFramework.EventSystem;
@@ -15,7 +20,8 @@ namespace CombatSystem.Triggers
 
         private void OnTriggerEnter(Collider other)
         {
-            EventManager.RaiseEvent(new CombatStartedEvent(Enemies));
+            EventManager.RaiseEvent(new EnterCombatArenaEvent(PlayerPartySingleton.Instance.Party.Where(party => !party.GetComponent<CharacterHealth>().IsDead)
+                .ToList(), Enemies, ArenaTypes.Castle_Outdoors, CombatTypes.Default));
             combatCollider.Disable();
             this.Disable();
         }

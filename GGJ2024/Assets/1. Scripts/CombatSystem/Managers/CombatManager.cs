@@ -3,6 +3,7 @@ using System.Linq;
 using CharacterScripts;
 using CombatSystem.CharacterScripts;
 using CombatSystem.Events;
+using CombatSystem.Events.EnterCombatArenaEvent;
 using InputScripts;
 using InputScripts.Enums;
 using PlayerPartyScripts;
@@ -21,23 +22,25 @@ namespace CombatSystem.Managers
 
 		private void OnEnable()
 		{
-			EventManager.AddListener<CombatStartedEvent>(OnCombatStart, 100); // Make sure we react to it first
 			EventManager.AddListener<CharacterEnterCombatEvent>(OnCharacterEnterCombat, 100);
 			EventManager.AddListener<CombatEndedEvent>(OnCombatEnd);
+			
+			EventManager.AddListener<EnterCombatArenaEvent>(OnCombatStart, 100);
+			
 		}
 
 		private void OnDisable()
 		{
-			EventManager.RemoveListener<CombatStartedEvent>(OnCombatStart);
 			EventManager.RemoveListener<CharacterEnterCombatEvent>(OnCharacterEnterCombat);
 			EventManager.RemoveListener<CombatEndedEvent>(OnCombatEnd);
+			EventManager.RemoveListener<EnterCombatArenaEvent>(OnCombatStart);
 		}
 
-		private void OnCombatStart(CombatStartedEvent combatStartedEvent)
+		private void OnCombatStart(EnterCombatArenaEvent enterCombatArenaEvent)
 		{
 			CombatParticipants.Clear();
 
-			foreach (GameObject eventEnemy in combatStartedEvent.Enemies)
+			foreach (GameObject eventEnemy in enterCombatArenaEvent.Enemies)
 			{
 				CombatParticipants.Add(eventEnemy);
 				eventEnemy.GetComponent<CharacterStateManager>().Enable();
