@@ -3509,7 +3509,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 684556419}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.082311824, y: 0.000000017147991, z: -0.0000000014162886, w: 0.99660665}
+  m_LocalRotation: {x: 0.082311824, y: -0.000000017147997, z: 0.0000000014162891, w: 0.99660665}
   m_LocalPosition: {x: -23.04, y: 5.26, z: -7.37}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -6005,8 +6005,8 @@ Camera:
   m_Iso: 200
   m_ShutterSpeed: 0.005
   m_Aperture: 16
-  m_FocusDistance: 1000
-  m_FocalLength: 1.3
+  m_FocusDistance: 10
+  m_FocalLength: 1.3737388
   m_BladeCount: 5
   m_Curvature: {x: 2, y: 11}
   m_BarrelClipping: 0.25
@@ -6019,11 +6019,11 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.1
-  far clip plane: 5000
-  field of view: 42.075024
+  near clip plane: 0.3
+  far clip plane: 1000
+  field of view: 40
   orthographic: 0
-  orthographic size: 10
+  orthographic size: 8.255476
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -6047,8 +6047,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.24821435, y: 0, z: 0, w: 0.9687052}
-  m_LocalPosition: {x: -78.54, y: 4.64, z: 3.19}
+  m_LocalRotation: {x: 0.082311824, y: -0.000000017147997, z: 0.0000000014162891, w: 0.99660665}
+  m_LocalPosition: {x: -23.04, y: 5.26, z: -7.37}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6113,10 +6113,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a29d431e07f4986ae297d6c803b580e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  layerMask:
+  clickableLayers:
     serializedVersion: 2
-    m_Bits: 64
-  raycastInterval: 0.05
+    m_Bits: 0
 --- !u!1 &964851107
 GameObject:
   m_ObjectHideFlags: 0
