@@ -14,25 +14,18 @@ namespace CombatSystem.Targeting
 		[SerializeField]
 		private GameObject currentSelectedCharacterIndicator;
 
-		private GameObject casterToBe;
+		private readonly List<GameObject> selectedTargets = new List<GameObject>();
+		private AbstractCombatMove currentMove;
 
-		private readonly List<GameObject> characterList = new List<GameObject>();
+		private PlayerTurnManager turnManager;
 
 		private CombatManager combatManager;
-
-		private bool targetsChoosen;
-
-		private AbstractCombatMove toBeConfirmedMove;
-		private List<GameObject> selectedTargets;
 
 		protected override void Awake()
 		{
 			base.Awake();
 
-			combatManager = GetComponent<CombatManager>();
-
-			selectedTargets = new List<GameObject>();
-			EventManager.AddListener<CharacterClickedEvent>(OnCharacterClicked);
+			turnManager   = GetComponent<PlayerTurnManager>();
 		}
 
 		protected override void OnDestroy()
@@ -46,32 +39,51 @@ namespace CombatSystem.Targeting
 		{
 			// BUG: left click confirms, but left click also selects a move | trying to select a move after you already selected a move simultaneously confirms the target and then selects the move (which causes you to select a move on someone who is not allowed yet to select a move)
 
-			toBeConfirmedMove = move;
-			casterToBe        = caster;
+			selectedTargets.Clear();
+			
+			currentMove = move;
 		}
 
 
 		private void OnCharacterClicked(CharacterClickedEvent @event)
 		{
-			if (!@event.Character) currentSelectedCharacterIndicator.transform.position = Vector3.zero;
+			if (!@event.Character)
+			{
+				currentSelectedCharacterIndicator.transform.position = Vector3.zero;
+			}
 
-			if (!characterList.Contains(@event.Character)) return;
+			if (!CombatManager.CombatParticipants.Contains(@event.Character))
+			{
+#if UNITY_EDITOR
+				Debug.LogError("Tried to target a character that is not in combat!");
+#endif
+				
+				return;
+			}
 
-			selectedTargets.Add(@event.Character.gameObject);
+			selectedTargets.Add(@event.Character);
 
-			currentSelectedCharacterIndicator.transform.position = @event.Character.gameObject.transform.position;
-			currentSelectedCharacterIndicator.transform.Translate(Vector3.up * 1.5f);
+			//TODO move to a seperate class
+			currentSelectedCharacterIndicator.transform.position = @event.Character.transform.position + Vector3.up * 1.5f;
 		}
 
 		public void OnTargetSelectConfirm()
 		{
-			if (selectedTargets.Count == 0) return;
+			if (selectedTargets.Count == 0)
+			{
+				return;
+			}
 
-			ConfirmedMoveHolder confirmedMoveHolder = casterToBe.GetComponent<ConfirmedMoveHolder>();
-			confirmedMoveHolder.SelectMove(toBeConfirmedMove, selectedTargets);
-			toBeConfirmedMove = null;
-			targetsChoosen    = false;
+			if (!turnManager.TryGetActivePlayer(out GameObject currentPlayer))
+			{
+				Debug.LogError("Confirmed a move but there's no active player!");
+				return;
+			}
 
+			ConfirmedMoveHolder confirmedMoveHolder = currentPlayer.GetComponent<ConfirmedMoveHolder>();
+			confirmedMoveHolder.SelectMove(currentMove, selectedTargets);
+			currentMove     = null;
+			
 			selectedTargets.Clear();
 		}
 	}

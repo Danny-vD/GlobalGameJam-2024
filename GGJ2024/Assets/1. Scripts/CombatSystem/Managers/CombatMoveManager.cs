@@ -9,7 +9,7 @@ namespace CombatSystem.Managers
 {
     public class CombatMoveManager : BetterMonoBehaviour
     {
-        private readonly List<CastingState> combatMoveReadyQueue = new();
+        private readonly List<CastingState> combatMoveReadyQueue = new List<CastingState>();
 
         private bool isSomeoneCasting;
 
@@ -76,7 +76,9 @@ namespace CombatSystem.Managers
         private void RemoveFromQueue(CastingState castingState)
         {
             if (!combatMoveReadyQueue.Remove(castingState))
+            {
                 Debug.LogError("The queue does not contain this character!\n" + castingState.gameObject.name);
+            }
         }
 
         private bool TryGetNextInLine(out CastingState castingState)
@@ -95,10 +97,14 @@ namespace CombatSystem.Managers
 
         private void StartNextInQueue() // Called when a character enters CastingState
         {
-            if (TryGetNextInLine(out var castingState)) // Will succeed so long as at least 1 object is in the queue
+            if (TryGetNextInLine(out CastingState castingState)) // Will succeed so long as at least 1 object is in the queue
+            {
                 castingState.StartCasting();
+            }
             else
+            {
                 isSomeoneCasting = false;
+            }
         }
     }
 }

@@ -8,111 +8,113 @@ using VDFramework.EventSystem;
 
 namespace CombatSystem.Managers
 {
-    public class PlayerTurnManager : BetterMonoBehaviour
-    {
-        // A list that acts like a queue, we use a list to be able to remove from any position (in case of dead/stunned)
-        private readonly List<GameObject> playerTurnQueue = new(6);
+	public class PlayerTurnManager : BetterMonoBehaviour
+	{
+		// A list that acts like a queue, we use a list to be able to remove from any position (in case of dead/stunned)
+		private readonly List<GameObject> playerTurnQueue = new List<GameObject>(6);
 
-        private GameObject currentlyActivePlayer;
+		private GameObject currentlyActivePlayer;
 
-        private void OnEnable()
-        {
-            PlayerEnteredChoosingStateEvent.Listeners += AddToQueue;
-            PlayerExitedChoosingStateEvent.Listeners += RemoveFromQueue;
-            CombatStartedEvent.ParameterlessListeners += ResetQueue;
-            CombatEndedEvent.ParameterlessListeners += ResetQueue;
-        }
+		private void OnEnable()
+		{
+			PlayerEnteredChoosingStateEvent.Listeners += AddToQueue;
+			PlayerExitedChoosingStateEvent.Listeners  += RemoveFromQueue;
+			CombatStartedEvent.ParameterlessListeners += ResetQueue;
+			CombatEndedEvent.ParameterlessListeners   += ResetQueue;
+		}
 
-        private void OnDisable()
-        {
-            PlayerEnteredChoosingStateEvent.Listeners -= AddToQueue;
-            PlayerExitedChoosingStateEvent.Listeners -= RemoveFromQueue;
-            CombatStartedEvent.ParameterlessListeners -= ResetQueue;
-            CombatEndedEvent.ParameterlessListeners -= ResetQueue;
-        }
+		private void OnDisable()
+		{
+			PlayerEnteredChoosingStateEvent.Listeners -= AddToQueue;
+			PlayerExitedChoosingStateEvent.Listeners  -= RemoveFromQueue;
+			CombatStartedEvent.ParameterlessListeners -= ResetQueue;
+			CombatEndedEvent.ParameterlessListeners   -= ResetQueue;
+		}
 
-        public bool TryGetActivePlayer(out GameObject activePlayer)
-        {
-            activePlayer = currentlyActivePlayer;
+		public bool TryGetActivePlayer(out GameObject activePlayer)
+		{
+			activePlayer = currentlyActivePlayer;
 
-            return currentlyActivePlayer != null;
-        }
+			return currentlyActivePlayer != null;
+		}
 
-        private void ResetQueue()
-        {
-            playerTurnQueue.Clear();
-        }
+		private void ResetQueue()
+		{
+			playerTurnQueue.Clear();
+		}
 
-        private void AddToQueue(PlayerEnteredChoosingStateEvent enteredChoosingStateEvent)
-        {
-            var player = enteredChoosingStateEvent.Player;
+		private void AddToQueue(PlayerEnteredChoosingStateEvent enteredChoosingStateEvent)
+		{
+			var player = enteredChoosingStateEvent.Player;
 
-            AddToQueue(player);
-        }
+			AddToQueue(player);
+		}
 
-        private void RemoveFromQueue(PlayerExitedChoosingStateEvent exitedChoosingStateEvent)
-        {
-            RemoveFromQueue(exitedChoosingStateEvent.Player);
-        }
+		private void RemoveFromQueue(PlayerExitedChoosingStateEvent exitedChoosingStateEvent)
+		{
+			RemoveFromQueue(exitedChoosingStateEvent.Player);
+		}
 
-        private void AddToQueue(GameObject player)
-        {
-            if (playerTurnQueue.Contains(player))
-            {
-                Debug.LogError("The queue already contains this character!\n" + player.name);
-                return;
-            }
+		private void AddToQueue(GameObject player)
+		{
+			if (playerTurnQueue.Contains(player))
+			{
+				Debug.LogError("The queue already contains this character!\n" + player.name);
+				return;
+			}
 
-            playerTurnQueue.Add(player);
+			playerTurnQueue.Add(player);
 
-            if (playerTurnQueue.Count == 1)
-                // First character added so it is always going to be the one that is choosing a move
-                SetNewActivePlayer(player);
-        }
+			if (playerTurnQueue.Count == 1)
+			{
+				// First character added so it is always going to be the one that is choosing a move
+				SetNewActivePlayer(player);
+			}
+		}
 
-        private void RemoveFromQueue(GameObject player)
-        {
-            if (playerTurnQueue.Contains(player))
-            {
-                if (ReferenceEquals(player, currentlyActivePlayer))
-                    SetNextInQueueActive(); // SetNextInQueueActive removes element 0 from the list, which is the active player
-                else
-                    playerTurnQueue.Remove(player);
-            }
-            else
-            {
-                Debug.LogError($"Attempting to dequeue an gameobject that is not in line!\ndequeuing: {player.name}");
-            }
-        }
+		private void RemoveFromQueue(GameObject player)
+		{
+			if (playerTurnQueue.Contains(player))
+			{
+				if (ReferenceEquals(player, currentlyActivePlayer))
+					SetNextInQueueActive(); // SetNextInQueueActive removes element 0 from the list, which is the active player
+				else
+					playerTurnQueue.Remove(player);
+			}
+			else
+			{
+				Debug.LogError($"Attempting to dequeue an gameobject that is not in line!\ndequeuing: {player.name}");
+			}
+		}
 
-        private void SetNextInQueueActive()
-        {
-            playerTurnQueue.RemoveAt(0); // Dequeue the first player
+		private void SetNextInQueueActive()
+		{
+			playerTurnQueue.RemoveAt(0); // Dequeue the first player
 
-            if (playerTurnQueue.Count == 0) // Queue is empty
-            {
-                SetNoActivePlayer();
-            }
-            else
-            {
-                var next = playerTurnQueue[0];
+			if (playerTurnQueue.Count == 0) // Queue is empty
+			{
+				SetNoActivePlayer();
+			}
+			else
+			{
+				var next = playerTurnQueue[0];
 
-                SetNewActivePlayer(next);
-            }
-        }
+				SetNewActivePlayer(next);
+			}
+		}
 
-        private void SetNewActivePlayer(GameObject player)
-        {
-            currentlyActivePlayer = player;
+		private void SetNewActivePlayer(GameObject player)
+		{
+			currentlyActivePlayer = player;
 
-            EventManager.RaiseEvent(new NewPlayerChoosingMoveEvent(player));
-        }
+			EventManager.RaiseEvent(new NewPlayerChoosingMoveEvent(player));
+		}
 
-        private void SetNoActivePlayer()
-        {
-            currentlyActivePlayer = null;
+		private void SetNoActivePlayer()
+		{
+			currentlyActivePlayer = null;
 
-            EventManager.RaiseEvent(new AllPlayersChoseMoveEvent());
-        }
-    }
+			EventManager.RaiseEvent(new AllPlayersChoseMoveEvent());
+		}
+	}
 }

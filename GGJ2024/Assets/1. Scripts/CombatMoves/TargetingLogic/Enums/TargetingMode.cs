@@ -6,6 +6,6 @@
         SingleTargetOnly,
         MultipleTargets,
         MultipleTargetsOnly,
-        None
+        None,
     }
 }

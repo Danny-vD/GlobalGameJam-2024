@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
-using VDFramework.EventSystem;
+﻿using VDFramework.EventSystem;
 
 namespace CombatSystem.Events
 {

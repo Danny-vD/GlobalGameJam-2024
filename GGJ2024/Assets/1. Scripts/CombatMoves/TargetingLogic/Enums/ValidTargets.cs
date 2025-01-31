@@ -12,6 +12,6 @@ namespace CombatMoves.TargetingLogic.Enums
         // Combinations
         OwnTeam = Self | TeamMates,
         Other = ~Self,
-        OpposingTeam = ~OwnTeam
+        OpposingTeam = ~OwnTeam,
     }
 }

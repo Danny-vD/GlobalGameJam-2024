@@ -1,12 +1,9 @@
 using System.Collections.Generic;
-using System.Linq;
-using CharacterScripts;
 using CombatSystem.CharacterScripts;
 using CombatSystem.Events;
 using CombatSystem.Events.EnterCombatArenaEvent;
 using InputScripts;
 using InputScripts.Enums;
-using PlayerPartyScripts;
 using UnityEngine;
 using VDFramework;
 using VDFramework.EventSystem;
@@ -26,7 +23,6 @@ namespace CombatSystem.Managers
 			EventManager.AddListener<CombatEndedEvent>(OnCombatEnd);
 			
 			EventManager.AddListener<EnterCombatArenaEvent>(OnCombatStart, 100);
-			
 		}
 
 		private void OnDisable()
@@ -46,7 +42,7 @@ namespace CombatSystem.Managers
 				eventEnemy.GetComponent<CharacterStateManager>().Enable();
 			}
 
-			foreach (GameObject partyMember in PlayerPartySingleton.Instance.Party.Where(partyMember => !partyMember.GetComponent<CharacterHealth>().IsDead))
+			foreach (GameObject partyMember in enterCombatArenaEvent.PartyMembers)
 			{
 				CombatParticipants.Add(partyMember);
 			}
@@ -55,7 +51,7 @@ namespace CombatSystem.Managers
 			InputControlManager.Instance.ChangeControls(ControlTypes.Combat);
 		}
 
-		private void OnCharacterEnterCombat(CharacterEnterCombatEvent characterEnterCombatEvent)
+		private static void OnCharacterEnterCombat(CharacterEnterCombatEvent characterEnterCombatEvent)
 		{
 			if (CombatParticipants.Contains(characterEnterCombatEvent.Character))
 			{

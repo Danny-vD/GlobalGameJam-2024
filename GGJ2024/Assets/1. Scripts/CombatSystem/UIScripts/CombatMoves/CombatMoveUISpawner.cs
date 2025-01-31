@@ -1,4 +1,5 @@
 ﻿using System;
+using CombatMoves.ScriptableObjects.BaseClasses;
 using CombatSystem.Events.Queues;
 using CombatSystem.Interfaces;
 using UnityEngine;
@@ -7,53 +8,55 @@ using VDFramework.UnityExtensions;
 
 namespace CombatSystem.UIScripts.CombatMoves
 {
-    public class CombatMoveUISpawner : BetterMonoBehaviour
-    {
-        [SerializeField] private Transform combatMovesParent;
+	public class CombatMoveUISpawner : BetterMonoBehaviour
+	{
+		[SerializeField]
+		private Transform combatMovesParent;
 
-        [SerializeField] private GameObject combatMovePrefab;
+		[SerializeField]
+		private GameObject combatMovePrefab;
 
-        private void Awake()
-        {
-            NewPlayerChoosingMoveEvent.Listeners += ShowMoves;
-            AllPlayersChoseMoveEvent.ParameterlessListeners += HideMoves;
-        }
+		private void Awake()
+		{
+			NewPlayerChoosingMoveEvent.Listeners            += ShowMoves;
+			AllPlayersChoseMoveEvent.ParameterlessListeners += HideMoves;
+		}
 
-        private void OnDestroy()
-        {
-            NewPlayerChoosingMoveEvent.Listeners -= ShowMoves;
-            AllPlayersChoseMoveEvent.ParameterlessListeners -= HideMoves;
-        }
+		private void OnDestroy()
+		{
+			NewPlayerChoosingMoveEvent.Listeners            -= ShowMoves;
+			AllPlayersChoseMoveEvent.ParameterlessListeners -= HideMoves;
+		}
 
-        public static event Action OnShowMoves = delegate { };
-        public static event Action OnHideMoves = delegate { };
+		public static event Action OnShowMoves = delegate { };
+		public static event Action OnHideMoves = delegate { };
 
-        private void ShowMoves(NewPlayerChoosingMoveEvent newPlayerChoosingMoveEvent)
-        {
-            var player = newPlayerChoosingMoveEvent.Player;
+		private void ShowMoves(NewPlayerChoosingMoveEvent newPlayerChoosingMoveEvent)
+		{
+			GameObject player = newPlayerChoosingMoveEvent.Player;
 
-            var moveset = player.GetComponent<IMoveset>();
+			IMoveset moveset = player.GetComponent<IMoveset>();
 
-            InstantiateCombatMoves(moveset, player);
+			InstantiateCombatMoves(moveset, player);
 
-            OnShowMoves.Invoke();
-        }
+			OnShowMoves.Invoke();
+		}
 
-        public static void HideMoves()
-        {
-            OnHideMoves.Invoke();
-        }
+		public static void HideMoves()
+		{
+			OnHideMoves.Invoke();
+		}
 
-        private void InstantiateCombatMoves(IMoveset moveset, GameObject player)
-        {
-            combatMovesParent.DestroyChildren();
+		private void InstantiateCombatMoves(IMoveset moveset, GameObject player)
+		{
+			combatMovesParent.DestroyChildren();
 
-            foreach (var combatMove in moveset.GetMoves())
-            {
-                var instance = Instantiate(combatMovePrefab, combatMovesParent);
+			foreach (AbstractCombatMove combatMove in moveset.GetMoves())
+			{
+				GameObject instance = Instantiate(combatMovePrefab, combatMovesParent);
 
-                instance.GetComponent<CombatMoveUIManager>().Initialize(combatMove, player);
-            }
-        }
-    }
+				instance.GetComponent<CombatMoveUIManager>().Initialize(combatMove, player);
+			}
+		}
+	}
 }
