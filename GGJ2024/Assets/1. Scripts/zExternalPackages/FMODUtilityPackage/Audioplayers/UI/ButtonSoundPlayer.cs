@@ -1,4 +1,5 @@
 ﻿using FMOD.Studio;
+using FMODUtilityPackage.Audioplayers.Managers;
 using FMODUtilityPackage.Core;
 using FMODUtilityPackage.Enums;
 using FMODUtilityPackage.ExtentionMethods;
@@ -10,76 +11,122 @@ using VDFramework;
 
 namespace FMODUtilityPackage.Audioplayers.UI
 {
-    [RequireComponent(typeof(Button))]
-    public class ButtonSoundPlayer : BetterMonoBehaviour, IAudioplayer
-    {
-        [SerializeField] [Tooltip("If true, clicking the button again will start the event from the beginning")]
-        private bool clickRestartsSound = true;
+	[RequireComponent(typeof(Button))]
+	public class ButtonSoundPlayer : BetterMonoBehaviour, IAudioplayer
+	{
+		[SerializeField, Tooltip("If true, clicking the button again will start the event from the beginning")]
+		private bool clickRestartsSound = true;
 
-        [SerializeField] private AudioEventType audioEventToPlayOnClick;
+		[SerializeField]
+		private AudioEventType audioEventToPlayOnClick;
 
-        [SerializeField] private EventParameters parameters;
+		[SerializeField]
+		private EventParameters parameters;
 
-        private Button button;
+		[Header("Global Instance settings")]
+		[SerializeField]
+		private bool useGlobalInstance;
 
-        private EventInstance clickSound;
-        private bool isInitialized;
+		[SerializeField]
+		private bool releaseGlobalInstanceOnDisable;
 
-        private void Awake()
-        {
-            button = GetComponent<Button>();
-            button.onClick.AddListener(clickRestartsSound ? Play : PlayIfNotPlaying);
-        }
+		private Button button;
 
-        private void OnDisable()
-        {
-            clickSound.release();
-            isInitialized = false;
-        }
+		private EventInstance localClickSoundEvent;
+		private bool isInitialized;
 
-        private void OnDestroy()
-        {
-            Stop();
-        }
+		private EventInstance AudioEventInstance => useGlobalInstance ? GlobalEventInstanceManager.GetEventInstance(audioEventToPlayOnClick) : localClickSoundEvent;
 
-        public void Play()
-        {
-            if (!isInitialized) Initialize();
+		private void Awake()
+		{
+			button = GetComponent<Button>();
+			button.onClick.AddListener(clickRestartsSound ? Play : PlayIfNotPlaying);
+		}
 
-            clickSound.start();
-        }
+		private void Initialize()
+		{
+			EventInstance clickSoundEventInstance;
+			
+			if (!useGlobalInstance)
+			{
+				localClickSoundEvent    = AudioPlayer.GetEventInstance(audioEventToPlayOnClick);
+				clickSoundEventInstance = localClickSoundEvent;
+			}
+			else
+			{
+				clickSoundEventInstance = GlobalEventInstanceManager.GetEventInstance(audioEventToPlayOnClick);
+			}
+			
+			isInitialized = true;
+			
+			clickSoundEventInstance.SetParameters(parameters);
+		}
 
-        public void PlayIfNotPlaying()
-        {
-            if (!isInitialized) Initialize();
+		private void OnDisable()
+		{
+			if (useGlobalInstance)
+			{
+				if (releaseGlobalInstanceOnDisable)
+				{
+					GlobalEventInstanceManager.ReleaseAndRemoveInstance(audioEventToPlayOnClick, false);
+				}
+			}
+			else
+			{
+				localClickSoundEvent.release();
+			}
+			
+			isInitialized = false;
+		}
 
-            clickSound.getPlaybackState(out PLAYBACK_STATE state);
+		public void Play()
+		{
+			if (!isInitialized)
+			{
+				Initialize();
+			}
 
-            if (state is PLAYBACK_STATE.STOPPED or PLAYBACK_STATE.STOPPING) clickSound.start();
-        }
+			AudioEventInstance.start();
+		}
 
-        public void Stop()
-        {
-            clickSound.stop(STOP_MODE.ALLOWFADEOUT);
-        }
+		public void PlayIfNotPlaying()
+		{
+			if (!isInitialized)
+			{
+				Initialize();
+			}
 
-        public void SetPause(bool paused)
-        {
-            clickSound.setPaused(paused);
-        }
+			EventInstance clickSoundEventInstance = AudioEventInstance;
+			
+			clickSoundEventInstance.getPlaybackState(out PLAYBACK_STATE state);
 
-        private void Initialize()
-        {
-            clickSound = AudioPlayer.GetEventInstance(audioEventToPlayOnClick);
-            clickSound.SetParameters(parameters);
+			if (state is PLAYBACK_STATE.STOPPED or PLAYBACK_STATE.STOPPING)
+			{
+				clickSoundEventInstance.start();
+			}
+		}
 
-            isInitialized = true;
-        }
+		public void Stop()
+		{
+			AudioEventInstance.stop(STOP_MODE.ALLOWFADEOUT);
+		}
 
-        public void SetParameters(EventParameters eventParameters)
-        {
-            parameters = eventParameters;
-            clickSound.SetParameters(parameters);
-        }
-    }
+		public void SetPause(bool paused)
+		{
+			AudioEventInstance.setPaused(paused);
+		}
+
+		public void SetParameters(EventParameters eventParameters)
+		{
+			parameters = eventParameters;
+			AudioEventInstance.SetParameters(parameters);
+		}
+
+		private void OnDestroy()
+		{
+			Stop();
+
+			button.onClick.RemoveListener(clickRestartsSound ? Play : PlayIfNotPlaying);
+		}
+	}
 }

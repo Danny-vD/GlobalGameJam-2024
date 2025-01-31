@@ -1,65 +1,105 @@
 ﻿using FMOD.Studio;
+using FMODUtilityPackage.Audioplayers.Managers;
 using FMODUtilityPackage.Core;
 using FMODUtilityPackage.Enums;
+using FMODUtilityPackage.ExtentionMethods;
 using FMODUtilityPackage.Interfaces;
+using FMODUtilityPackage.Structs;
 using UnityEngine;
 using VDFramework;
 
 namespace FMODUtilityPackage.Audioplayers
 {
-    public class AudioPlayerComponent : BetterMonoBehaviour, IAudioplayer
-    {
-        [SerializeField] private AudioEventType audioEventType;
+	public class AudioPlayerComponent : BetterMonoBehaviour, IAudioplayer
+	{
+		[SerializeField]
+		private AudioEventType audioEventType;
 
-        private EventInstance eventInstance;
+		[Header("Global Instance settings")]
+		[SerializeField]
+		private bool useGlobalInstance;
 
-        private void Start()
-        {
-            CacheEventInstance();
-        }
+		[SerializeField]
+		private bool releaseGlobalInstanceOnDestroy = true;
 
-        private void OnDestroy()
-        {
-            eventInstance.release();
-        }
+		private EventInstance localInstance;
+		private EventInstance AudioEventInstance => useGlobalInstance ? GlobalEventInstanceManager.GetEventInstance(audioEventType) : localInstance;
 
-        public void Play()
-        {
-            eventInstance.start();
-        }
+		private void Start()
+		{
+			CacheEventInstance();
+		}
 
-        public void PlayIfNotPlaying()
-        {
-            eventInstance.getPlaybackState(out PLAYBACK_STATE state);
+		public void SetEventType(AudioEventType newAudioEventType, bool releaseGlobalInstanceIfApplicable)
+		{
+			if (useGlobalInstance && releaseGlobalInstanceIfApplicable)
+			{
+				GlobalEventInstanceManager.ReleaseAndRemoveInstance(audioEventType, false);
+			}
 
-            if (state is PLAYBACK_STATE.STOPPED or PLAYBACK_STATE.STOPPING) eventInstance.start();
-        }
+			audioEventType = newAudioEventType;
+			CacheEventInstance();
+		}
 
-        public void SetPause(bool paused)
-        {
-            eventInstance.setPaused(paused);
-        }
+		public void Play()
+		{
+			AudioEventInstance.start();
+		}
 
-        public void Stop()
-        {
-            Stop(STOP_MODE.ALLOWFADEOUT);
-        }
+		public void PlayIfNotPlaying()
+		{
+			EventInstance audioEventInstance = AudioEventInstance;
+			audioEventInstance.getPlaybackState(out PLAYBACK_STATE state);
 
-        public void SetEventType(AudioEventType newAudioEventType)
-        {
-            audioEventType = newAudioEventType;
-            CacheEventInstance();
-        }
+			if (state is PLAYBACK_STATE.STOPPED or PLAYBACK_STATE.STOPPING)
+			{
+				audioEventInstance.start();
+			}
+		}
 
-        public void Stop(STOP_MODE stopMode)
-        {
-            eventInstance.stop(stopMode);
-        }
+		public void SetPause(bool paused)
+		{
+			AudioEventInstance.setPaused(paused);
+		}
 
-        private void CacheEventInstance()
-        {
-            eventInstance.release();
-            eventInstance = AudioPlayer.GetEventInstance(audioEventType);
-        }
-    }
+		public void Stop()
+		{
+			Stop(STOP_MODE.ALLOWFADEOUT);
+		}
+
+		public void Stop(STOP_MODE stopMode)
+		{
+			AudioEventInstance.stop(stopMode);
+		}
+
+		public void SetParameters(EventParameters parameters)
+		{
+			AudioEventInstance.SetParameters(parameters);
+		}
+
+		private void CacheEventInstance()
+		{
+			if (useGlobalInstance)
+			{
+				GlobalEventInstanceManager.CacheNewInstanceIfNeeded(audioEventType);
+			}
+			else
+			{
+				localInstance.release();
+				localInstance = AudioPlayer.GetEventInstance(audioEventType);
+			}
+		}
+
+		private void OnDestroy()
+		{
+			if (useGlobalInstance && releaseGlobalInstanceOnDestroy)
+			{
+				AudioEventInstance.release();
+			}
+			else
+			{
+				localInstance.release();
+			}
+		}
+	}
 }

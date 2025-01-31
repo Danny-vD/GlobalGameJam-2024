@@ -5,193 +5,210 @@ using FMODUtilityPackage.Core;
 using FMODUtilityPackage.Enums;
 using UnityEditor;
 using UnityEngine;
-using Utility.FMODUtilityPackage.EnumWriter;
+using Utility.FMODUtilityPackage;
 using VDFramework.Extensions;
 using static Utility.EditorPackage.EditorUtils;
 
 namespace CustomInspector.FMODUtilityPackage
 {
-    [CustomEditor(typeof(AudioManager))]
-    public class AudioManagerEditor : Editor
-    {
-        // Fmod
-        private static Type eventBrowser;
+	[CustomEditor(typeof(AudioManager))]
+	public class AudioManagerEditor : Editor
+	{
+		// AudioManager
+		private AudioManager audioManager;
+		private bool showBusVolume;
+		private bool[] busVolumeFoldout;
 
-        // Icons
-        private static Texture fmodIcon;
+		// EventPaths
+		private bool showEventPaths;
+		private bool[] eventPathsFoldout;
 
-        private static Texture folderIconClosed;
-        private static Texture folderIconOpen;
+		private bool showBuses;
+		private bool[] busesFoldout;
 
-        private static Texture[] eventIcon;
+		private bool showEmitterEvents;
+		private bool[] emitterEventsFoldout;
 
-        private static Texture[] busIcon;
+		// Fmod
+		private static Type eventBrowser;
 
-        // AudioManager
-        private AudioManager audioManager;
-        private SerializedProperty buses;
-        private bool[] busesFoldout;
-        private bool[] busVolumeFoldout;
-        private SerializedProperty emitterEvents;
-        private bool[] emitterEventsFoldout;
-        private bool[] eventPathsFoldout;
+		// Icons
+		private static Texture fmodIcon;
 
-        // EventPaths
-        private SerializedProperty events;
+		private static Texture folderIconClosed;
+		private static Texture folderIconOpen;
 
-        //////////////////////////////////////////////////
+		private static Texture[] eventIcon;
+		private static Texture[] busIcon;
 
-        // AudioManager
-        private SerializedProperty initialVolumes;
+		//////////////////////////////////////////////////
 
-        private bool showBuses;
-        private bool showBusVolume;
+		// AudioManager
+		private SerializedProperty initialVolumes;
 
-        private bool showEmitterEvents;
+		// EventPaths
+		private SerializedProperty events;
+		private SerializedProperty buses;
+		private SerializedProperty emitterEvents;
 
-        // EventPaths
-        private bool showEventPaths;
+		private void OnEnable()
+		{
+			if (ValidateEventTypeEnum())
+			{
+				return;
+			}
 
-        private void OnEnable()
-        {
-            if (ValidateEventTypeEnum()) return;
+			// AudioManager
+			audioManager = (AudioManager)target;
+			
+			initialVolumes   = serializedObject.FindProperty("initialVolumes");
+			busVolumeFoldout = new bool[initialVolumes.arraySize];
 
-            // AudioManager
-            audioManager = (AudioManager)target;
+			// EventPaths
+			events        = serializedObject.FindProperty("EventPaths.events");
+			buses         = serializedObject.FindProperty("EventPaths.buses");
+			emitterEvents = serializedObject.FindProperty("EventPaths.emitterEvents");
 
-            initialVolumes = serializedObject.FindProperty("initialVolumes");
-            busVolumeFoldout = new bool[initialVolumes.arraySize];
+			eventPathsFoldout    = new bool[events.arraySize];
+			busesFoldout         = new bool[buses.arraySize];
+			emitterEventsFoldout = new bool[emitterEvents.arraySize];
 
-            // EventPaths
-            events = serializedObject.FindProperty("EventPaths.events");
-            buses = serializedObject.FindProperty("EventPaths.buses");
-            emitterEvents = serializedObject.FindProperty("EventPaths.emitterEvents");
+			// Icons
+			fmodIcon = EditorUtils.LoadImage("StudioIcon.png");
 
-            eventPathsFoldout = new bool[events.arraySize];
-            busesFoldout = new bool[buses.arraySize];
-            emitterEventsFoldout = new bool[emitterEvents.arraySize];
+			folderIconClosed = EditorUtils.LoadImage("FolderIconClosed.png");
+			folderIconOpen   = EditorUtils.LoadImage("FolderIconOpen.png");
 
-            // Icons
-            fmodIcon = EditorUtils.LoadImage("StudioIcon.png");
+			eventIcon = new[]
+			{
+				EditorUtils.LoadImage("EventIcon.png"),
+			};
 
-            folderIconClosed = EditorUtils.LoadImage("FolderIconClosed.png");
-            folderIconOpen = EditorUtils.LoadImage("FolderIconOpen.png");
+			busIcon = new[]
+			{
+				GetTexture("AudioManager/BusIcon.png"),
+			};
+		}
 
-            eventIcon = new[]
-            {
-                EditorUtils.LoadImage("EventIcon.png")
-            };
+		public override void OnInspectorGUI()
+		{
+			serializedObject.Update();
 
-            busIcon = new[]
-            {
-                GetTexture("AudioManager/BusIcon.png")
-            };
-        }
+			DrawEventPaths();
+			DrawBusPaths();
 
-        public override void OnInspectorGUI()
-        {
-            serializedObject.Update();
+			DrawSeperatorLine(); //-------------------
 
-            DrawEventPaths();
-            DrawBusPaths();
+			DrawEmitterEvents();
 
-            DrawSeperatorLine(); //-------------------
+			DrawSeperatorLine(); //-------------------
 
-            DrawEmitterEvents();
+			DrawInitialVolumes();
 
-            DrawSeperatorLine(); //-------------------
+			DrawSeperatorLine(); //-------------------
 
-            DrawInitialVolumes();
+			DrawEventBrowserButton();
 
-            DrawSeperatorLine(); //-------------------
+			serializedObject.ApplyModifiedProperties();
+		}
 
-            DrawEventBrowserButton();
+		private void DrawEventPaths()
+		{
+			if (IsFoldOut(ref showEventPaths, showEventPaths ? folderIconOpen : folderIconClosed, "Event Paths"))
+			{
+				DrawFoldoutKeyValueArray<AudioEventType>(events, "key", "value", eventPathsFoldout, eventIcon, new GUIContent("Path"));
+			}
+		}
 
-            serializedObject.ApplyModifiedProperties();
-        }
+		private void DrawBusPaths()
+		{
+			if (IsFoldOut(ref showBuses, showBuses ? folderIconOpen : folderIconClosed, "Bus Paths"))
+			{
+				DrawFoldoutKeyValueArray<BusType>(buses, "key", "value", busesFoldout, busIcon, DrawElement);
+			}
 
-        private void DrawEventPaths()
-        {
-            if (IsFoldOut(ref showEventPaths, showEventPaths ? folderIconOpen : folderIconClosed, "Event Paths"))
-                DrawFoldoutKeyValueArray<AudioEventType>(events, "key", "value", eventPathsFoldout, eventIcon,
-                    new GUIContent("Path"));
+			void DrawElement(int index, SerializedProperty key, SerializedProperty value)
+			{
+				string path = value.stringValue;
 
-            EditorGUILayout.Space(5);
-        }
+				if (index == 0)
+				{
+					EditorGUILayout.LabelField("Path", path);
+					return;
+				}
 
-        private void DrawBusPaths()
-        {
-            if (IsFoldOut(ref showBuses, showBuses ? folderIconOpen : folderIconClosed, "Bus Paths"))
-                DrawFoldoutKeyValueArray<BusType>(buses, "key", "value", busesFoldout, busIcon, DrawElement);
+				if (!path.StartsWith("Bus:/") && !path.StartsWith("bus:/"))
+				{
+					if (value.stringValue == string.Empty)
+					{
+						value.stringValue = $"bus:/{key.enumNames[key.enumValueIndex]}";
+					}
+					else
+					{
+						value.stringValue = path.Insert(0, "bus:/");
+					}
+				}
 
-            void DrawElement(int index, SerializedProperty key, SerializedProperty value)
-            {
-                var path = value.stringValue;
+				EditorGUILayout.PropertyField(value, new GUIContent("Path"));
+			}
+		}
 
-                if (index == 0)
-                {
-                    EditorGUILayout.LabelField("Path", path);
-                    return;
-                }
+		private void DrawEmitterEvents()
+		{
+			if (IsFoldOut(ref showEmitterEvents, showEmitterEvents ? folderIconOpen : folderIconClosed, "Emitters"))
+			{
+				DrawFoldoutKeyValueArray<EmitterType>(emitterEvents, "key", "value", emitterEventsFoldout,
+					new GUIContent("Event to play", eventIcon[0]));
+			}
+		}
 
-                if (!path.StartsWith("Bus:/") && !path.StartsWith("bus:/"))
-                {
-                    if (value.stringValue == string.Empty)
-                        value.stringValue = $"bus:/{key.enumNames[key.enumValueIndex]}";
-                    else
-                        value.stringValue = path.Insert(0, "bus:/");
-                }
+		private void DrawInitialVolumes()
+		{
+			if (IsFoldOut(ref showBusVolume, showBusVolume ? folderIconOpen : folderIconClosed, "Volume"))
+			{
+				DrawFoldoutKeyValueArray<BusType>(initialVolumes, "key", busVolumeFoldout, busIcon, DrawStruct);
+			}
 
-                EditorGUILayout.PropertyField(value, new GUIContent("Path"));
-            }
-        }
+			void DrawStruct(int i, SerializedProperty @struct)
+			{
+				SerializedProperty value = @struct.FindPropertyRelative("value");
+				SerializedProperty isMuted = @struct.FindPropertyRelative("isMuted");
 
-        private void DrawEmitterEvents()
-        {
-            if (IsFoldOut(ref showEmitterEvents, showEmitterEvents ? folderIconOpen : folderIconClosed, "Emitters"))
-                DrawFoldoutKeyValueArray<EmitterType>(emitterEvents, "key", "value", emitterEventsFoldout,
-                    new GUIContent("Event to play", eventIcon[0]));
-        }
+				float volume = value.floatValue;
 
-        private void DrawInitialVolumes()
-        {
-            if (IsFoldOut(ref showBusVolume, showBusVolume ? folderIconOpen : folderIconClosed, "Volume"))
-                DrawFoldoutKeyValueArray<BusType>(initialVolumes, "key", busVolumeFoldout, busIcon, DrawStruct);
+				EditorGUILayout.PropertyField(isMuted, new GUIContent("Mute"));
+				value.floatValue = EditorGUILayout.Slider("Volume", volume, 0.0f, 1.0f);
+			}
+		}
 
-            void DrawStruct(int i, SerializedProperty @struct)
-            {
-                var value = @struct.FindPropertyRelative("value");
-                var isMuted = @struct.FindPropertyRelative("isMuted");
+		private static void DrawEventBrowserButton()
+		{
+			if (GUILayout.Button(new GUIContent("Event Browser", fmodIcon)))
+			{
+				EventBrowser.ShowWindow();
+			}
+		}
 
-                var volume = value.floatValue;
+		/// <summary>
+		/// Will update the EventType enum to match the amount of events if necessary
+		/// </summary>
+		/// <returns>Whether or not a recompile is necessary</returns>
+		private static bool ValidateEventTypeEnum()
+		{
+			bool needRecompile = default(AudioEventType).GetValues().Count() != EventManager.Events.Count;
 
-                EditorGUILayout.PropertyField(isMuted, new GUIContent("Mute"));
-                value.floatValue = EditorGUILayout.Slider("Volume", volume, 0.0f, 1.0f);
-            }
-        }
+			if (needRecompile)
+			{
+				AudioEventEnumWriter.WriteFmodEventsToEnum();
+			}
 
-        private static void DrawEventBrowserButton()
-        {
-            if (GUILayout.Button(new GUIContent("Event Browser", fmodIcon))) EventBrowser.ShowWindow();
-        }
+			return needRecompile;
+		}
 
-        /// <summary>
-        ///     Will update the EventType enum to match the amount of events if necessary
-        /// </summary>
-        /// <returns>Whether or not a recompile is necessary</returns>
-        private static bool ValidateEventTypeEnum()
-        {
-            var needRecompile = default(AudioEventType).GetValues().Count() != EventManager.Events.Count;
-
-            if (needRecompile) AudioEnumWriter.WriteFmodEventsToEnum();
-
-            return needRecompile;
-        }
-
-        [MenuItem("FMOD/Import Events")] // Make the validation a menu command that can be triggered from anywhere
-        private static void ValidateEventTypeEnumMenuItem(MenuCommand command)
-        {
-            _ = ValidateEventTypeEnum();
-        }
-    }
+		[MenuItem("FMOD/Import Events")] // Make the validation a menu command that can be triggered from anywhere
+		private static void ValidateEventTypeEnumMenuItem(MenuCommand command)
+		{
+			_ = ValidateEventTypeEnum();
+		}
+	}
 }

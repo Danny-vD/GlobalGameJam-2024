@@ -1,4 +1,5 @@
 ﻿using FMOD.Studio;
+using FMODUtilityPackage.Audioplayers.Managers;
 using FMODUtilityPackage.Audioplayers.UnityFunctionHandlers.BaseClasses;
 using FMODUtilityPackage.Core;
 using FMODUtilityPackage.Enums;
@@ -8,44 +9,88 @@ using UtilityPackage.Utility.UnityFunctionHandlers.Enums;
 namespace FMODUtilityPackage.Audioplayers.UnityFunctionHandlers
 {
 	/// <summary>
-	///     play an <see cref="EventType" /> on a specific <see cref="UnityFunction" />
+	/// play an <see cref="AudioEventType"/> on a specific <see cref="UnityFunction"/>
 	/// </summary>
 	public class AudioPlayerFunctionHandler : AbstractAudioFunctionHandler
-    {
-        [SerializeField] private AudioEventType audioEventType;
+	{
+		[SerializeField]
+		private AudioEventType audioEventType;
 
-        [Header("On Destroy")] [SerializeField] [Tooltip("Stop all instances when this object is destroyed")]
-        private bool stopInstancesOnDestroy;
+		[Header("Playback settings"), SerializeField, Tooltip("Share this event instance between all AudioPlayerFunctionHandlers")]
+		private bool useGlobalInstance = false;
 
-        [SerializeField] [Tooltip("Allow the playing events to fade out when this object is destroyed")]
-        private bool allowFadeoutOnDestroy = true;
+		[SerializeField, Tooltip("Don't restart the instance if it is already playing")]
+		private bool onlyPlayIfNotPlaying = false;
+		
+		[Header("On Destroy"), SerializeField, Tooltip("Stop playing the event when this object is destroyed")]
+		private bool stopPlayingOnDestroy;
 
-        private EventInstance eventInstance;
+		[SerializeField, Tooltip("Allow the playing events to fade out when this object is destroyed")]
+		private bool allowFadeoutOnDestroy = true;
 
-        public EventInstance AudioEventInstance => eventInstance;
+		[Header("Global Instance settings")]
+		[SerializeField, Tooltip("Free the memory of the global instance when this object is destroyed")]
+		private bool freeGlobalInstanceOnDestroy = true;
 
-        private void Awake()
-        {
-            eventInstance = AudioPlayer.GetEventInstance(audioEventType);
-        }
+		private EventInstance localInstance;
 
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
+		public EventInstance AudioEventInstance => useGlobalInstance ? GlobalEventInstanceManager.GetEventInstance(audioEventType) : localInstance;
 
-            if (stopInstancesOnDestroy)
-            {
-                STOP_MODE stopMode = allowFadeoutOnDestroy ? STOP_MODE.ALLOWFADEOUT : STOP_MODE.IMMEDIATE;
+		private void Awake()
+		{
+			if (useGlobalInstance)
+			{
+				GlobalEventInstanceManager.CacheNewInstanceIfNeeded(audioEventType);
+			}
+			else
+			{
+				localInstance = AudioPlayer.GetEventInstance(audioEventType);
+			}
+		}
 
-                eventInstance.stop(stopMode);
-            }
+		protected override void ReactToEvent(UnityFunction unityFunction)
+		{
+			EventInstance audioEventInstance = AudioEventInstance;
+			
+			if (onlyPlayIfNotPlaying)
+			{
+				audioEventInstance.getPlaybackState(out PLAYBACK_STATE state);
 
-            eventInstance.release();
-        }
+				if (state is PLAYBACK_STATE.PLAYING or PLAYBACK_STATE.STARTING)
+				{
+					return;
+				}
+			}
 
-        protected override void ReactToEvent(UnityFunction unityFunction)
-        {
-            eventInstance.start();
-        }
-    }
+			audioEventInstance.start();
+		}
+
+		protected override void OnDestroy()
+		{
+			base.OnDestroy();
+
+			STOP_MODE stopMode = allowFadeoutOnDestroy ? STOP_MODE.ALLOWFADEOUT : STOP_MODE.IMMEDIATE;
+
+			if (useGlobalInstance)
+			{
+				if (freeGlobalInstanceOnDestroy)
+				{
+					GlobalEventInstanceManager.ReleaseAndRemoveInstance(audioEventType, stopPlayingOnDestroy, stopMode);
+				}
+				else if (stopPlayingOnDestroy)
+				{
+					AudioEventInstance.stop(stopMode);
+				}
+			}
+			else
+			{
+				if (stopPlayingOnDestroy)
+				{
+					localInstance.stop(stopMode); // Using localInstance here to prevent another UseGlobalInstance check 
+				}
+
+				localInstance.release();
+			}
+		}
+	}
 }

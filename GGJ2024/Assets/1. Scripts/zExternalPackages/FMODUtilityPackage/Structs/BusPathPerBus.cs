@@ -5,28 +5,30 @@ using VDFramework.Interfaces;
 
 namespace FMODUtilityPackage.Structs
 {
-    [Serializable]
-    public struct BusPathPerBus : IKeyValuePair<BusType, string>
-    {
-        [SerializeField] private BusType key;
+	[Serializable]
+	public struct BusPathPerBus : IKeyValuePair<BusType, string>
+	{
+		[SerializeField]
+		private BusType key;
 
-        [SerializeField] private string value;
+		[SerializeField]
+		private string value;
 
-        public BusType Key
-        {
-            get => key;
-            set => key = value;
-        }
+		public BusType Key
+		{
+			get => key;
+			set => key = value;
+		}
 
-        public string Value
-        {
-            get => value;
-            set => this.value = value;
-        }
+		public string Value
+		{
+			get => value;
+			set => this.value = value;
+		}
 
-        public bool Equals(IKeyValuePair<BusType, string> other)
-        {
-            return other != null && other.Key == Key;
-        }
-    }
+		public bool Equals(IKeyValuePair<BusType, string> other)
+		{
+			return other != null && other.Key == Key;
+		}
+	}
 }
