@@ -45,9 +45,9 @@ namespace FMODUtilityPackage.Core
 
         public void AddEmitters(GameObject gameObject)
         {
-            foreach (var emitterType in default(EmitterType).GetValues())
+            foreach (EmitterType emitterType in default(EmitterType).GetValues())
             {
-                var emitter = gameObject.AddComponent<StudioEventEmitter>();
+                StudioEventEmitter emitter = gameObject.AddComponent<StudioEventEmitter>();
                 emitter.EventReference = GetEventReferenceForEmitter(emitterType);
 
                 emitters.Add(emitterType, emitter);
@@ -71,7 +71,7 @@ namespace FMODUtilityPackage.Core
 
         private EventReference GetEventReferenceForEmitter(EmitterType emitterType)
         {
-            var audioEventType = emitterEvents.First(item => item.Key == emitterType).Value;
+            AudioEventType audioEventType = emitterEvents.First(item => item.Key == emitterType).Value;
             return GetEventReference(audioEventType);
         }
 
@@ -80,17 +80,17 @@ namespace FMODUtilityPackage.Core
         {
             try
             {
-                var eventRefs = EventManager.Events;
-                var eventPaths = eventRefs.Select(eventref => eventref.Path).ToArray();
+                List<EditorEventRef> eventRefs = EventManager.Events;
+                string[] eventPaths = eventRefs.Select(eventref => eventref.Path).ToArray();
 
-                var enumValues = EventPathToEnumValueUtil.ConvertEventPathToEnumValues(eventPaths);
+                AudioEventType[] enumValues = EventPathToEnumValueUtil.ConvertEventPathToEnumValues(eventPaths);
 
-                for (var i = 0; i < enumValues.Length; i++)
+                for (int i = 0; i < enumValues.Length; i++)
                 {
                     EventReferencePerEvent pair = default;
                     pair.Key = enumValues[i];
 
-                    var index = events.FindIndex(referencePerEvent => referencePerEvent.Key.Equals(enumValues[i]));
+                    int index = events.FindIndex(referencePerEvent => referencePerEvent.Key.Equals(enumValues[i]));
 
                     if (index == -1)
                     {
@@ -140,17 +140,17 @@ namespace FMODUtilityPackage.Core
 
         private void SetBusPaths()
         {
-            var busCount = buses.Count;
+            int busCount = buses.Count;
 
             if (busCount <= 1) // The master bus is already taken care of in the constructor
                 return;
 
-            var busNames = default(BusType).GetNames().ToArray();
+            string[] busNames = default(BusType).GetNames().ToArray();
 
             // Start at 1 because 0 is always the master bus
-            for (var i = 1; i < busCount; i++)
+            for (int i = 1; i < busCount; i++)
             {
-                var pathPerBus = buses[i];
+                BusPathPerBus pathPerBus = buses[i];
 
                 // Bus paths always start with bus:/ which is the Master Bus Path 
                 pathPerBus.Value = MASTER_BUS_PATH + busNames[i];

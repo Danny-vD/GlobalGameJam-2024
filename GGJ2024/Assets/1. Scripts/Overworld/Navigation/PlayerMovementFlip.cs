@@ -56,7 +56,7 @@ namespace Overworld.Navigation
 
         private void OnMoving(InputAction.CallbackContext obj)
         {
-            var input = obj.ReadValue<Vector2>();
+            Vector2 input = obj.ReadValue<Vector2>();
 
             if (input.x.Equals(0)) // Don't flip for up/down movement
                 return;
@@ -89,13 +89,13 @@ namespace Overworld.Navigation
             isFacingRight = false;
             isFlipping = true;
 
-            var targetTime = flippingCurve.MinTime;
+            float targetTime = flippingCurve.MinTime;
 
             while (interpolationTime > targetTime)
             {
                 interpolationTime -= Time.deltaTime;
 
-                var interpolationValue = flippingCurve.EvaluateCurve(interpolationTime);
+                float interpolationValue = flippingCurve.EvaluateCurve(interpolationTime);
 
                 transform.rotation = GetFlipRotation(interpolationValue);
                 yield return null;
@@ -112,13 +112,13 @@ namespace Overworld.Navigation
             isFacingRight = true;
             isFlipping = true;
 
-            var targetTime = flippingCurve.MaxTime;
+            float targetTime = flippingCurve.MaxTime;
 
             while (interpolationTime < targetTime)
             {
                 interpolationTime += Time.deltaTime;
 
-                var interpolationValue = flippingCurve.EvaluateCurve(interpolationTime);
+                float interpolationValue = flippingCurve.EvaluateCurve(interpolationTime);
 
                 transform.rotation = GetFlipRotation(interpolationValue);
                 yield return null;

@@ -35,7 +35,7 @@ namespace FMODUtilityPackage.Audioplayers.UnityFunctionHandlers
 
             if (stopInstancesOnDestroy)
             {
-                var stopMode = allowFadeoutOnDestroy ? STOP_MODE.ALLOWFADEOUT : STOP_MODE.IMMEDIATE;
+                STOP_MODE stopMode = allowFadeoutOnDestroy ? STOP_MODE.ALLOWFADEOUT : STOP_MODE.IMMEDIATE;
 
                 eventInstance.stop(stopMode);
             }

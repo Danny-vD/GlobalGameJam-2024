@@ -23,14 +23,14 @@ namespace UtilityPackage.CursorManagement.Singletons
 
             mouseButtons = default(MouseButtonUtil.MouseButton).GetValues();
 
-            foreach (var mouseButton in mouseButtons) downTimePerButton.Add(mouseButton, 0);
+            foreach (MouseButtonUtil.MouseButton mouseButton in mouseButtons) downTimePerButton.Add(mouseButton, 0);
         }
 
         private void LateUpdate()
         {
-            var deltaTime = Time.deltaTime;
+            float deltaTime = Time.deltaTime;
 
-            foreach (var mouseButton in mouseButtons)
+            foreach (MouseButtonUtil.MouseButton mouseButton in mouseButtons)
                 if (MouseButtonUtil.IsButtonPressed(mouseButton))
                     downTimePerButton[mouseButton] += deltaTime;
                 else

@@ -14,22 +14,22 @@ namespace FMODUtilityPackage.ExtentionMethods
         public static PARAMETER_DESCRIPTION GetParameterDescriptionByName(this EventReference instance,
             string parameterName)
         {
-            var eventDescription = RuntimeManager.GetEventDescription(instance.Guid);
-            eventDescription.getParameterDescriptionByName(parameterName, out var parameterDescription);
+            EventDescription eventDescription = RuntimeManager.GetEventDescription(instance.Guid);
+            eventDescription.getParameterDescriptionByName(parameterName, out PARAMETER_DESCRIPTION parameterDescription);
 
             return parameterDescription;
         }
 
         public static IEnumerable<PARAMETER_DESCRIPTION> GetParameters(this EventReference instance)
         {
-            var eventDescription = RuntimeManager.GetEventDescription(instance.Guid);
-            eventDescription.getParameterDescriptionCount(out var count);
+            EventDescription eventDescription = RuntimeManager.GetEventDescription(instance.Guid);
+            eventDescription.getParameterDescriptionCount(out int count);
 
-            var array = new PARAMETER_DESCRIPTION[count];
+            PARAMETER_DESCRIPTION[] array = new PARAMETER_DESCRIPTION[count];
 
-            for (var i = 0; i < count; i++)
+            for (int i = 0; i < count; i++)
             {
-                eventDescription.getParameterDescriptionByIndex(i, out var parameterDescription);
+                eventDescription.getParameterDescriptionByIndex(i, out PARAMETER_DESCRIPTION parameterDescription);
                 array[i] = parameterDescription;
             }
 

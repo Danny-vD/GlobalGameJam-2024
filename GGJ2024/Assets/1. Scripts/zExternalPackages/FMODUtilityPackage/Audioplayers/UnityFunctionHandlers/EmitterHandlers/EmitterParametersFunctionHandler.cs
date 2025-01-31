@@ -1,4 +1,5 @@
-﻿using FMODUtilityPackage.Audioplayers.UnityFunctionHandlers.BaseClasses;
+﻿using FMODUnity;
+using FMODUtilityPackage.Audioplayers.UnityFunctionHandlers.BaseClasses;
 using FMODUtilityPackage.Core;
 using FMODUtilityPackage.Enums;
 using FMODUtilityPackage.ExtentionMethods;
@@ -20,7 +21,7 @@ namespace FMODUtilityPackage.Audioplayers.UnityFunctionHandlers.EmitterHandlers
 
         protected override void ReactToEvent(UnityFunction unityFunction)
         {
-            var emitter = AudioManager.Instance.EventPaths.GetEmitter(emitterType);
+            StudioEventEmitter emitter = AudioManager.Instance.EventPaths.GetEmitter(emitterType);
 
             emitter.SetParameters(parameters[unityFunction]);
         }

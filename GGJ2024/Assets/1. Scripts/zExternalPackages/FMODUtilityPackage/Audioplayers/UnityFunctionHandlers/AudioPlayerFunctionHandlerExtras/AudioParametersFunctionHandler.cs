@@ -1,4 +1,6 @@
-﻿using FMODUtilityPackage.Audioplayers.UnityFunctionHandlers.BaseClasses;
+﻿using System.Collections.Generic;
+using FMOD.Studio;
+using FMODUtilityPackage.Audioplayers.UnityFunctionHandlers.BaseClasses;
 using FMODUtilityPackage.Structs;
 using SerializableDictionaryPackage.SerializableDictionary;
 using UnityEngine;
@@ -23,9 +25,9 @@ namespace FMODUtilityPackage.Audioplayers.UnityFunctionHandlers.AudioPlayerFunct
 
         protected override void ReactToEvent(UnityFunction unityFunction)
         {
-            var eventInstance = audioPlayerFunctionHandler.AudioEventInstance;
+            EventInstance eventInstance = audioPlayerFunctionHandler.AudioEventInstance;
 
-            foreach (var pair in parameters[unityFunction]) eventInstance.setParameterByName(pair.Key, pair.Value);
+            foreach (KeyValuePair<string, float> pair in parameters[unityFunction]) eventInstance.setParameterByName(pair.Key, pair.Value);
         }
     }
 }

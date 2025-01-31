@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using SerializableDictionaryPackage.SerializableDictionary;
 using UnityEngine;
 using UnityEngine.UI;
@@ -49,11 +50,11 @@ public class SliderValueSprites : BetterMonoBehaviour
     private Sprite GetLastSpriteWithConditionsMet(float value)
     {
         Sprite sprite = null;
-        var highestValueMet = float.MinValue;
+        float highestValueMet = float.MinValue;
 
-        foreach (var pair in sliderValueSprites)
+        foreach (KeyValuePair<float, Sprite> pair in sliderValueSprites)
         {
-            var threshold = pair.Key;
+            float threshold = pair.Key;
 
             if (highestValueMet < threshold && value >= threshold)
             {

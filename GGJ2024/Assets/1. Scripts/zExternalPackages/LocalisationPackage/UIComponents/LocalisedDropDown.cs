@@ -52,10 +52,10 @@ namespace LocalisationPackage.UIComponents
         private void ReloadOptionText()
         {
             if (!ReferenceEquals(dropdownTMP, null))
-                for (var i = 0; i < entryIDs.Length; i++)
+                for (int i = 0; i < entryIDs.Length; i++)
                     dropdownTMP.options[i].text = LocalisationUtil.GetLocalisedString(entryIDs[i]);
             else // use legacy dropdown if no TMP dropdown
-                for (var i = 0; i < entryIDs.Length; i++)
+                for (int i = 0; i < entryIDs.Length; i++)
                     dropdown.options[i].text = LocalisationUtil.GetLocalisedString(entryIDs[i]);
         }
     }

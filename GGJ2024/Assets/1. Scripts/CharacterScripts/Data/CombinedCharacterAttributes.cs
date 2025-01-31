@@ -14,7 +14,7 @@ namespace CharacterScripts.Data
 
         public CombinedCharacterAttributes(params CharacterAttributes[] attributesCollection)
         {
-            foreach (var attributes in attributesCollection) AddAttributesToAccumulate(attributes);
+            foreach (CharacterAttributes attributes in attributesCollection) AddAttributesToAccumulate(attributes);
         }
 
         public CombinedCharacterAttributes(CharacterAttributes attributes) : base(attributes)
@@ -64,13 +64,13 @@ namespace CharacterScripts.Data
         /// </summary>
         public CharacterAttributes GetAttributes()
         {
-            var characterAttributes = new CharacterAttributes();
+            CharacterAttributes characterAttributes = new CharacterAttributes();
 
-            foreach (var attributes in
+            foreach (CharacterAttributes attributes in
                      accumulatedAttributesList) // Only iterate over the list once to add together the attributes
             {
                 // Make sure we use the more efficient method of getting attributes if it is a CombinedAttributes instance
-                var attributesToAdd = attributes is CombinedCharacterAttributes combinedAttributes
+                CharacterAttributes attributesToAdd = attributes is CombinedCharacterAttributes combinedAttributes
                     ? combinedAttributes.GetAttributes()
                     : attributes;
 

@@ -5,6 +5,7 @@ using CombatSystem.Interfaces;
 using CombatSystem.ScriptableObjects;
 using UnityEngine;
 using VDFramework.LootTables;
+using VDFramework.LootTables.Interfaces;
 using VDFramework.LootTables.Structs;
 
 namespace CombatSystem.CharacterScripts.MoveSets
@@ -27,7 +28,7 @@ namespace CombatSystem.CharacterScripts.MoveSets
         {
             if (cachedMovesList != null) return cachedMovesList;
 
-            var lootList = movesWeightedLootTable.GetLootTable().GetLootList();
+            List<LootTablePair<AbstractCombatMove>> lootList = movesWeightedLootTable.GetLootTable().GetLootList();
             cachedMovesList = new List<AbstractCombatMove>(lootList.Count);
 
             CacheLootList(lootList);
@@ -52,7 +53,7 @@ namespace CombatSystem.CharacterScripts.MoveSets
 
         private void CacheLootList(IEnumerable<LootTablePair<AbstractCombatMove>> lootList)
         {
-            foreach (var loot in lootList.Select(pair => pair.Loot))
+            foreach (ILoot<AbstractCombatMove> loot in lootList.Select(pair => pair.Loot))
             {
                 if (loot is WeightedLootTable<AbstractCombatMove> nestedTable)
                 {

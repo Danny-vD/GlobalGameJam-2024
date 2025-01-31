@@ -1,4 +1,5 @@
-﻿using SerializableDictionaryPackage.SerializableDictionary;
+﻿using System.Collections.Generic;
+using SerializableDictionaryPackage.SerializableDictionary;
 using UnityEngine;
 using UtilityPackage.CursorManagement.CursorUtility;
 using UtilityPackage.CursorManagement.Singletons;
@@ -22,7 +23,7 @@ namespace UtilityPackage.CursorManagement.CursorComponents
 
         public override bool AreConditionsMet()
         {
-            foreach (var pair in holdingData)
+            foreach (KeyValuePair<MouseButtonUtil.MouseButton, CursorData> pair in holdingData)
                 if (MouseButtonHeldChecker.Instance.IsButtonHeld(pair.Key))
                 {
                     if (!pair.Value.Equals(dataToSet)) // Prevent constantly updating to the same cursor

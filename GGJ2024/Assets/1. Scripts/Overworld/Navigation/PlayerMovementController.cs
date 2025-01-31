@@ -26,7 +26,7 @@ namespace Overworld.Navigation
         {
             if (isMoving)
             {
-                var delta = speed * deltaMovement;
+                Vector3 delta = speed * deltaMovement;
                 controller.SimpleMove(delta);
             }
         }
@@ -62,7 +62,7 @@ namespace Overworld.Navigation
         {
             isMoving = true;
 
-            var vector = obj.ReadValue<Vector2>();
+            Vector2 vector = obj.ReadValue<Vector2>();
 
             deltaMovement = new Vector3(vector.x, 0, vector.y);
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using FMODUtilityPackage.Enums;
 
@@ -18,11 +19,11 @@ namespace FMODUtilityPackage.Utility
 
         public static string GetValidEnumName(string stringValue)
         {
-            var enumValue = stringValue;
+            string enumValue = stringValue;
 
-            for (var j = stringValue.Length - 1; j >= 0; j--)
+            for (int j = stringValue.Length - 1; j >= 0; j--)
             {
-                var character = stringValue[j];
+                char character = stringValue[j];
 
                 // Replace any special characters with an underscore (specials characters are not allowed in an enum name, but an underscore is)
                 if (!char.IsLetterOrDigit(character) && !character.Equals('_'))
@@ -37,11 +38,11 @@ namespace FMODUtilityPackage.Utility
 
         private static string[] ValidateArray(string[] array, char startCharacter)
         {
-            var list = array.Distinct().ToList(); // Prevent duplicates
+            List<string> list = array.Distinct().ToList(); // Prevent duplicates
 
-            for (var i = list.Count - 1; i >= 0; i--)
+            for (int i = list.Count - 1; i >= 0; i--)
             {
-                var value = list[i];
+                string value = list[i];
 
                 // Trim everything after our starting character
                 value = value.Substring(value.IndexOf(startCharacter) + 1);

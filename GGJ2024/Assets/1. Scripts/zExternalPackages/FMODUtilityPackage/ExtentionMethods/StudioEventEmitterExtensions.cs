@@ -12,14 +12,14 @@ namespace FMODUtilityPackage.ExtentionMethods
 
         public static PARAMETER_ID GetParameterID(this StudioEventEmitter emitter, string parameterName)
         {
-            var eventDescription = RuntimeManager.GetEventDescription(emitter.EventReference.Guid);
-            eventDescription.getParameterDescriptionByName(parameterName, out var parameterDescription);
+            EventDescription eventDescription = RuntimeManager.GetEventDescription(emitter.EventReference.Guid);
+            eventDescription.getParameterDescriptionByName(parameterName, out PARAMETER_DESCRIPTION parameterDescription);
             return parameterDescription.id;
         }
 
         private static GUID GetGuid(string emitterEventPath)
         {
-            if (guidsPerEvent.TryGetValue(emitterEventPath, out var guid)) return guid;
+            if (guidsPerEvent.TryGetValue(emitterEventPath, out GUID guid)) return guid;
 
             guid = RuntimeManager.PathToGUID(emitterEventPath);
             guidsPerEvent.Add(emitterEventPath, guid);
@@ -29,7 +29,7 @@ namespace FMODUtilityPackage.ExtentionMethods
 
         public static void SetParameters(this StudioEventEmitter instance, EventParameters parameters)
         {
-            foreach (var pair in parameters) instance.SetParameter(pair.Key, pair.Value);
+            foreach (KeyValuePair<string, float> pair in parameters) instance.SetParameter(pair.Key, pair.Value);
         }
     }
 }

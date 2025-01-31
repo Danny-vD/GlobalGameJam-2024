@@ -12,9 +12,7 @@ using VDFramework.UnityExtensions;
 namespace CombatSystem.Managers
 {
 	public class CombatManager : BetterMonoBehaviour
-	{
-		// Start is called before the first frame update
-
+	{ 
 		public static List<GameObject> CombatParticipants { get; private set; } = new List<GameObject>();
 
 		private void OnEnable()

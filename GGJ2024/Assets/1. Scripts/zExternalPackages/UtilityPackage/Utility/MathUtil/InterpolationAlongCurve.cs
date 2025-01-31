@@ -224,7 +224,7 @@ namespace UtilityPackage.Utility.MathUtil
 
         private void RecalculateValues()
         {
-            var curveKeys = curve.keys;
+            Keyframe[] curveKeys = curve.keys;
 
             curveKeys.Select(key => key.time).GetMinMax(out minTime, out maxTime);
 

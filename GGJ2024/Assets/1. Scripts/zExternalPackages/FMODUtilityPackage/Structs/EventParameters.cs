@@ -15,7 +15,7 @@ namespace FMODUtilityPackage.Structs
         {
             parameters = new SerializableDictionary<string, float>();
 
-            foreach (var pair in values) parameters.Add(pair.Key, pair.Value);
+            foreach (KeyValuePair<string, float> pair in values) parameters.Add(pair.Key, pair.Value);
         }
 
         /// <summary>

@@ -56,20 +56,20 @@ namespace FMODUtilityPackage.Core
 
         private void Reset()
         {
-            for (var i = 0; i < initialVolumes.Count; i++) initialVolumes[i] = InitialVolumePerBus.DefaultValue;
+            for (int i = 0; i < initialVolumes.Count; i++) initialVolumes[i] = InitialVolumePerBus.DefaultValue;
         }
 
         public void OnBeforeSerialize()
         {
-            var countBeforeResize = initialVolumes.Count;
+            int countBeforeResize = initialVolumes.Count;
             EnumDictionaryUtil.PopulateEnumDictionary<InitialVolumePerBus, BusType, float>(initialVolumes);
-            var countAfterResize = initialVolumes.Count;
+            int countAfterResize = initialVolumes.Count;
 
             if (countAfterResize >
                 countBeforeResize) // If we have more values now then we had before, initialize the new ones with default values
-                for (var i = countBeforeResize; i < countAfterResize; i++)
+                for (int i = countBeforeResize; i < countAfterResize; i++)
                 {
-                    var initialVolumePerBus = initialVolumes[i];
+                    InitialVolumePerBus initialVolumePerBus = initialVolumes[i];
 
                     initialVolumes[i] =
                         new InitialVolumePerBus(initialVolumePerBus.Key, 1, initialVolumePerBus.isMuted);
@@ -82,7 +82,7 @@ namespace FMODUtilityPackage.Core
 
         private void SetInitialVolumes()
         {
-            foreach (var pair in initialVolumes)
+            foreach (InitialVolumePerBus pair in initialVolumes)
             {
                 if (pair.Key == default) // Use default so people can freely rename the enum value
                 {
@@ -91,7 +91,7 @@ namespace FMODUtilityPackage.Core
                     continue;
                 }
 
-                var busPath = EventPaths.GetPath(pair.Key);
+                string busPath = EventPaths.GetPath(pair.Key);
                 AudioParameterManager.SetBusVolume(busPath, pair.Value);
                 AudioParameterManager.SetBusMute(busPath, pair.isMuted);
             }

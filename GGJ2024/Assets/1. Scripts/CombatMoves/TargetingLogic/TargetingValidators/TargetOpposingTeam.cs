@@ -1,4 +1,5 @@
-﻿using CombatMoves.TargetingLogic.Interfaces;
+﻿using System.Collections.Generic;
+using CombatMoves.TargetingLogic.Interfaces;
 using PlayerPartyScripts;
 using UnityEngine;
 
@@ -8,7 +9,7 @@ namespace CombatMoves.TargetingLogic.TargetingValidators
     {
         public bool IsValidTarget(GameObject target, GameObject caster)
         {
-            var party = PlayerPartySingleton.Instance.Party;
+            List<GameObject> party = PlayerPartySingleton.Instance.Party;
 
             return party.Contains(target) != party.Contains(caster);
         }

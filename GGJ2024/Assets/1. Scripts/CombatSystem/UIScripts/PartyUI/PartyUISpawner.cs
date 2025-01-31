@@ -20,9 +20,9 @@ namespace CombatSystem.UIScripts.PartyUI
         {
             partyUIParent.DestroyChildren();
 
-            foreach (var player in PlayerPartySingleton.Instance.Party)
+            foreach (GameObject player in PlayerPartySingleton.Instance.Party)
             {
-                var instance = Instantiate(partyUIPrefab, partyUIParent);
+                GameObject instance = Instantiate(partyUIPrefab, partyUIParent);
 
                 instance.GetComponent<PartyUIManager>().Initialize(player);
             }

@@ -26,7 +26,7 @@ namespace Inventory
         public void PurgeItemList()
         {
             // Will crash?
-            foreach (var keyValuePair in itemsList.Where(keyValuePair => keyValuePair.Value == 0))
+            foreach (KeyValuePair<IItem, int> keyValuePair in itemsList.Where(keyValuePair => keyValuePair.Value == 0))
                 itemsList.Remove(keyValuePair.Key);
         }
 

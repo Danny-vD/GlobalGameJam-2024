@@ -11,7 +11,7 @@ namespace UtilityPackage.Utility.UnityFunctionHandlers
 
         protected override void ReactToEvent(UnityFunction unityFunction)
         {
-            if (eventPerFunction.TryGetValue(unityFunction, out var unityEvent)) unityEvent.Invoke();
+            if (eventPerFunction.TryGetValue(unityFunction, out UnityEvent unityEvent)) unityEvent.Invoke();
         }
     }
 }

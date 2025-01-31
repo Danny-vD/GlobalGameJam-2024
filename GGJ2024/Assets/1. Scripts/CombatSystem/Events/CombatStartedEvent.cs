@@ -6,6 +6,6 @@ namespace CombatSystem.Events
 	///     This event triggers when any combat starts
 	/// </summary>
 	public class CombatStartedEvent : VDEvent<CombatStartedEvent>
-    {	
+    {
     }
 }

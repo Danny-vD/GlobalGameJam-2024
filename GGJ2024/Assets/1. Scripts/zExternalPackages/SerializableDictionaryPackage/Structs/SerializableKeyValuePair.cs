@@ -88,7 +88,7 @@ namespace Structs.Utility.SerializableDictionary
 
         public override string ToString()
         {
-            var sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
             sb.Clear();
             sb.Append('[').Append(key).Append(", ").Append(value).Append(']');
             return sb.ToString();

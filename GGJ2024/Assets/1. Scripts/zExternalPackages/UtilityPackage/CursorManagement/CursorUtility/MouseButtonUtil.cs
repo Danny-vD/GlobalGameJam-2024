@@ -344,7 +344,7 @@ namespace UtilityPackage.CursorManagement.CursorUtility
         public static Vector3 GetMouseWorldPosition(Camera camera,
             Camera.MonoOrStereoscopicEye eye = Camera.MonoOrStereoscopicEye.Mono)
         {
-            var mousePosition = GetMousePosition();
+            Vector3 mousePosition = GetMousePosition();
 
 #if UNITY_INPUT_SYSTEM
 
@@ -437,7 +437,7 @@ namespace UtilityPackage.CursorManagement.CursorUtility
         /// <param name="mouseButton">The mousebutton whose MouseButtonDown event to unsubscribe from</param>
         public static void RemoveButtonDownListener(Action callback, MouseButton mouseButton = MouseButton.Left)
         {
-            var handler = mouseButtonHandlers[(int)mouseButton];
+            MouseInputEventHandler handler = mouseButtonHandlers[(int)mouseButton];
 
             if (handler == null) // If it is null, it has never been intialised yet so we can skip it
                 return;
@@ -465,7 +465,7 @@ namespace UtilityPackage.CursorManagement.CursorUtility
         /// <param name="mouseButton">The mousebutton whose MouseButtonUp event to unsubscribe from</param>
         public static void RemoveButtonUpListener(Action callback, MouseButton mouseButton = MouseButton.Left)
         {
-            var handler = mouseButtonHandlers[(int)mouseButton];
+            MouseInputEventHandler handler = mouseButtonHandlers[(int)mouseButton];
 
             if (handler == null) // If it is null, it has never been intialised yet so we can skip it
                 return;
@@ -537,9 +537,9 @@ namespace UtilityPackage.CursorManagement.CursorUtility
                     ReferenceEquals(handler, null))) // Since it's static it could already be initialised
                 return;
 
-            for (var i = 0; i < mouseButtonHandlers.Length; i++)
+            for (int i = 0; i < mouseButtonHandlers.Length; i++)
             {
-                var mouseButton = (MouseButton)i;
+                MouseButton mouseButton = (MouseButton)i;
                 mouseButtonHandlers[i] = new MouseInputEventHandler(GetButtonPressedThisFrame(mouseButton),
                     GetButtonReleasedThisFrame(mouseButton));
             }
@@ -657,7 +657,7 @@ namespace UtilityPackage.CursorManagement.CursorUtility
             // Will be non-null if it has listeners, this allows us to prevent the Vector math for GetScrollDelta when we don't need it
             if (onMouseScroll != null && IsScrolling) onMouseScroll.Invoke(GetMouseScroll());
 
-            foreach (var buttonHandler in mouseButtonHandlers) buttonHandler.Update();
+            foreach (MouseInputEventHandler buttonHandler in mouseButtonHandlers) buttonHandler.Update();
         }
 
         #endregion

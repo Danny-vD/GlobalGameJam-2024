@@ -1,4 +1,6 @@
-﻿using AI;
+﻿using System.Collections.Generic;
+using AI;
+using CombatMoves.ScriptableObjects.BaseClasses;
 using CombatSystem.Enums;
 using CombatSystem.Interfaces;
 using UnityEngine;
@@ -36,10 +38,10 @@ namespace CombatSystem.CharacterScripts.CharacterStates
         public override void Step()
         {
             // NOTE: We can add a small time before this to mimic the AI 'thinking'
-            var combatMove = aiMoveset.ChooseAIMove();
+            AbstractCombatMove combatMove = aiMoveset.ChooseAIMove();
 
             // TODO: Override target selection when taunted
-            var targets = aiTargetingLogic.GetTargets(combatMove);
+            List<GameObject> targets = aiTargetingLogic.GetTargets(combatMove);
 
             if (targets.Count == 0)
             {

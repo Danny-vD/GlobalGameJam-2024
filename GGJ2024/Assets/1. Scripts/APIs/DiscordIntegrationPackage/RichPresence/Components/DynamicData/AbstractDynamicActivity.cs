@@ -43,7 +43,7 @@ namespace APIs.DiscordIntegrationPackage.RichPresence.Components.DynamicData
         {
             if (!DiscordManager.IsDiscordConnected) return;
 
-            var activity = new Activity();
+            Activity activity = new Activity();
 
             if (showDetails)
                 activity.Details = dynamicDataLocation.HasFlag(DynamicDataLocation.Details)
@@ -92,7 +92,7 @@ namespace APIs.DiscordIntegrationPackage.RichPresence.Components.DynamicData
                     break;
                 case ImageShown.LargeAndSmall:
                     largeImageData = DiscordImageManager.Instance.GetImageID(largeImage);
-                    var smallImageData = DiscordImageManager.Instance.GetImageID(smallImage);
+                    ImageData smallImageData = DiscordImageManager.Instance.GetImageID(smallImage);
 
                     activity.Assets = new ActivityAssets
                     {

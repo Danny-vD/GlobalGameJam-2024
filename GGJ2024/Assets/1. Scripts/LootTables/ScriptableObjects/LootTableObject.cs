@@ -23,7 +23,7 @@ namespace LootTables.ScriptableObjects
 
         public decimal GetLootDropChance(TLootType loot)
         {
-            var tableItem = ConvertToLoot(loot);
+            ILoot<TLootType> tableItem = ConvertToLoot(loot);
             return GetLootTable().GetLootDropChance(tableItem);
         }
 

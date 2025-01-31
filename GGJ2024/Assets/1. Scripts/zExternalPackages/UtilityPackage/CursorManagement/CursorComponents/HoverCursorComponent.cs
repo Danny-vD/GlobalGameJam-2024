@@ -23,9 +23,9 @@ namespace UtilityPackage.CursorManagement.CursorComponents
 
         private void LateUpdate()
         {
-            if (IsPointerOverSelectable(out var hoveredSelectableObject))
+            if (IsPointerOverSelectable(out GameObject hoveredSelectableObject))
             {
-                var newCursorData = GetCursorData(hoveredSelectableObject);
+                CursorData newCursorData = GetCursorData(hoveredSelectableObject);
 
                 if (!newCursorData.Equals(cursorDataToSet)) // Prevent updating to the cursorData that is already set
                 {
@@ -56,7 +56,7 @@ namespace UtilityPackage.CursorManagement.CursorComponents
             pointerIsHoveringOverSelectable = false;
             hoveredSelectableObject = null;
 
-            if (CursorUtil.Instance.TryGetHoveredGameObject(out var hoveredGameObject))
+            if (CursorUtil.Instance.TryGetHoveredGameObject(out GameObject hoveredGameObject))
                 if (hoveredGameObject.GetComponent<Selectable>() != null)
                 {
                     pointerIsHoveringOverSelectable = true;
@@ -71,7 +71,7 @@ namespace UtilityPackage.CursorManagement.CursorComponents
             if (hoveredObject.TryGetComponent(out CursorTextureComponent cursorTexture))
                 return cursorTexture.CursorData;
 
-            if (tagData.TryGetValue(hoveredObject.tag, out var cursorData)) return cursorData;
+            if (tagData.TryGetValue(hoveredObject.tag, out CursorData cursorData)) return cursorData;
 
             return defaultHoverDatum;
         }

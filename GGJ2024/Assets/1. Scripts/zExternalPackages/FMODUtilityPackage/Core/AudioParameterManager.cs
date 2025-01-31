@@ -31,7 +31,7 @@ namespace FMODUtilityPackage.Core
         /// </summary>
         public static void SetGlobalParameter(string parameter, float newValue)
         {
-            if (globalParameters.TryGetValue(parameter, out var id))
+            if (globalParameters.TryGetValue(parameter, out PARAMETER_ID id))
             {
                 RuntimeManager.StudioSystem.setParameterByID(id, newValue);
                 return;
@@ -42,21 +42,21 @@ namespace FMODUtilityPackage.Core
 
         private static PARAMETER_ID GetGlobalParameterID(EventReference eventReference, string parameter)
         {
-            if (globalParameters.TryGetValue(parameter, out var id)) return id;
+            if (globalParameters.TryGetValue(parameter, out PARAMETER_ID id)) return id;
 
             return AddNewCachedParameter(eventReference, parameter);
         }
 
         private static PARAMETER_ID GetParameterIDInternal(EventReference eventReference, string parameter)
         {
-            var eventDescription = RuntimeManager.GetEventDescription(eventReference.Guid);
-            eventDescription.getParameterDescriptionByName(parameter, out var parameterDescription);
+            EventDescription eventDescription = RuntimeManager.GetEventDescription(eventReference.Guid);
+            eventDescription.getParameterDescriptionByName(parameter, out PARAMETER_DESCRIPTION parameterDescription);
             return parameterDescription.id;
         }
 
         private static PARAMETER_ID AddNewCachedParameter(EventReference eventReference, string parameter)
         {
-            var id = GetParameterIDInternal(eventReference, parameter);
+            PARAMETER_ID id = GetParameterIDInternal(eventReference, parameter);
 
             globalParameters.Add(parameter, id);
             return id;
@@ -71,9 +71,9 @@ namespace FMODUtilityPackage.Core
         /// </summary>
         public static void SetEventParameter(EventReference eventReference, string parameter, float newValue)
         {
-            RuntimeManager.GetEventDescription(eventReference.Guid).getInstanceList(out var instances);
+            RuntimeManager.GetEventDescription(eventReference.Guid).getInstanceList(out EventInstance[] instances);
 
-            foreach (var instance in instances) instance.setParameterByName(parameter, newValue);
+            foreach (EventInstance instance in instances) instance.setParameterByName(parameter, newValue);
         }
 
         /////////////////////////////////////////////////
@@ -88,7 +88,7 @@ namespace FMODUtilityPackage.Core
                 return;
             }
 
-            var bus = GetBus(busPath);
+            Bus bus = GetBus(busPath);
             bus.setVolume(volume);
         }
 
@@ -107,13 +107,13 @@ namespace FMODUtilityPackage.Core
 
             if (!ignoreMute && masterMute) return;
 
-            var bus = GetBus(EventPaths.MASTER_BUS_PATH);
+            Bus bus = GetBus(EventPaths.MASTER_BUS_PATH);
             bus.setVolume(volume);
         }
 
         public static void SetBusMute(string busPath, bool isMuted)
         {
-            var bus = GetBus(busPath);
+            Bus bus = GetBus(busPath);
             bus.setMute(isMuted);
         }
 
@@ -131,15 +131,15 @@ namespace FMODUtilityPackage.Core
         {
             if (busPath == EventPaths.MASTER_BUS_PATH) return masterVolume;
 
-            var bus = GetBus(busPath);
-            bus.getVolume(out var volume);
+            Bus bus = GetBus(busPath);
+            bus.getVolume(out float volume);
 
             return volume;
         }
 
         private static Bus GetBus(string busPath)
         {
-            if (buses.TryGetValue(busPath, out var bus)) return bus;
+            if (buses.TryGetValue(busPath, out Bus bus)) return bus;
 
             bus = RuntimeManager.GetBus(busPath);
             buses.Add(busPath, bus);

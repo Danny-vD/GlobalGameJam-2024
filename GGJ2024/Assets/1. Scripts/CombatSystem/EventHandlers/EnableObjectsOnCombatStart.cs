@@ -22,12 +22,12 @@ namespace CombatSystem.EventHandlers
 
         private void EnableObjects()
         {
-            foreach (var obj in objectsToEnable) obj.SetActive(true);
+            foreach (GameObject obj in objectsToEnable) obj.SetActive(true);
         }
 
         private void DisableObjects()
         {
-            foreach (var obj in objectsToEnable) obj.SetActive(false);
+            foreach (GameObject obj in objectsToEnable) obj.SetActive(false);
         }
     }
 }

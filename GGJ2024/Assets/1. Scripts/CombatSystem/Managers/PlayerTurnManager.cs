@@ -45,7 +45,7 @@ namespace CombatSystem.Managers
 
 		private void AddToQueue(PlayerEnteredChoosingStateEvent enteredChoosingStateEvent)
 		{
-			var player = enteredChoosingStateEvent.Player;
+			GameObject player = enteredChoosingStateEvent.Player;
 
 			AddToQueue(player);
 		}
@@ -97,7 +97,7 @@ namespace CombatSystem.Managers
 			}
 			else
 			{
-				var next = playerTurnQueue[0];
+				GameObject next = playerTurnQueue[0];
 
 				SetNewActivePlayer(next);
 			}

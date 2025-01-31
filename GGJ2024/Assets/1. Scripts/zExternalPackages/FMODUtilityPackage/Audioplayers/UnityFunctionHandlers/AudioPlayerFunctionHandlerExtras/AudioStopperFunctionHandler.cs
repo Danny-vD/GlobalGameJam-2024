@@ -19,7 +19,7 @@ namespace FMODUtilityPackage.Audioplayers.UnityFunctionHandlers.AudioPlayerFunct
 
         protected override void ReactToEvent(UnityFunction unityFunction)
         {
-            var eventInstance = audioPlayerFunctionHandler.AudioEventInstance;
+            EventInstance eventInstance = audioPlayerFunctionHandler.AudioEventInstance;
 
             eventInstance.stop(STOP_MODE.ALLOWFADEOUT);
         }

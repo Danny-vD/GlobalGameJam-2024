@@ -53,7 +53,7 @@ namespace FMODUtilityPackage.Audioplayers.UI
         {
             if (!isInitialized) Initialize();
 
-            clickSound.getPlaybackState(out var state);
+            clickSound.getPlaybackState(out PLAYBACK_STATE state);
 
             if (state is PLAYBACK_STATE.STOPPED or PLAYBACK_STATE.STOPPING) clickSound.start();
         }

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.EventSystems;
 using VDFramework.Singleton;
 #if UNITY_INPUT_SYSTEM
 using UnityEngine.InputSystem;
@@ -30,7 +31,7 @@ namespace UtilityPackage.CursorManagement.CursorUtility.Singletons
         {
             if (inputModule.IsPointerOverGameObject(pointerID))
             {
-                var raycastResult = inputModule.GetLastRaycastResult(pointerID);
+                RaycastResult raycastResult = inputModule.GetLastRaycastResult(pointerID);
 
                 if (raycastResult.isValid)
                 {

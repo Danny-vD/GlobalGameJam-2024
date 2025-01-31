@@ -30,7 +30,7 @@ namespace FMODUtilityPackage.Audioplayers
 
         public void PlayIfNotPlaying()
         {
-            eventInstance.getPlaybackState(out var state);
+            eventInstance.getPlaybackState(out PLAYBACK_STATE state);
 
             if (state is PLAYBACK_STATE.STOPPED or PLAYBACK_STATE.STOPPING) eventInstance.start();
         }

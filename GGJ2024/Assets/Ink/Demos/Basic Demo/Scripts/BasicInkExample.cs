@@ -46,7 +46,7 @@ public class BasicInkExample : MonoBehaviour
         while (story.canContinue)
         {
             // Continue gets the next line of the story
-            var text = story.Continue();
+            string text = story.Continue();
             // This removes any white space from the text.
             text = text.Trim();
             // Display the text on screen!
@@ -56,10 +56,10 @@ public class BasicInkExample : MonoBehaviour
         // Display all the choices, if there are any!
         if (story.currentChoices.Count > 0)
         {
-            for (var i = 0; i < story.currentChoices.Count; i++)
+            for (int i = 0; i < story.currentChoices.Count; i++)
             {
-                var choice = story.currentChoices[i];
-                var button = CreateChoiceView(choice.text.Trim());
+                Choice choice = story.currentChoices[i];
+                Button button = CreateChoiceView(choice.text.Trim());
                 // Tell the button what to do when we press it
                 button.onClick.AddListener(delegate { OnClickChoiceButton(choice); });
             }
@@ -67,7 +67,7 @@ public class BasicInkExample : MonoBehaviour
         // If we've read all the content and there's no choices, the story is finished!
         else
         {
-            var choice = CreateChoiceView("End of story.\nRestart?");
+            Button choice = CreateChoiceView("End of story.\nRestart?");
             choice.onClick.AddListener(delegate { StartStory(); });
         }
     }
@@ -82,7 +82,7 @@ public class BasicInkExample : MonoBehaviour
     // Creates a textbox showing the the line of text
     private void CreateContentView(string text)
     {
-        var storyText = Instantiate(textPrefab);
+        Text storyText = Instantiate(textPrefab);
         storyText.text = text;
         storyText.transform.SetParent(canvas.transform, false);
     }
@@ -91,15 +91,15 @@ public class BasicInkExample : MonoBehaviour
     private Button CreateChoiceView(string text)
     {
         // Creates the button from a prefab
-        var choice = Instantiate(buttonPrefab);
+        Button choice = Instantiate(buttonPrefab);
         choice.transform.SetParent(canvas.transform, false);
 
         // Gets the text from the button prefab
-        var choiceText = choice.GetComponentInChildren<Text>();
+        Text choiceText = choice.GetComponentInChildren<Text>();
         choiceText.text = text;
 
         // Make the button expand to fit the text
-        var layoutGroup = choice.GetComponent<HorizontalLayoutGroup>();
+        HorizontalLayoutGroup layoutGroup = choice.GetComponent<HorizontalLayoutGroup>();
         layoutGroup.childForceExpandHeight = false;
 
         return choice;
@@ -108,7 +108,7 @@ public class BasicInkExample : MonoBehaviour
     // Destroys all the children of this gameobject (all the UI)
     private void RemoveChildren()
     {
-        var childCount = canvas.transform.childCount;
-        for (var i = childCount - 1; i >= 0; --i) Destroy(canvas.transform.GetChild(i).gameObject);
+        int childCount = canvas.transform.childCount;
+        for (int i = childCount - 1; i >= 0; --i) Destroy(canvas.transform.GetChild(i).gameObject);
     }
 }

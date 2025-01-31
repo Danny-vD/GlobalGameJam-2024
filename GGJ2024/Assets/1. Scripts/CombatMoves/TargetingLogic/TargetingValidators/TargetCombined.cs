@@ -14,7 +14,7 @@ namespace CombatMoves.TargetingLogic.TargetingValidators
 
         public bool IsValidTarget(GameObject target, GameObject caster)
         {
-            for (var i = 0; i < targetingValidators.Length; i++)
+            for (int i = 0; i < targetingValidators.Length; i++)
                 if (!targetingValidators[i].IsValidTarget(target, caster))
                     return false;
 

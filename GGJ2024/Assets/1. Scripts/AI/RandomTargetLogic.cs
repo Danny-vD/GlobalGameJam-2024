@@ -9,7 +9,7 @@ namespace AI
     {
         public override List<GameObject> GetTargets(AbstractCombatMove combatMove)
         {
-            var targets = new List<GameObject> { GetAllValidTargets(combatMove).GetRandomElement() };
+            List<GameObject> targets = new List<GameObject> { GetAllValidTargets(combatMove).GetRandomElement() };
             return targets;
         }
     }

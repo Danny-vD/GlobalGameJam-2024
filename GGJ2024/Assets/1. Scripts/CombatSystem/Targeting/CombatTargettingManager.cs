@@ -25,7 +25,7 @@ namespace CombatSystem.Targeting
 		{
 			base.Awake();
 
-			turnManager   = GetComponent<PlayerTurnManager>();
+			turnManager = GetComponent<PlayerTurnManager>();
 		}
 
 		protected override void OnDestroy()
@@ -40,7 +40,7 @@ namespace CombatSystem.Targeting
 			// BUG: left click confirms, but left click also selects a move | trying to select a move after you already selected a move simultaneously confirms the target and then selects the move (which causes you to select a move on someone who is not allowed yet to select a move)
 
 			selectedTargets.Clear();
-			
+
 			currentMove = move;
 		}
 
@@ -57,7 +57,7 @@ namespace CombatSystem.Targeting
 #if UNITY_EDITOR
 				Debug.LogError("Tried to target a character that is not in combat!");
 #endif
-				
+
 				return;
 			}
 
@@ -82,8 +82,8 @@ namespace CombatSystem.Targeting
 
 			ConfirmedMoveHolder confirmedMoveHolder = currentPlayer.GetComponent<ConfirmedMoveHolder>();
 			confirmedMoveHolder.SelectMove(currentMove, selectedTargets);
-			currentMove     = null;
-			
+			currentMove = null;
+
 			selectedTargets.Clear();
 		}
 	}

@@ -35,11 +35,11 @@ namespace UtilityPackage.CursorManagement.Singletons
         {
             while (true)
             {
-                for (var i = 0; i < checkInterval; i++) yield return null;
+                for (int i = 0; i < checkInterval; i++) yield return null;
 
-                var currentMousePosition = MouseButtonUtil.MousePosition2D;
+                Vector2 currentMousePosition = MouseButtonUtil.MousePosition2D;
 
-                var delta = currentMousePosition - lastMousePosition;
+                Vector2 delta = currentMousePosition - lastMousePosition;
                 IsCursorMoving = delta.magnitude >= movementThreshold;
 
                 lastMousePosition = currentMousePosition;

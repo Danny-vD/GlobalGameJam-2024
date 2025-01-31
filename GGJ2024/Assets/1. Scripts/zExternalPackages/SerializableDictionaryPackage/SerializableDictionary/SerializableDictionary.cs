@@ -52,7 +52,7 @@ namespace SerializableDictionaryPackage.SerializableDictionary
         {
             get
             {
-                TryGetValue(key, out var value);
+                TryGetValue(key, out TValue value);
                 return value;
             }
             set => Add(key, value);
@@ -72,7 +72,7 @@ namespace SerializableDictionaryPackage.SerializableDictionary
         {
             get
             {
-                TryGetValue(key, out var value);
+                TryGetValue(key, out TValue value);
                 return value;
             }
             set => ((IDictionary)this).Add(key, value);
@@ -115,12 +115,12 @@ namespace SerializableDictionaryPackage.SerializableDictionary
 
         public SerializableDictionary(Dictionary<TKey, TValue> dictionary)
         {
-            foreach (var pair in dictionary) Add(pair.Key, pair.Value);
+            foreach (KeyValuePair<TKey, TValue> pair in dictionary) Add(pair.Key, pair.Value);
         }
 
         public SerializableDictionary(SerializableDictionary<TKey, TValue> dictionary)
         {
-            foreach (var pair in dictionary) Add(pair.Key, pair.Value);
+            foreach (KeyValuePair<TKey, TValue> pair in dictionary) Add(pair.Key, pair.Value);
         }
 
         #endregion
@@ -129,18 +129,18 @@ namespace SerializableDictionaryPackage.SerializableDictionary
 
         public void Add(TKey key, TValue value)
         {
-            var index = FindEntry(key);
+            int index = FindEntry(key);
 
             // FindIndex returns -1 if it's not present
             if (index < 0)
             {
-                var newPair = new SerializableKeyValuePair<TKey, TValue>(key, value);
+                SerializableKeyValuePair<TKey, TValue> newPair = new SerializableKeyValuePair<TKey, TValue>(key, value);
                 InternalList.Add(newPair);
                 serializedDictionary.Add(newPair);
                 return;
             }
 
-            var pair = InternalList[index];
+            SerializableKeyValuePair<TKey, TValue> pair = InternalList[index];
             pair.Value = value;
 
             InternalList[index] = pair;
@@ -149,7 +149,7 @@ namespace SerializableDictionaryPackage.SerializableDictionary
 
         public bool Remove(TKey key)
         {
-            var index = FindEntry(key);
+            int index = FindEntry(key);
 
             if (index < 0) return false;
 
@@ -160,7 +160,7 @@ namespace SerializableDictionaryPackage.SerializableDictionary
 
         public bool TryGetValue(TKey key, out TValue value)
         {
-            var index = FindEntry(key);
+            int index = FindEntry(key);
 
             if (index >= 0)
             {
@@ -249,11 +249,11 @@ namespace SerializableDictionaryPackage.SerializableDictionary
         {
             SerializableKeyValuePair<TKey, TValue> last;
 
-            foreach (var serializableKeyValuePair in serializedDictionary)
+            foreach (SerializableKeyValuePair<TKey, TValue> serializableKeyValuePair in serializedDictionary)
             {
                 last = serializableKeyValuePair;
 
-                var equals = serializableKeyValuePair.Equals(last);
+                bool equals = serializableKeyValuePair.Equals(last);
             }
 
             InternalList = serializedDictionary.Distinct().ToList();
@@ -286,7 +286,7 @@ namespace SerializableDictionaryPackage.SerializableDictionary
         {
             VerifyKey(key);
 
-            var index = FindEntry((TKey)key);
+            int index = FindEntry((TKey)key);
 
             if (index >= 0)
             {
@@ -355,7 +355,7 @@ namespace SerializableDictionaryPackage.SerializableDictionary
         /// </summary>
         private int FindEntry(TKey key)
         {
-            var index = InternalList.FindIndex(pair => pair.Key.Equals(key));
+            int index = InternalList.FindIndex(pair => pair.Key.Equals(key));
             return index;
         }
 

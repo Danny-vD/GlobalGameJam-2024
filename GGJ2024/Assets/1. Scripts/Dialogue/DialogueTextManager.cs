@@ -57,22 +57,22 @@ namespace Dialogue
 
         private IEnumerator HandleNextLine(string line, string author)
         {
-            var searchString = "<wave>";
+            string searchString = "<wave>";
 
             if (line.Contains(searchString))
             {
                 // finds index of the first part of the searchString
-                var startIndex = line.IndexOf(searchString);
+                int startIndex = line.IndexOf(searchString);
 
 
                 // creates the second part of the searchString
                 searchString = "</" + searchString.Substring(1);
 
                 // finds the index of the starting section of the endIndex
-                var endIndex = line.IndexOf(searchString);
+                int endIndex = line.IndexOf(searchString);
 
                 // constructs a substring from the startingIndex 
-                var substring = line.Substring(startIndex, endIndex + searchString.Length - startIndex);
+                string substring = line.Substring(startIndex, endIndex + searchString.Length - startIndex);
 
                 Debug.Log(substring);
                 line = line.Remove(line.IndexOf("<wave>"), searchString.Length - 1);
@@ -93,11 +93,11 @@ namespace Dialogue
             HandleAuthor(author);
 
 
-            foreach (var letter in line)
+            foreach (char letter in line)
             {
                 dialogueText.maxVisibleCharacters++;
 
-                if (specialCharacterTimes.TryGetValue(letter.ToString(), out var specialTime))
+                if (specialCharacterTimes.TryGetValue(letter.ToString(), out float specialTime))
                     yield return new WaitForSeconds(specialTime);
                 else
                     yield return new WaitForSeconds(waitTimer);
@@ -122,7 +122,7 @@ namespace Dialogue
 
         private void HandlePortrait(string author)
         {
-            if (imagesByNames.TryGetValue(author, out var byName)) sprite.GetComponent<Image>().sprite = byName;
+            if (imagesByNames.TryGetValue(author, out Sprite byName)) sprite.GetComponent<Image>().sprite = byName;
         }
 
         private void HandleAuthor(string author)

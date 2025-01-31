@@ -23,7 +23,7 @@ namespace UtilityPackage.CursorManagement.CursorComponents
 
         public override bool AreConditionsMet()
         {
-            foreach ((var button, var data) in mouseClickData)
+            foreach ((MouseButtonUtil.MouseButton button, CursorData data) in mouseClickData)
                 if (MouseButtonUtil.IsButtonPressed(button))
                 {
                     if (lastButtonPressed != button) // Prevent constantly setting the current state to itself

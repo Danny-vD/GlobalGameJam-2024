@@ -1,6 +1,7 @@
 ﻿using System;
 using APIs.DiscordIntegrationPackage.RichPresence;
 using APIs.DiscordIntegrationPackage.RichPresence.Enums;
+using APIs.DiscordIntegrationPackage.Structs;
 using Discord;
 
 namespace APIs.DiscordIntegrationPackage.Factories
@@ -17,7 +18,7 @@ namespace APIs.DiscordIntegrationPackage.Factories
 
         public static Activity CreateActivity(string details, DiscordImage largeImage)
         {
-            var largeImageData = DiscordImageManager.Instance.GetImageID(largeImage);
+            ImageData largeImageData = DiscordImageManager.Instance.GetImageID(largeImage);
 
             return new Activity
             {
@@ -33,8 +34,8 @@ namespace APIs.DiscordIntegrationPackage.Factories
 
         public static Activity CreateActivity(string details, DiscordImage largeImage, DiscordImage smallImage)
         {
-            var largeImageData = DiscordImageManager.Instance.GetImageID(largeImage);
-            var smallImageData = DiscordImageManager.Instance.GetImageID(smallImage);
+            ImageData largeImageData = DiscordImageManager.Instance.GetImageID(largeImage);
+            ImageData smallImageData = DiscordImageManager.Instance.GetImageID(smallImage);
 
             return new Activity
             {
@@ -61,7 +62,7 @@ namespace APIs.DiscordIntegrationPackage.Factories
 
         public static Activity CreateActivity(string details, string state, DiscordImage largeImage)
         {
-            var largeImageData = DiscordImageManager.Instance.GetImageID(largeImage);
+            ImageData largeImageData = DiscordImageManager.Instance.GetImageID(largeImage);
 
             return new Activity
             {
@@ -79,8 +80,8 @@ namespace APIs.DiscordIntegrationPackage.Factories
         public static Activity CreateActivity(string details, string state, DiscordImage largeImage,
             DiscordImage smallImage)
         {
-            var largeImageData = DiscordImageManager.Instance.GetImageID(largeImage);
-            var smallImageData = DiscordImageManager.Instance.GetImageID(smallImage);
+            ImageData largeImageData = DiscordImageManager.Instance.GetImageID(largeImage);
+            ImageData smallImageData = DiscordImageManager.Instance.GetImageID(smallImage);
 
             return new Activity
             {
@@ -118,7 +119,7 @@ namespace APIs.DiscordIntegrationPackage.Factories
         {
             if (!showElapsedTime) return CreateActivity(details, state, largeImage);
 
-            var largeImageData = DiscordImageManager.Instance.GetImageID(largeImage);
+            ImageData largeImageData = DiscordImageManager.Instance.GetImageID(largeImage);
 
             return new Activity
             {
@@ -143,8 +144,8 @@ namespace APIs.DiscordIntegrationPackage.Factories
         {
             if (!showElapsedTime) return CreateActivity(details, state, largeImage, smallImage);
 
-            var largeImageData = DiscordImageManager.Instance.GetImageID(largeImage);
-            var smallImageData = DiscordImageManager.Instance.GetImageID(smallImage);
+            ImageData largeImageData = DiscordImageManager.Instance.GetImageID(largeImage);
+            ImageData smallImageData = DiscordImageManager.Instance.GetImageID(smallImage);
 
             return new Activity
             {
@@ -188,7 +189,7 @@ namespace APIs.DiscordIntegrationPackage.Factories
         {
             if (!showRemainingTime) return CreateActivity(details, state, largeImage);
 
-            var largeImageData = DiscordImageManager.Instance.GetImageID(largeImage);
+            ImageData largeImageData = DiscordImageManager.Instance.GetImageID(largeImage);
 
             return new Activity
             {
@@ -213,8 +214,8 @@ namespace APIs.DiscordIntegrationPackage.Factories
         {
             if (!showRemainingTime) return CreateActivity(details, state, largeImage, smallImage);
 
-            var largeImageData = DiscordImageManager.Instance.GetImageID(largeImage);
-            var smallImageData = DiscordImageManager.Instance.GetImageID(smallImage);
+            ImageData largeImageData = DiscordImageManager.Instance.GetImageID(largeImage);
+            ImageData smallImageData = DiscordImageManager.Instance.GetImageID(smallImage);
 
             return new Activity
             {
@@ -265,7 +266,7 @@ namespace APIs.DiscordIntegrationPackage.Factories
         public static Activity CreateMultiplayerActivity(string state, DiscordImage largeImage, string partyID,
             ActivityPartyPrivacy partyPrivacy, int currentPartySize, int maxPartySize, ActivitySecrets activitySecrets)
         {
-            var largeImageData = DiscordImageManager.Instance.GetImageID(largeImage);
+            ImageData largeImageData = DiscordImageManager.Instance.GetImageID(largeImage);
 
             return new Activity
             {
@@ -297,8 +298,8 @@ namespace APIs.DiscordIntegrationPackage.Factories
             string partyID, ActivityPartyPrivacy partyPrivacy, int currentPartySize, int maxPartySize,
             ActivitySecrets activitySecrets)
         {
-            var largeImageData = DiscordImageManager.Instance.GetImageID(largeImage);
-            var smallImageData = DiscordImageManager.Instance.GetImageID(smallImage);
+            ImageData largeImageData = DiscordImageManager.Instance.GetImageID(largeImage);
+            ImageData smallImageData = DiscordImageManager.Instance.GetImageID(smallImage);
 
             return new Activity
             {
@@ -331,7 +332,7 @@ namespace APIs.DiscordIntegrationPackage.Factories
         public static Activity CreateMultiplayerActivity(string details, string state, string partyID,
             ActivityPartyPrivacy partyPrivacy, int currentPartySize, int maxPartySize, ActivitySecrets activitySecrets)
         {
-            var activity = CreateActivity(details, state);
+            Activity activity = CreateActivity(details, state);
 
             AddMultiplayerInformation(ref activity, partyID, partyPrivacy, currentPartySize, maxPartySize,
                 activitySecrets);
@@ -343,7 +344,7 @@ namespace APIs.DiscordIntegrationPackage.Factories
             string partyID, ActivityPartyPrivacy partyPrivacy, int currentPartySize, int maxPartySize,
             ActivitySecrets activitySecrets)
         {
-            var activity = CreateActivity(details, state, largeImage);
+            Activity activity = CreateActivity(details, state, largeImage);
 
             AddMultiplayerInformation(ref activity, partyID, partyPrivacy, currentPartySize, maxPartySize,
                 activitySecrets);
@@ -356,7 +357,7 @@ namespace APIs.DiscordIntegrationPackage.Factories
             string partyID, ActivityPartyPrivacy partyPrivacy, int currentPartySize, int maxPartySize,
             ActivitySecrets activitySecrets)
         {
-            var activity = CreateActivity(details, state, largeImage, smallImage);
+            Activity activity = CreateActivity(details, state, largeImage, smallImage);
 
             AddMultiplayerInformation(ref activity, partyID, partyPrivacy, currentPartySize, maxPartySize,
                 activitySecrets);
@@ -368,7 +369,7 @@ namespace APIs.DiscordIntegrationPackage.Factories
             string partyID, ActivityPartyPrivacy partyPrivacy, int currentPartySize, int maxPartySize,
             ActivitySecrets activitySecrets)
         {
-            var activity = CreateActivity(details, state, showElapsedTime);
+            Activity activity = CreateActivity(details, state, showElapsedTime);
 
             AddMultiplayerInformation(ref activity, partyID, partyPrivacy, currentPartySize, maxPartySize,
                 activitySecrets);
@@ -381,7 +382,7 @@ namespace APIs.DiscordIntegrationPackage.Factories
             string partyID, ActivityPartyPrivacy partyPrivacy, int currentPartySize, int maxPartySize,
             ActivitySecrets activitySecrets)
         {
-            var activity = CreateActivity(details, state, showElapsedTime, largeImage);
+            Activity activity = CreateActivity(details, state, showElapsedTime, largeImage);
 
             AddMultiplayerInformation(ref activity, partyID, partyPrivacy, currentPartySize, maxPartySize,
                 activitySecrets);
@@ -394,7 +395,7 @@ namespace APIs.DiscordIntegrationPackage.Factories
             string partyID, ActivityPartyPrivacy partyPrivacy, int currentPartySize, int maxPartySize,
             ActivitySecrets activitySecrets)
         {
-            var activity = CreateActivity(details, state, showElapsedTime, largeImage, smallImage);
+            Activity activity = CreateActivity(details, state, showElapsedTime, largeImage, smallImage);
 
             AddMultiplayerInformation(ref activity, partyID, partyPrivacy, currentPartySize, maxPartySize,
                 activitySecrets);
@@ -407,7 +408,7 @@ namespace APIs.DiscordIntegrationPackage.Factories
             string partyID, ActivityPartyPrivacy partyPrivacy, int currentPartySize, int maxPartySize,
             ActivitySecrets activitySecrets)
         {
-            var activity = CreateActivity(details, state, showRemainingTime, secondsRemaining);
+            Activity activity = CreateActivity(details, state, showRemainingTime, secondsRemaining);
 
             AddMultiplayerInformation(ref activity, partyID, partyPrivacy, currentPartySize, maxPartySize,
                 activitySecrets);
@@ -420,7 +421,7 @@ namespace APIs.DiscordIntegrationPackage.Factories
             string partyID, ActivityPartyPrivacy partyPrivacy, int currentPartySize, int maxPartySize,
             ActivitySecrets activitySecrets)
         {
-            var activity = CreateActivity(details, state, showRemainingTime, secondsRemaining, largeImage);
+            Activity activity = CreateActivity(details, state, showRemainingTime, secondsRemaining, largeImage);
 
             AddMultiplayerInformation(ref activity, partyID, partyPrivacy, currentPartySize, maxPartySize,
                 activitySecrets);
@@ -432,7 +433,7 @@ namespace APIs.DiscordIntegrationPackage.Factories
             long secondsRemaining, DiscordImage largeImage, DiscordImage smallImage, string partyID,
             ActivityPartyPrivacy partyPrivacy, int currentPartySize, int maxPartySize, ActivitySecrets activitySecrets)
         {
-            var activity = CreateActivity(details, state, showRemainingTime, secondsRemaining, largeImage, smallImage);
+            Activity activity = CreateActivity(details, state, showRemainingTime, secondsRemaining, largeImage, smallImage);
 
             AddMultiplayerInformation(ref activity, partyID, partyPrivacy, currentPartySize, maxPartySize,
                 activitySecrets);

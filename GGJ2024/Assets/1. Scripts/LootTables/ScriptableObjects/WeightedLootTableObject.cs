@@ -14,9 +14,9 @@ namespace LootTables.ScriptableObjects
 
         protected override WeightedLootTable<TLootType> GetNewLootTable()
         {
-            var table = new WeightedLootTable<TLootType>(weightedLootTable);
+            WeightedLootTable<TLootType> table = new WeightedLootTable<TLootType>(weightedLootTable);
 
-            foreach (var pair in nestedLootTables) table.TryAdd(pair.Key, pair.Value);
+            foreach (KeyValuePair<LootTableObject<TLootType>, long> pair in nestedLootTables) table.TryAdd(pair.Key, pair.Value);
 
             return table;
         }

@@ -37,16 +37,16 @@ namespace Dialogue
             Debug.Log("NEXT LINE EVENT TRIGGERED");
             if (@event.Choices.Count == 0)
             {
-                var instance = Instantiate(button, transform);
+                GameObject instance = Instantiate(button, transform);
 
                 instance.GetComponent<ChoiceTextHandler>().SetValues("...", -1);
                 buttonsList.Add(instance);
             }
             else
             {
-                for (var i = 0; i < @event.Choices.Count; i++)
+                for (int i = 0; i < @event.Choices.Count; i++)
                 {
-                    var instance = Instantiate(button, transform);
+                    GameObject instance = Instantiate(button, transform);
 
                     instance.GetComponent<ChoiceTextHandler>().SetValues(@event.Choices[i].text, i);
                     buttonsList.Add(instance);
@@ -56,7 +56,7 @@ namespace Dialogue
 
         private void OnChoiceSelected(ChoiceSelectedEvent @event)
         {
-            foreach (var o in buttonsList) Destroy(o);
+            foreach (GameObject o in buttonsList) Destroy(o);
 
             Debug.Log("DESTROYED");
             buttonsList.Clear();

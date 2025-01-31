@@ -21,7 +21,7 @@ namespace AI
         protected IEnumerable<GameObject> GetCombatParticipants()
         {
             //TODO properly get all participants in combat (combat manager?)
-            var party = PlayerPartySingleton.Instance.Party.Where(obj => !obj.GetComponent<CharacterHealth>().IsDead);
+            IEnumerable<GameObject> party = PlayerPartySingleton.Instance.Party.Where(obj => !obj.GetComponent<CharacterHealth>().IsDead);
 
             return party;
         }

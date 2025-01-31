@@ -1,4 +1,5 @@
-﻿using SerializableDictionaryPackage.SerializableDictionary;
+﻿using System.Collections.Generic;
+using SerializableDictionaryPackage.SerializableDictionary;
 using UnityEngine;
 using UtilityPackage.CursorManagement.CursorUtility;
 using UtilityPackage.CursorManagement.Singletons;
@@ -27,7 +28,7 @@ namespace UtilityPackage.CursorManagement.CursorComponents
         public override bool AreConditionsMet()
         {
             if ((keepUsingAfterStoppedMoving && draggingStarted) || CursorMovementChecker.Instance.IsCursorMoving)
-                foreach (var pair in draggingData)
+                foreach (KeyValuePair<MouseButtonUtil.MouseButton, CursorData> pair in draggingData)
                     if (MouseButtonHeldChecker.Instance.IsButtonHeld(pair.Key))
                     {
                         if (!pair.Value.Equals(dataToSet)) // Prevent constantly updating to the same cursor

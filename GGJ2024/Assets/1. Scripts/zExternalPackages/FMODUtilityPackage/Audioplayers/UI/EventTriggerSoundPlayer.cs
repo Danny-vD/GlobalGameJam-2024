@@ -64,14 +64,14 @@ namespace FMODUtilityPackage.Audioplayers.UI
 		{
 			eventTrigger = this.EnsureComponent<EventTrigger>();
 
-			foreach (var eventDataPerTrigger in audioDataPerTriggerType)
+			foreach (KeyValuePair<EventTriggerType, AudioEventData[]> eventDataPerTrigger in audioDataPerTriggerType)
 			{
-				var entry = new EventTrigger.Entry
+				EventTrigger.Entry entry = new EventTrigger.Entry
 				{
 					eventID = eventDataPerTrigger.Key
 				};
 
-				foreach (var audioEventData in eventDataPerTrigger.Value)
+				foreach (AudioEventData audioEventData in eventDataPerTrigger.Value)
 				{
 					CacheInstanceIfNeeded(audioEventData);
 
@@ -84,25 +84,25 @@ namespace FMODUtilityPackage.Audioplayers.UI
 
 		private void OnDisable()
 		{
-			var stopMode = allowFadeoutOnDisable ? STOP_MODE.ALLOWFADEOUT : STOP_MODE.IMMEDIATE;
+			STOP_MODE stopMode = allowFadeoutOnDisable ? STOP_MODE.ALLOWFADEOUT : STOP_MODE.IMMEDIATE;
 
 			if (stopInstancesOnDisable)
-				foreach (var keyValuePair in instancePerEventType)
+				foreach (KeyValuePair<AudioEventType, EventInstance> keyValuePair in instancePerEventType)
 					keyValuePair.Value.stop(stopMode);
 
 			if (stopGlobalInstancesOnDisable)
-				foreach (var keyValuePair in staticInstancePerEventType)
+				foreach (KeyValuePair<AudioEventType, EventInstance> keyValuePair in staticInstancePerEventType)
 					keyValuePair.Value.stop(stopMode);
 		}
 
 		private void OnDestroy()
 		{
-			var stopMode = allowFadeoutOnDestroy ? STOP_MODE.ALLOWFADEOUT : STOP_MODE.IMMEDIATE;
+			STOP_MODE stopMode = allowFadeoutOnDestroy ? STOP_MODE.ALLOWFADEOUT : STOP_MODE.IMMEDIATE;
 
 			// Always stop the local instances on Destroy, because there is no other way to stop them afterwards
-			foreach (var pair in instancePerEventType)
+			foreach (KeyValuePair<AudioEventType, EventInstance> pair in instancePerEventType)
 			{
-				var instance = pair.Value;
+				EventInstance instance = pair.Value;
 				instance.stop(stopMode);
 				instance.release();
 			}
@@ -115,7 +115,7 @@ namespace FMODUtilityPackage.Audioplayers.UI
 		{
 			if (staticInstancePerEventType.ContainsKey(audioEventType))
 			{
-				var instance = staticInstancePerEventType[audioEventType];
+				EventInstance instance = staticInstancePerEventType[audioEventType];
 				instance.stop(stopMode);
 
 				if (releaseMemory)
@@ -129,9 +129,9 @@ namespace FMODUtilityPackage.Audioplayers.UI
 		public static void StopAllStaticInstances(STOP_MODE stopMode      = STOP_MODE.ALLOWFADEOUT,
 			bool                                            releaseMemory = true)
 		{
-			foreach (var keyValuePair in staticInstancePerEventType)
+			foreach (KeyValuePair<AudioEventType, EventInstance> keyValuePair in staticInstancePerEventType)
 			{
-				var instance = keyValuePair.Value;
+				EventInstance instance = keyValuePair.Value;
 
 				instance.stop(stopMode);
 
@@ -143,9 +143,9 @@ namespace FMODUtilityPackage.Audioplayers.UI
 
 		public void AddEventTriggerHandler(EventTriggerType triggerType, AudioEventData eventData)
 		{
-			var entry = eventTrigger.triggers.FirstOrDefault(trigger => trigger.eventID == triggerType);
+			EventTrigger.Entry entry = eventTrigger.triggers.FirstOrDefault(trigger => trigger.eventID == triggerType);
 
-			var entryExisted = entry != null;
+			bool entryExisted = entry != null;
 
 			if (!entryExisted)
 				entry = new EventTrigger.Entry
@@ -178,7 +178,7 @@ namespace FMODUtilityPackage.Audioplayers.UI
 
 		private UnityAction<BaseEventData> GetCallback(AudioEventData audioEventData)
 		{
-			var instance = audioEventData.IsGlobalInstance
+			EventInstance instance = audioEventData.IsGlobalInstance
 				? staticInstancePerEventType[audioEventData.audioAudioEvent]
 				: instancePerEventType[audioEventData.audioAudioEvent];
 
@@ -192,7 +192,7 @@ namespace FMODUtilityPackage.Audioplayers.UI
 				},
 				PlayState.PlayIfNotPlaying => delegate
 				{
-					instance.getPlaybackState(out var state);
+					instance.getPlaybackState(out PLAYBACK_STATE state);
 
 					if (state is PLAYBACK_STATE.STOPPED or PLAYBACK_STATE.STOPPING) instance.start();
 
@@ -212,7 +212,7 @@ namespace FMODUtilityPackage.Audioplayers.UI
 				},
 				PlayState.TogglePause => delegate
 				{
-					instance.getPaused(out var paused);
+					instance.getPaused(out bool paused);
 					instance.setPaused(!paused);
 
 					instance.SetParameters(audioEventData.Parameters);

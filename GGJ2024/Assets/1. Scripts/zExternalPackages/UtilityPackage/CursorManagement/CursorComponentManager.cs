@@ -25,10 +25,10 @@ namespace UtilityPackage.CursorManagement
 
         private void CheckComponents()
         {
-            var allowMoreComponents = true;
+            bool allowMoreComponents = true;
 
             // Go through the components and activate the ones whose conditions are met. If IsAdditiveEffect is false, then no more components will be activated after that one
-            foreach (var cursorComponent in cursorComponents)
+            foreach (AbstractCursorComponent cursorComponent in cursorComponents)
                 // Check if the conditions for this component are met, but only if we can still activate more components
                 if (allowMoreComponents && cursorComponent.AreConditionsMet())
                 {

@@ -13,7 +13,7 @@ namespace LocalisationPackage.Core.IO.Parsers
         {
             variables = new JsonLanguageVariables();
 
-            foreach (var file in Resources.LoadAll<TextAsset>("Localisation"))
+            foreach (TextAsset file in Resources.LoadAll<TextAsset>("Localisation"))
                 variables.AddVariables(JsonUtility.FromJson<JsonLanguageVariables>(file.ToString()));
         }
 

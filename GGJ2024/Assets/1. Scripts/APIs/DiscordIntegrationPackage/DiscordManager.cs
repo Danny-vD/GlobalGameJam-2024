@@ -91,7 +91,7 @@ namespace APIs.DiscordIntegrationPackage
         /// </summary>
         public static void ResetConnection()
         {
-            var discordManager = Instance;
+            DiscordManager discordManager = Instance;
 
             discordManager.Cleanup();
             discordManager.currentConnectionAttempt = 0;

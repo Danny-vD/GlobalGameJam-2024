@@ -15,9 +15,9 @@ namespace LootTables.ScriptableObjects
 
         protected override WeightedLootTable<TLootType> GetNewLootTable()
         {
-            var weightedLootTable = new PercentageLootTable<TLootType>(percentageLootTable);
+            PercentageLootTable<TLootType> weightedLootTable = new PercentageLootTable<TLootType>(percentageLootTable);
 
-            foreach (var pair in nestedLootTables) weightedLootTable.TryAdd(pair.Key, pair.Value);
+            foreach (KeyValuePair<LootTableObject<TLootType>, float> pair in nestedLootTables) weightedLootTable.TryAdd(pair.Key, pair.Value);
 
             return weightedLootTable;
         }
