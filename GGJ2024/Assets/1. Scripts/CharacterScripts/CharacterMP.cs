@@ -30,17 +30,17 @@ namespace CharacterScripts
 
         public void DecreaseMP(int amount)
         {
-            RemoveMP(amount);
+            DecreaseMP_internal(amount);
             OnMPDecrease.Invoke(amount);
         }
 
         public void IncreaseMP(int amount)
         {
-            RemoveMP(-amount);
+            DecreaseMP_internal(-amount);
             OnMPIncrease.Invoke(amount);
         }
 
-        private void RemoveMP(int amount)
+        private void DecreaseMP_internal(int amount)
         {
             MP -= amount;
             OnMPChanged.Invoke();

@@ -31,7 +31,7 @@ namespace CombatSystem.CharacterScripts.CharacterStates
         public override void Step()
         {
             // Stun is basically a slower idle
-            characterStamina.DecreaseStamina(character.Attributes.Speed / 2 * Time.deltaTime);
+            characterStamina.DecreaseStamina(character.Attributes.Speed / 2 * Time.deltaTime); // TODO: make the time a variable
         }
     }
 }

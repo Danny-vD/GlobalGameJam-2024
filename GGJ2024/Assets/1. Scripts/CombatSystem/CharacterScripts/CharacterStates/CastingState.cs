@@ -11,18 +11,17 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 {
 	public class CastingState : AbstractCharacterState
 	{
-		private ConfirmedMoveHolder confirmedMoveHolder;
-
+		public event Action OnCastingStarted = delegate { };
+		
 		public bool IsCasting { get; private set; }
-
 		public override CharacterCombatStateType NextState => CharacterCombatStateType.Idle;
+
+		private ConfirmedMoveHolder confirmedMoveHolder;
 
 		private void Awake()
 		{
 			confirmedMoveHolder = GetComponent<ConfirmedMoveHolder>();
 		}
-
-		public event Action OnCastingStarted = delegate { };
 
 		public override void Enter()
 		{

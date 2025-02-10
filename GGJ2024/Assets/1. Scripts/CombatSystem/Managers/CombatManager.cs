@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+using CharacterScripts;
 using CombatSystem.CharacterScripts;
 using CombatSystem.Events;
 using CombatSystem.Events.EnterCombatArenaEvent;
@@ -11,15 +13,20 @@ using VDFramework.UnityExtensions;
 
 namespace CombatSystem.Managers
 {
-	public class CombatManager : BetterMonoBehaviour
-	{ 
+	public class CombatManager : BetterMonoBehaviour // NOTE: Can probably be turned into a static class
+	{
 		public static List<GameObject> CombatParticipants { get; private set; } = new List<GameObject>();
 
+		public static IEnumerable<GameObject> GetAliveCombatParticipants()
+		{
+			return CombatParticipants.Where(participant => !participant.GetComponent<CharacterHealth>().IsDead);
+		}
+		
 		private void OnEnable()
 		{
 			EventManager.AddListener<CharacterEnterCombatEvent>(OnCharacterEnterCombat, 100);
 			EventManager.AddListener<CombatEndedEvent>(OnCombatEnd);
-			
+
 			EventManager.AddListener<EnterCombatArenaEvent>(OnCombatStart, 100);
 		}
 
@@ -44,7 +51,7 @@ namespace CombatSystem.Managers
 			{
 				CombatParticipants.Add(partyMember);
 			}
-			
+
 			// TODO: move to another class
 			InputControlManager.Instance.ChangeControls(ControlTypes.Combat);
 		}
