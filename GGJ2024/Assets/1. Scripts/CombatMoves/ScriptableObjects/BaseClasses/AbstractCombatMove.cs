@@ -12,6 +12,8 @@ namespace CombatMoves.ScriptableObjects.BaseClasses
 {
 	public abstract class AbstractCombatMove : ScriptableObject
 	{
+		public event Action<GameObject> OnCombatMoveEnded = delegate { };
+		
 		[Header("General data")]
 		[field: SerializeField]
 		public string AbilityName { get; protected set; }
@@ -42,7 +44,7 @@ namespace CombatMoves.ScriptableObjects.BaseClasses
 		private ITargetingValidator cachedValidator;
 
 		private ValidTargets oldValidTargets;
-		public event Action<GameObject> OnCombatMoveEnded = delegate { };
+		
 
 		/// <summary>
 		///     Allows another combat move to start
@@ -69,7 +71,7 @@ namespace CombatMoves.ScriptableObjects.BaseClasses
 		/// </summary>
 		public virtual void ForceStopCombatMove(GameObject caster)
 		{
-			// If we died/got stunned while performing a move, we already allowed the next one to start, hence no AllowNextMoveToStart
+			// If we died/got stunned while performing a move, we already allowed the next one to start, hence no AllowNextMoveToStart | But CombatMoveManager has a check just in case
 			InvokeOnCombatMoveEnded(caster);
 		}
 

@@ -12,7 +12,7 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 	public class CastingState : AbstractCharacterState
 	{
 		public event Action OnCastingStarted = delegate { };
-		
+
 		public bool IsCasting { get; private set; }
 		public override CharacterCombatStateType NextState => CharacterCombatStateType.Idle;
 
@@ -32,10 +32,11 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 		{
 			if (IsCasting)
 			{
-				// This prevents other moves from starting if this was called before the selected move called AllowNextMoveToStart (should never happen)
-
 				// no call to base because StopCasting already calls it
 				confirmedMoveHolder.SelectedMove.ForceStopCombatMove(gameObject);
+				
+				EventManager.RaiseEvent(new CastingInterupptedEvent(this));
+				// Move manager will listen to this event, and if last caster was this caster then it will allow the next move to start
 			}
 			else
 			{
@@ -54,7 +55,11 @@ namespace CombatSystem.CharacterScripts.CharacterStates
 			{
 				validTargets = ValidateTargets();
 
-				if (validTargets.Count == 0) base.Exit();
+				if (validTargets.Count == 0)
+				{
+					base.Exit();
+					return;
+				}
 			}
 
 			selectedMove.OnCombatMoveEnded += OnCombatMoveEnded;

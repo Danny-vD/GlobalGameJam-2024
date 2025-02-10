@@ -4,6 +4,7 @@ using CombatSystem.Events;
 using CombatSystem.Events.Queues;
 using UnityEngine;
 using VDFramework;
+using VDFramework.EventSystem;
 
 namespace CombatSystem.Managers
 {
@@ -11,14 +12,17 @@ namespace CombatSystem.Managers
     {
         private readonly List<CastingState> combatMoveReadyQueue = new List<CastingState>();
 
+        private CastingState lastCaster = null; // Will be null if no one is currently casting
         private bool isSomeoneCasting;
 
         private void OnEnable()
         {
             NewCharacterReadyToCastEvent.Listeners += OnNewCharacterReadyToCast;
             NextCombatMoveCanStartEvent.ParameterlessListeners += StartNextInQueue;
-
+            
             CastingPreventedEvent.Listeners += OnCastingPrevented;
+            CastingInterupptedEvent.Listeners += OnCastingInteruppted;
+
             CombatStartedEvent.ParameterlessListeners += ResetState;
             CombatEndedEvent.ParameterlessListeners += ResetState;
         }
@@ -27,7 +31,9 @@ namespace CombatSystem.Managers
         {
             NewCharacterReadyToCastEvent.Listeners -= OnNewCharacterReadyToCast;
             NextCombatMoveCanStartEvent.ParameterlessListeners -= StartNextInQueue;
-            CastingPreventedEvent.Listeners -= OnCastingPrevented;
+            
+            CastingPreventedEvent.Listeners   -= OnCastingPrevented;
+            CastingInterupptedEvent.Listeners -= OnCastingInteruppted;
 
             CombatStartedEvent.ParameterlessListeners -= ResetState;
             CombatEndedEvent.ParameterlessListeners -= ResetState;
@@ -36,6 +42,8 @@ namespace CombatSystem.Managers
         private void ResetState()
         {
             combatMoveReadyQueue.Clear();
+            
+            lastCaster       = null;
             isSomeoneCasting = false;
         }
 
@@ -44,6 +52,11 @@ namespace CombatSystem.Managers
             HandleNewCharacterReadyToCast(newCharacterReadyToCastEvent.CastingState);
         }
 
+        private void OnCastingInteruppted(CastingInterupptedEvent castingInterupptedEvent)
+        {
+            RemoveFromQueue(castingInterupptedEvent.CastingState);
+        }
+        
         private void OnCastingPrevented(CastingPreventedEvent castingPreventedEvent)
         {
             RemoveFromQueue(castingPreventedEvent.CastingState);
@@ -54,6 +67,8 @@ namespace CombatSystem.Managers
             if (!isSomeoneCasting)
             {
                 isSomeoneCasting = true;
+                lastCaster       = castingState;
+                
                 castingState.StartCasting();
             }
             else
@@ -79,6 +94,12 @@ namespace CombatSystem.Managers
             {
                 Debug.LogError("The queue does not contain this character!\n" + castingState.gameObject.name);
             }
+
+            if (ReferenceEquals(lastCaster, castingState))
+            {
+                lastCaster = null;
+                EventManager.RaiseEvent(new NextCombatMoveCanStartEvent());
+            }
         }
 
         private bool TryGetNextInLine(out CastingState castingState)
@@ -97,12 +118,16 @@ namespace CombatSystem.Managers
 
         private void StartNextInQueue() // Called when a character enters CastingState
         {
-            if (TryGetNextInLine(out CastingState castingState)) // Will succeed so long as at least 1 object is in the queue
+            if (TryGetNextInLine(out CastingState castingState)) // Will succeed if at least 1 object is in the queue
             {
+                lastCaster = castingState;
+
+                // isSomeoneCasting = true; is unnecessary as it is already true
                 castingState.StartCasting();
             }
             else
             {
+                lastCaster       = null;
                 isSomeoneCasting = false;
             }
         }

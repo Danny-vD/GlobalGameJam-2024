@@ -144,7 +144,7 @@ namespace CombatSystem.Targeting
 			}
 		}
 
-		private bool CheckValidTargets()
+		private void CheckValidTargets()
 		{
 			switch (currentMove.TargetingMode)
 			{
@@ -189,7 +189,7 @@ namespace CombatSystem.Targeting
 
 		public void OnTargetSelectConfirm()
 		{
-			if (selectedTargets.Count == 0)
+			if (!HasValidTargets)
 			{
 				return;
 			}

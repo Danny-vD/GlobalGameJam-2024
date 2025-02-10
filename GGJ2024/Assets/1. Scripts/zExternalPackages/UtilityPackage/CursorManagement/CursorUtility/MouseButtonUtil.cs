@@ -453,7 +453,10 @@ namespace UtilityPackage.CursorManagement.CursorUtility
         /// <param name="mouseButton">The mousebutton whose MouseButtonUp event to subscribe to</param>
         public static void AddButtonUpListener(Action callback, MouseButton mouseButton = MouseButton.Left)
         {
-            if (!IsInitialized) ForceInitialize();
+			if (!IsInitialized)
+			{
+				ForceInitialize();
+			}
 
             mouseButtonHandlers[(int)mouseButton].OnButtonUp += callback;
         }
@@ -467,8 +470,10 @@ namespace UtilityPackage.CursorManagement.CursorUtility
         {
             MouseInputEventHandler handler = mouseButtonHandlers[(int)mouseButton];
 
-            if (handler == null) // If it is null, it has never been intialised yet so we can skip it
-                return;
+			if (handler == null) // If it is null, it has never been intialised yet so we can skip it
+			{
+				return;
+			}
 
             mouseButtonHandlers[(int)mouseButton].OnButtonUp -= callback;
         }
