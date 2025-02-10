@@ -19,6 +19,7 @@ namespace CombatSystem.Managers
 		{
 			PlayerEnteredChoosingStateEvent.Listeners += AddToQueue;
 			PlayerExitedChoosingStateEvent.Listeners  += RemoveFromQueue;
+			
 			CombatStartedEvent.ParameterlessListeners += ResetQueue;
 			CombatEndedEvent.ParameterlessListeners   += ResetQueue;
 		}
@@ -27,6 +28,7 @@ namespace CombatSystem.Managers
 		{
 			PlayerEnteredChoosingStateEvent.Listeners -= AddToQueue;
 			PlayerExitedChoosingStateEvent.Listeners  -= RemoveFromQueue;
+			
 			CombatStartedEvent.ParameterlessListeners -= ResetQueue;
 			CombatEndedEvent.ParameterlessListeners   -= ResetQueue;
 		}
@@ -77,9 +79,13 @@ namespace CombatSystem.Managers
 			if (playerTurnQueue.Contains(player))
 			{
 				if (ReferenceEquals(player, currentlyActivePlayer))
+				{
 					SetNextInQueueActive(); // SetNextInQueueActive removes element 0 from the list, which is the active player
+				}
 				else
+				{
 					playerTurnQueue.Remove(player);
+				}
 			}
 			else
 			{
@@ -114,7 +120,7 @@ namespace CombatSystem.Managers
 		{
 			currentlyActivePlayer = null;
 
-			EventManager.RaiseEvent(new AllPlayersChoseMoveEvent());
+			EventManager.RaiseEvent(new AllPlayersChoseMoveEvent()); // TODO: this can also happen if all players are dead/stunned, possibly rename?
 		}
 	}
 }

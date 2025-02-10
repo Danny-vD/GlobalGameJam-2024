@@ -11,7 +11,7 @@ namespace CombatSystem.Targeting
 		private void Awake()
 		{
 			confirmButton = GetComponent<Button>();
-			confirmButton.onClick.AddListener(CombatTargettingManager.Instance.OnTargetSelectConfirm);
+			confirmButton.onClick.AddListener(CombatTargetingManager.Instance.OnTargetSelectConfirm);
 		}
 	}
 }

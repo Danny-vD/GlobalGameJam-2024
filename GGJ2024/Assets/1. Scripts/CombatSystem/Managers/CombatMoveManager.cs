@@ -97,7 +97,7 @@ namespace CombatSystem.Managers
 
             if (ReferenceEquals(lastCaster, castingState))
             {
-                lastCaster = null;
+                lastCaster = null; // Technically unneccessary to set this here (it's immediately overwritten)
                 EventManager.RaiseEvent(new NextCombatMoveCanStartEvent());
             }
         }

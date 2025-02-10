@@ -34,6 +34,7 @@ namespace CombatSystem.Managers
 		{
 			EventManager.RemoveListener<CharacterEnterCombatEvent>(OnCharacterEnterCombat);
 			EventManager.RemoveListener<CombatEndedEvent>(OnCombatEnd);
+			
 			EventManager.RemoveListener<EnterCombatArenaEvent>(OnCombatStart);
 		}
 

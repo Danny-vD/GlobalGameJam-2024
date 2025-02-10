@@ -50,7 +50,7 @@ namespace CombatSystem.UIScripts.CombatMoves
 		{
 			// TODO make a targeting UI that hides the moves buttons, or change the way targetting works so another move can be selected without confirming
 			// at the moment clicking on another move after you selected one will both select that move and confirm the target at once, which causes the next confirm input to confim the move from the previous turn
-			CombatTargettingManager.Instance.EnableTargetingForMove(combatMove, characterCaster);
+			CombatTargetingManager.Instance.EnableTargetingForMove(combatMove, characterCaster);
 
 			CombatMoveUISpawner.HideMoves();
 		}

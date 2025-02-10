@@ -16,7 +16,7 @@ namespace AI
 
         private GameObject GetRandomTarget(AbstractCombatMove combatMove)
         {
-            return CombatTargettingManager.GetAllValidTargets(combatMove, gameObject).GetRandomElement();
+            return CombatTargetingManager.GetAllValidTargets(combatMove, gameObject).GetRandomElement();
         }
     }
 }

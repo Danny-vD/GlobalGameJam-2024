@@ -4,7 +4,9 @@ using System.Linq;
 using CombatMoves.ScriptableObjects.BaseClasses;
 using CombatMoves.TargetingLogic.Enums;
 using CombatSystem.CharacterScripts;
+using CombatSystem.Enums;
 using CombatSystem.Events.CharacterSelection;
+using CombatSystem.Events.Queues;
 using CombatSystem.Managers;
 using UnityEngine;
 using VDFramework.EventSystem;
@@ -12,7 +14,7 @@ using VDFramework.Singleton;
 
 namespace CombatSystem.Targeting
 {
-	public class CombatTargettingManager : Singleton<CombatTargettingManager> // TODO: override target selection when taunted?? (Can a player be taunted?)
+	public class CombatTargetingManager : Singleton<CombatTargetingManager> // TODO: override target selection when taunted?? (Can a player be taunted?)
 	{
 		public event Action OnTargetingStarted = delegate { };
 
@@ -50,25 +52,49 @@ namespace CombatSystem.Targeting
 			turnManager = GetComponent<PlayerTurnManager>();
 		}
 
+		private void OnEnable()
+		{
+			EventManager.AddListener<AllPlayersChoseMoveEvent>(ForceDisableTargeting); // Listening to this event so that we can properly react to all players being forced out of choosing state
+		}
+
+		private void OnDisable()
+		{
+			EventManager.RemoveListener<AllPlayersChoseMoveEvent>(ForceDisableTargeting);
+
+			ForceDisableTargeting();
+		}
+
 		protected override void OnDestroy()
 		{
 			EventManager.RemoveListener<CharacterClickedEvent>(OnCharacterClicked);
 
 			base.OnDestroy();
 		}
-		
+
 		private void EnableTargeting()
 		{
 			IsTargetingEnabled = true;
 			OnTargetingStarted.Invoke();
-			
-			EventManager.AddListener<CharacterClickedEvent>(OnCharacterClicked);
+
+			EventManager.AddListener<CharacterClickedEvent>(OnCharacterClicked); // TODO: decide how the actual targeting should work
 		}
 
 		private void DisableTargeting(bool cancelledMove)
 		{
-			IsTargetingEnabled = false;
-			OnTargetingStopped.Invoke(cancelledMove);
+			selectedTargets.Clear();
+
+			if (currentMove != null)
+			{
+				IsTargetingEnabled = false;
+				OnTargetingStopped.Invoke(cancelledMove);
+				
+				currentMove = null;
+			}
+		}
+
+		private void ForceDisableTargeting()
+		{
+			DisableTargeting(true);
 		}
 
 		public void EnableTargetingForMove(AbstractCombatMove combatMove, GameObject caster)
@@ -79,12 +105,11 @@ namespace CombatSystem.Targeting
 			{
 				DisableTargeting(true);
 			}
-			
+
 			selectedTargets.Clear();
-			SetHasValidTargetsFlag(false);
 
 			currentMove = combatMove;
-			
+
 			switch (currentMove.TargetingMode)
 			{
 				case TargetingMode.TargetAll:
@@ -94,6 +119,7 @@ namespace CombatSystem.Targeting
 				case TargetingMode.MultipleTargetsOnly:
 				case TargetingMode.MultipleTargets:
 					EnableTargeting();
+					CheckValidTargets();
 					break;
 				case TargetingMode.None:
 					CheckValidTargets();
@@ -107,11 +133,13 @@ namespace CombatSystem.Targeting
 		{
 			foreach (GameObject target in targets)
 			{
-				AddTarget(target);
+				AddTarget(target, false);
 			}
+
+			CheckValidTargets();
 		}
 
-		private void AddTarget(GameObject target)
+		private void AddTarget(GameObject target, bool checkIfValidTargetConditionsMet)
 		{
 			if (!target)
 			{
@@ -128,9 +156,12 @@ namespace CombatSystem.Targeting
 			}
 
 			selectedTargets.Add(target);
-			CheckValidTargets();
-			
 			OnTargetAdded.Invoke(target);
+
+			if (checkIfValidTargetConditionsMet)
+			{
+				CheckValidTargets();
+			}
 
 			//TODO move to a seperate class
 			currentSelectedCharacterIndicator.transform.position = target.transform.position + Vector3.up * 1.5f;
@@ -184,7 +215,7 @@ namespace CombatSystem.Targeting
 
 		private void OnCharacterClicked(CharacterClickedEvent @event)
 		{
-			AddTarget(@event.Character);
+			AddTarget(@event.Character, true);
 		}
 
 		public void OnTargetSelectConfirm()
@@ -203,8 +234,6 @@ namespace CombatSystem.Targeting
 			ConfirmedMoveHolder confirmedMoveHolder = currentPlayer.GetComponent<ConfirmedMoveHolder>();
 			confirmedMoveHolder.SelectMove(currentMove, selectedTargets);
 			currentMove = null;
-
-			selectedTargets.Clear();
 
 			DisableTargeting(false);
 		}
